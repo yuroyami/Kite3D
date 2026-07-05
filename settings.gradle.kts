@@ -19,5 +19,5 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = "kite3d-KMP"
+rootProject.name = "kite3d"
 include(":kite3d")

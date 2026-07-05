@@ -1,5 +1,5 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -20,12 +20,23 @@ plugins {
  *
  * NOTE: the Android target (com.android.kotlin.multiplatform.library) is
  * intentionally omitted for now — it requires a configured Android SDK. The
- * code is target-agnostic, so adding android later is purely a build-file change.
+ * code is target-agnostic and the JVM bytecode target is 11, so adding android
+ * later is purely a build-file change.
  */
 kotlin {
     jvmToolchain(21)
 
-    jvm()
+    // Every unmarked declaration in a published library would otherwise leak as
+    // public API. Strict explicit-API forces an intentional visibility on each.
+    explicitApi()
+
+    jvm {
+        // Build with JDK 21 (toolchain) but emit bytecode that JDK 11 runtimes
+        // and Android's D8 can consume. See audit §8.2 B2.
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
 
     // Apple
     iosSimulatorArm64()
@@ -52,11 +63,9 @@ kotlin {
     androidNativeX64()
 
     // Web
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    js(IR) {
+    js {
         browser()
         nodejs()
-        binaries.library()
     }
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
@@ -69,13 +78,6 @@ kotlin {
     }
 
     sourceSets {
-        all {
-            languageSettings {
-                optIn("kotlin.RequiresOptIn")
-                optIn("kotlin.experimental.ExperimentalNativeApi")
-            }
-        }
-
         commonMain.dependencies {
             // Intentionally empty. Kite3D core depends on kotlin-stdlib only.
         }

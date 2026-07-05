@@ -4,14 +4,11 @@ plugins {
     alias(libs.plugins.dokka)
 }
 
-allprojects {
-    group = "io.github.yuroyami"
-    version = "0.1.0"
-}
+// group and version are set once, for all projects, in the root gradle.properties.
 
 // Aggregate the published library modules into a single Dokka API reference.
 dependencies {
-    dokka(project(":kite3d"))
+    dokka(projects.kite3d)
 }
 
 dokka {

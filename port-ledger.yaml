@@ -1,0 +1,61 @@
+# Machine-checkable record of the three.js -> Kite3D port.
+# status: pending | in-progress | ported
+# tests:  none | ported
+# Each `ported` entry lists deviations from upstream semantics/shape (see PORTING.md).
+threejs_rev: r184
+layer: math
+
+files:
+  # --- core scalars & interfaces ------------------------------------------------
+  src/math/MathUtils.js:
+    kotlin: math/MathUtils.kt
+    status: pending
+    tests: none
+  AttributeLike (Kite3D-only, no upstream file):
+    kotlin: math/AttributeLike.kt
+    note: "D5 seam for BufferAttribute; core implements it later."
+    status: pending
+
+  # --- vectors ------------------------------------------------------------------
+  src/math/Vector2.js: { kotlin: math/Vector2.kt, status: pending, tests: none }
+  src/math/Vector3.js: { kotlin: math/Vector3.kt, status: pending, tests: none }
+  src/math/Vector4.js: { kotlin: math/Vector4.kt, status: pending, tests: none }
+
+  # --- matrices & rotations -----------------------------------------------------
+  src/math/Matrix2.js:    { kotlin: math/Matrix2.kt, status: pending, tests: none }
+  src/math/Matrix3.js:    { kotlin: math/Matrix3.kt, status: pending, tests: none }
+  src/math/Matrix4.js:    { kotlin: math/Matrix4.kt, status: pending, tests: none }
+  src/math/Quaternion.js: { kotlin: math/Quaternion.kt, status: pending, tests: none }
+  src/math/Euler.js:      { kotlin: math/Euler.kt, status: pending, tests: none }
+
+  # --- boxes & primitives -------------------------------------------------------
+  src/math/Box2.js:     { kotlin: math/Box2.kt, status: in-progress, tests: none, note: "rework of the broken baseline file" }
+  src/math/Box3.js:     { kotlin: math/Box3.kt, status: pending, tests: none }
+  src/math/Sphere.js:   { kotlin: math/Sphere.kt, status: pending, tests: none }
+  src/math/Plane.js:    { kotlin: math/Plane.kt, status: pending, tests: none }
+  src/math/Ray.js:      { kotlin: math/Ray.kt, status: pending, tests: none }
+  src/math/Line3.js:    { kotlin: math/Line3.kt, status: pending, tests: none }
+  src/math/Triangle.js: { kotlin: math/Triangle.kt, status: pending, tests: none }
+
+  # --- frustum & coordinate systems ---------------------------------------------
+  src/math/Frustum.js:            { kotlin: math/Frustum.kt, status: pending, tests: none }
+  src/math/FrustumArray.js:       { kotlin: math/FrustumArray.kt, status: pending, tests: none }
+  src/math/Spherical.js:          { kotlin: math/Spherical.kt, status: pending, tests: none }
+  src/math/Cylindrical.js:        { kotlin: math/Cylindrical.kt, status: pending, tests: none }
+  src/math/SphericalHarmonics3.js:{ kotlin: math/SphericalHarmonics3.kt, status: pending, tests: none }
+
+  # --- color --------------------------------------------------------------------
+  src/math/Color.js:           { kotlin: math/Color.kt, status: pending, tests: none }
+  src/math/ColorManagement.js: { kotlin: math/ColorManagement.kt, status: pending, tests: none }
+
+  # --- interpolants -------------------------------------------------------------
+  src/math/Interpolant.js:                          { kotlin: math/Interpolant.kt, status: pending, tests: none }
+  src/math/interpolants/LinearInterpolant.js:       { kotlin: math/interpolants/LinearInterpolant.kt, status: pending, tests: none }
+  src/math/interpolants/DiscreteInterpolant.js:     { kotlin: math/interpolants/DiscreteInterpolant.kt, status: pending, tests: none }
+  src/math/interpolants/CubicInterpolant.js:        { kotlin: math/interpolants/CubicInterpolant.kt, status: pending, tests: none }
+  src/math/interpolants/BezierInterpolant.js:       { kotlin: math/interpolants/BezierInterpolant.kt, status: pending, tests: none }
+  src/math/interpolants/QuaternionLinearInterpolant.js: { kotlin: math/interpolants/QuaternionLinearInterpolant.kt, status: pending, tests: none }
+
+deferred:
+  - "Vector3.project / Vector3.unproject: need core Camera; ship as ext fns in the camera layer."
+  - "MathUtils.setQuaternionFromProperEuler: lands with Quaternion.kt."
