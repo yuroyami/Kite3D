@@ -245,8 +245,21 @@ public class Vector2(
      */
     public fun divideScalar(scalar: Double): Vector2 = multiplyScalar(1.0 / scalar)
 
-    // applyMatrix3(m: Matrix3) is restored at the Matrix3 checkpoint (see
-    // port-ledger.yaml); it is the only Vector2 method with a forward dependency.
+    /**
+     * Multiplies this vector by the 3x3 matrix [m].
+     *
+     * @return A reference to this vector.
+     */
+    public fun applyMatrix3(m: Matrix3): Vector2 {
+        val x = this.x
+        val y = this.y
+        val e = m.elements
+
+        this.x = e[0] * x + e[3] * y + e[6]
+        this.y = e[1] * x + e[4] * y + e[7]
+
+        return this
+    }
 
     /**
      * Sets each component to the minimum of itself and [v]'s corresponding component.

@@ -25,5 +25,8 @@ val zero2 get() = Vector2()
 val one2 get() = Vector2(1.0, 1.0)
 val two2 get() = Vector2(2.0, 2.0)
 
-// Vector3 constants (negInf3, posInf3, zero3, one3, two3) are restored together
-// with Vector3.kt — see port-ledger.yaml.
+val negInf3 get() = Vector3(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY)
+val posInf3 get() = Vector3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
+val zero3 get() = Vector3()
+val one3 get() = Vector3(1.0, 1.0, 1.0)
+val two3 get() = Vector3(2.0, 2.0, 2.0)

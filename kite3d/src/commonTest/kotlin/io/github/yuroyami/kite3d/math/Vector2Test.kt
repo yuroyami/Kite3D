@@ -101,7 +101,15 @@ class Vector2Test {
         assertEquals(0.0, c.y)
     }
 
-    // applyMatrix3 is ported and tested at the Matrix3 checkpoint (needs Matrix3).
+    @Test
+    fun applyMatrix3() {
+        val a = Vector2(x, y)
+        val m = Matrix3().set(2.0, 3.0, 5.0, 7.0, 11.0, 13.0, 17.0, 19.0, 23.0)
+
+        a.applyMatrix3(m)
+        assertEquals(18.0, a.x, 0.0, "Check x")
+        assertEquals(60.0, a.y, 0.0, "Check y")
+    }
 
     @Test
     fun negate() {

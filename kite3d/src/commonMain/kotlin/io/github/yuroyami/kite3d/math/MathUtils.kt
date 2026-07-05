@@ -8,12 +8,14 @@ package io.github.yuroyami.kite3d.math
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.ceil
+import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.floor
 import kotlin.math.ln
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
+import kotlin.math.sin
 import kotlin.random.Random
 
 /**
@@ -31,6 +33,15 @@ public enum class ComponentType {
     Int16,
     Int8,
 }
+
+/**
+ * The axis order for [MathUtils.setQuaternionFromProperEuler].
+ *
+ * These are *proper* (a.k.a. classic) Euler orders, where the first and third
+ * axes repeat (`XYX`, `ZXZ`, …). They are distinct from [EulerOrder], whose
+ * orders use three different axes (`XYZ`, `ZXY`, …).
+ */
+public enum class ProperEulerOrder { XYX, XZX, YXY, YZY, ZXZ, ZYZ }
 
 /**
  * A collection of math utility functions.
@@ -287,8 +298,46 @@ public object MathUtils {
         ComponentType.Int8 -> jsRound(value * 127.0)
     }
 
-    // setQuaternionFromProperEuler lands together with Quaternion.kt (needs its
-    // `set(x, y, z, w)`); tracked in port-ledger.yaml under `deferred`.
+    /**
+     * Sets the given quaternion [q] from the
+     * [Intrinsic Proper Euler Angles](https://en.wikipedia.org/wiki/Euler_angles)
+     * defined by [a], [b], [c] and [order].
+     *
+     * Rotations are applied to the axes in the order specified by [order]:
+     * rotation by angle [a] is applied first, then by angle [b], then by angle [c].
+     *
+     * @param q The quaternion to set.
+     * @param a The rotation applied to the first axis, in radians.
+     * @param b The rotation applied to the second axis, in radians.
+     * @param c The rotation applied to the third axis, in radians.
+     * @param order A [ProperEulerOrder] specifying the axes order.
+     */
+    public fun setQuaternionFromProperEuler(q: Quaternion, a: Double, b: Double, c: Double, order: ProperEulerOrder) {
+
+        val c2 = cos(b / 2)
+        val s2 = sin(b / 2)
+
+        val c13 = cos((a + c) / 2)
+        val s13 = sin((a + c) / 2)
+
+        val c1_3 = cos((a - c) / 2)
+        val s1_3 = sin((a - c) / 2)
+
+        val c3_1 = cos((c - a) / 2)
+        val s3_1 = sin((c - a) / 2)
+
+        // Upstream's default branch only console.warns on an unknown string order;
+        // with an exhaustive enum `when` that branch is unreachable, so it is dropped.
+        when (order) {
+            ProperEulerOrder.XYX -> q.set(c2 * s13, s2 * c1_3, s2 * s1_3, c2 * c13)
+            ProperEulerOrder.YZY -> q.set(s2 * s1_3, c2 * s13, s2 * c1_3, c2 * c13)
+            ProperEulerOrder.ZXZ -> q.set(s2 * c1_3, s2 * s1_3, c2 * s13, c2 * c13)
+            ProperEulerOrder.XZX -> q.set(c2 * s13, s2 * s3_1, s2 * c3_1, c2 * c13)
+            ProperEulerOrder.YXY -> q.set(s2 * c3_1, c2 * s13, s2 * s3_1, c2 * c13)
+            ProperEulerOrder.ZYZ -> q.set(s2 * s3_1, s2 * c3_1, c2 * s13, c2 * c13)
+        }
+
+    }
 
     // -- shared numeric constants used across the math layer --------------------
 
