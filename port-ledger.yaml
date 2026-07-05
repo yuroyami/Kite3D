@@ -36,7 +36,7 @@ files:
     tests: ported
     deviations:
       - "isVector3 flag omitted; equals/hashCode(-0.0)/toString overridden; Iterable<Double>."
-      - "project/unproject (Camera) and setFromColor (Color) deferred to later layers."
+      - "project/unproject (Camera) deferred to later layer; setFromColor(Color) RESTORED at the Color checkpoint (test added — upstream Vector3.tests.js has no setFromColor case, so the ported test is written fresh to mirror the method)."
       - "set(x,y,z) drops the JS z===undefined sprite-scale guard; projectOnPlane/reflect inlined (no _vector scratch); applyEuler/applyAxisAngle allocate a local Quaternion."
   src/math/Vector4.js:
     kotlin: math/Vector4.kt
@@ -109,26 +109,115 @@ files:
   src/math/Plane.js:    { kotlin: math/Plane.kt, status: pending, tests: none }
   src/math/Ray.js:      { kotlin: math/Ray.kt, status: pending, tests: none }
   src/math/Line3.js:    { kotlin: math/Line3.kt, status: pending, tests: none }
-  src/math/Triangle.js: { kotlin: math/Triangle.kt, status: pending, tests: none }
+  src/math/Triangle.js:
+    kotlin: math/Triangle.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "All module scratch (_v0.._v3, _vab.._vcp, _v40.._v42) removed → locals per method (D13)."
+      - "Static helpers getNormal/getBarycoord/containsPoint/getInterpolation/getInterpolatedAttribute/isFrontFacing → companion object. getArea stays an instance method (it is instance-only upstream, not static)."
+      - "getBarycoord/getInterpolation return Vector3? (JS returns null on degenerate)."
+      - "getInterpolation degenerate branch: JS's `'z' in target`/`'w' in target` → the Vector3-target variant always zeroes x/y/z (no w). Vector4-attribute variants not needed here."
+      - "getInterpolatedAttribute: attr typed AttributeLike (getX/Y/Z/W only, read-only seam); the Vector4 temps' components are copied into fresh Vector3 for addScaledVector since Vector3.addScaledVector takes a Vector3."
+      - "a/b/c are `var Vector3` (upstream reassigns them in the copy test); ctor aliases the passed vectors. equals(Any?)/hashCode/toString overridden (D11) — equals doubles as the upstream value-equals(triangle)."
 
   # --- frustum & coordinate systems ---------------------------------------------
-  src/math/Frustum.js:            { kotlin: math/Frustum.kt, status: pending, tests: none }
-  src/math/FrustumArray.js:       { kotlin: math/FrustumArray.kt, status: pending, tests: none }
+  src/math/Frustum.js:
+    kotlin: math/Frustum.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "_sphere/_vector/_defaultSpriteCenter module scratch removed → local in intersectsBox; _sphere/_defaultSpriteCenter only fed the deferred methods."
+      - "planes is `val Array<Plane>` (D12; contents mutable, never reassigned)."
+      - "setFromProjectionMatrix(m, coordinateSystem: CoordinateSystem = WebGL, reversedDepth = false) — uses the CoordinateSystem enum from Matrix4.kt (not the WebGL/WebGPU int constants). The JS `throw Invalid coordinate system` is unreachable (exhaustive when over the 2-member enum) and dropped."
+      - "intersectsObject/intersectsSprite DEFERRED (need core Object3D/Sprite/BufferGeometry: boundingSphere/computeBoundingSphere/matrixWorld). Their tests are skipped in FrustumTest.kt."
+  src/math/FrustumArray.js:
+    kotlin: math/FrustumArray.kt
+    status: ported
+    tests: none  # no upstream FrustumArray.tests.js exists
+    deviations:
+      - "coordinateSystem is a CoordinateSystem enum (JS WebGLCoordinateSystem default → WebGL); clone() returns a fresh FrustumArray (faithful; does not copy coordinateSystem)."
+      - "All 5 intersection methods (intersectsObject/Sprite/Sphere/Box/containsPoint) DEFERRED: each iterates cameraArray.cameras and reads camera.projectionMatrix/matrixWorldInverse/coordinateSystem/reversedDepth then delegates to Frustum (incl. the deferred Frustum.intersectsObject/Sprite). Need the core ArrayCamera/Camera layer."
   src/math/Spherical.js:          { kotlin: math/Spherical.kt, status: ported, tests: ported, deviations: ["equals/hashCode/toString added (upstream has none); makeSafe EPS as private const."] }
   src/math/Cylindrical.js:        { kotlin: math/Cylindrical.kt, status: ported, tests: ported, deviations: ["equals/hashCode/toString added (upstream has none)."] }
-  src/math/SphericalHarmonics3.js:{ kotlin: math/SphericalHarmonics3.kt, status: pending, tests: none }
+  src/math/SphericalHarmonics3.js:
+    kotlin: math/SphericalHarmonics3.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "coefficients is `val Array<Vector3>` of 9, populated with Vector3() (D12); set() takes Array<Vector3>."
+      - "isSphericalHarmonics3 flag omitted (D10); its upstream test is omitted (use `is SphericalHarmonics3`). Instancing test asserts the 9-zeroed-coefficient invariant instead of JS's `assert.ok(object)`."
+      - "getBasisAt → companion object; fromArray takes DoubleArray, toArray takes MutableList<Double> (matching Vector3.fromArray/toArray). equals(Any?)/hashCode/toString overridden (D11)."
 
   # --- color --------------------------------------------------------------------
-  src/math/Color.js:           { kotlin: math/Color.kt, status: pending, tests: none }
-  src/math/ColorManagement.js: { kotlin: math/ColorManagement.kt, status: pending, tests: none }
+  src/math/Color.js:
+    kotlin: math/Color.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "isColor flag omitted; equals(Any?)/hashCode(-0.0)/toString overridden; Iterable<Double> replaces Symbol.iterator."
+      - "Polymorphic constructor/set(r,g,b) split into typed overloads: Color()/Color(Double,Double,Double)/Color(Int hex)/Color(Color); set(Double,Double,Double)/set(Int)/set(Color). Numeric-hex set(Int) ported."
+      - "getHex uses MathUtils.jsRound (JS Math.round); getHexString via takeLast(6). Hex math in Int."
+      - "DEFERRED CSS/name paths: setStyle (rgb()/hsl()/#hex parsing), setColorName + _colorKeywords table + Color.NAMES, getStyle (CSS output). Reason: large X11 table + regex CSS parsing, no value to the pure math layer yet. Their tests are skipped (commented)."
+      - "getHSL/getRGB target is an HSL/Color holder; module-level _color/_hslA/_hslB scratch replaced by method-local allocations (dialect rule 13)."
+      - "warn -> println (no logging dep)."
+  src/math/ColorManagement.js:
+    kotlin: math/ColorManagement.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "Kotlin `object ColorManagement`. Color spaces modelled as `enum ColorSpace {NoColorSpace,SRGB,LinearSRGB,DisplayP3,LinearDisplayP3}`; transfers as `enum ColorTransfer {Linear,SRGB}`; a space entry is `class ColorSpaceDefinition`."
+      - "Ported: enabled, workingColorSpace(=LinearSRGB), spaces registry, convert, workingToColorSpace/colorSpaceToWorking, getPrimaries, getTransfer, getLuminanceCoefficients, define, getMatrix, deprecated fromWorkingColorSpace/toWorkingColorSpace (warn->println), SRGBToLinear/LinearToSRGB, Rec709 3x3 matrices (Matrix3)."
+      - "OMITTED (renderer layer): getToneMappingMode, _getDrawingBufferColorSpace, _getUnpackColorSpace, DisplayP3/LinearDisplayP3 space defs and the optional output/workingColorSpaceConfig fields on definitions."
+      - "primaries object-identity check kept as referential (===) inequality: SRGB and LinearSRGB share the same REC709_PRIMARIES DoubleArray instance, matching three.js."
 
   # --- interpolants -------------------------------------------------------------
-  src/math/Interpolant.js:                          { kotlin: math/Interpolant.kt, status: pending, tests: none }
-  src/math/interpolants/LinearInterpolant.js:       { kotlin: math/interpolants/LinearInterpolant.kt, status: pending, tests: none }
-  src/math/interpolants/DiscreteInterpolant.js:     { kotlin: math/interpolants/DiscreteInterpolant.kt, status: pending, tests: none }
-  src/math/interpolants/CubicInterpolant.js:        { kotlin: math/interpolants/CubicInterpolant.kt, status: pending, tests: none }
-  src/math/interpolants/BezierInterpolant.js:       { kotlin: math/interpolants/BezierInterpolant.kt, status: pending, tests: none }
-  src/math/interpolants/QuaternionLinearInterpolant.js: { kotlin: math/interpolants/QuaternionLinearInterpolant.kt, status: pending, tests: none }
+  src/math/Interpolant.js:
+    kotlin: math/Interpolant.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "abstract class; buffers are DoubleArray (non-nullable, per contract); valueSize is val. resultBuffer defaults to DoubleArray(sampleSize) (JS `new sampleValues.constructor(sampleSize)`)."
+      - "evaluate: JS labeled blocks (validate_interval/seek/linear_scan/forward_scan) rewritten with Kotlin `run label@{}` + flags (seekDone/intervalValid/forwardFellThrough); control flow verified equivalent by tracing all 12 evaluate sub-cases in Interpolant.tests.js."
+      - "Out-of-bounds `pp[i] === undefined` boundary tests modeled via private ppGet(i):Double? returning null for i<0 || i>=size (Kotlin DoubleArray throws instead of yielding undefined)."
+      - "settings modeled as `InterpolantSettings?` holder (endingStart/endingEnd + inTangents/outTangents:DoubleArray?); DefaultSettings_ is open val, getSettings_()=settings ?: DefaultSettings_."
+      - "Ending modes: InterpolantEnding enum {ZeroCurvature,ZeroSlope,WrapAround} (top-level) replaces ZeroCurvatureEnding/ZeroSlopeEnding/WrapAroundEnding ints (2400/2401/2402)."
+      - "r184 has NO beforeStart_/afterEnd_ hooks (that was an older three.js shape referenced by the task brief); r184 inlines copySampleValue_ at the boundary returns — ported faithfully to r184 source. interpolate_ is protected abstract; intervalChanged_ protected open (no-op default)."
+      - "Instancing/copySampleValue_ tests pass DoubleArray(0) where JS passes null (pinned ctor is non-nullable); construction never reads those buffers."
+  src/math/interpolants/LinearInterpolant.js:
+    kotlin: math/interpolants/LinearInterpolant.kt
+    status: ported
+    tests: ported
+    deviations: ["straight 1:1 port of interpolate_; ctor forwards to base with resultBuffer default."]
+  src/math/interpolants/DiscreteInterpolant.js:
+    kotlin: math/interpolants/DiscreteInterpolant.kt
+    status: ported
+    tests: ported
+    deviations: ["interpolate_ returns copySampleValue_(i1-1); unused t0/t/t1 params kept for override signature."]
+  src/math/interpolants/CubicInterpolant.js:
+    kotlin: math/interpolants/CubicInterpolant.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "_offsetPrev/_offsetNext are Int (array offsets); _weightPrev/_weightNext Double init -0.0 (JS `-0`)."
+      - "DefaultSettings_ override = InterpolantSettings(ZeroCurvature,ZeroCurvature); intervalChanged_ switches on InterpolantEnding (when-exhaustive, JS default-case=ZeroCurvature)."
+      - "local ppGet(i):Double? mirrors the base's undefined-index handling for tPrev/tNext boundary reads."
+  src/math/interpolants/BezierInterpolant.js:
+    kotlin: math/interpolants/BezierInterpolant.kt
+    status: ported
+    tests: none  # no upstream BezierInterpolant.tests.js exists
+    deviations:
+      - "settings.inTangents/outTangents modeled as DoubleArray? on InterpolantSettings (JS Float32Array) — seam kept inside math, no core type pulled in; null ⇒ linear fallback."
+      - "Math.abs→kotlin.math.abs, Math.max/min→maxOf/minOf; Newton-Raphson s2/s3/oneMinusS* initialized before loop (JS declares with let outside, assigns inside) — value-equivalent since the loop always runs ≥1 iteration and assigns them before any break."
+  src/math/interpolants/QuaternionLinearInterpolant.js:
+    kotlin: math/interpolants/QuaternionLinearInterpolant.kt
+    status: ported
+    tests: ported
+    deviations: ["interpolate_ calls Quaternion.slerpFlat(result,0,values,offset-stride,values,offset,alpha) — companion fn (DoubleArray,Int,DoubleArray,Int,DoubleArray,Int,Double). offset+=4 stride matches JS."]
 
 deferred:
   - "Vector3.project / Vector3.unproject: need core Camera; ship as ext fns in the camera layer."
+  - "Color.setStyle / Color.setColorName / Color.getStyle / Color.NAMES + _colorKeywords X11 table: CSS-string parsing and the 140-entry named-color table; port later (likely an ext/ CSS module). Their tests (setStyle*, setColorName, Color.NAMES, getStyle, copyColorString, setWithString) are skipped with comments."
+  - "BezierInterpolant.tests.js: no upstream test file exists in three.js r184 — interpolate_ ported without a ported test (linear-fallback path is covered indirectly by the shared base/Linear logic)."
+  - "Frustum.intersectsObject / Frustum.intersectsSprite: need core Object3D/Sprite/BufferGeometry (boundingSphere, computeBoundingSphere, matrixWorld). Reintroduce in the camera/objects-aware layer; their Frustum.tests.js cases are skipped with comments."
+  - "FrustumArray.intersectsObject / intersectsSprite / intersectsSphere / intersectsBox / containsPoint: need core ArrayCamera/Camera (projectionMatrix, matrixWorldInverse, coordinateSystem, reversedDepth) and the deferred Frustum object/sprite tests. Only coordinateSystem + clone() are portable now. No upstream test file exists."

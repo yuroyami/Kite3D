@@ -469,6 +469,24 @@ class Vector3Test {
     }
 
     @Test
+    fun setFromColor() {
+        // Upstream Vector3.tests.js has no `setFromColor` case; this mirrors the
+        // method (reads c.r/c.g/c.b into x/y/z). Color(x,y,z) stores components in
+        // the working color space, which equals the default LinearSRGB input space,
+        // so no conversion occurs and r/g/b are exactly x/y/z.
+        val a = Vector3()
+        val c = Color(x, y, z)
+
+        a.setFromColor(c)
+        assertEquals(c.r, a.x, 0.0, "Check x")
+        assertEquals(c.g, a.y, 0.0, "Check y")
+        assertEquals(c.b, a.z, 0.0, "Check z")
+        assertEquals(x, a.x, 0.0, "Check x value")
+        assertEquals(y, a.y, 0.0, "Check y value")
+        assertEquals(z, a.z, 0.0, "Check z value")
+    }
+
+    @Test
     fun equalsTest() {
         val a = Vector3(x, 0.0, z)
         val b = Vector3(0.0, -y, 0.0)

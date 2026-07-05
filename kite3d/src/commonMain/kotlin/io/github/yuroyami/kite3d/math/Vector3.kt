@@ -804,7 +804,19 @@ public class Vector3(
         return this
     }
 
-    // setFromColor(color) needs Color — deferred (see port-ledger.yaml).
+    /**
+     * Sets the vector components from the RGB components of the color [c]
+     * (`x = r`, `y = g`, `z = b`).
+     *
+     * @return A reference to this vector.
+     */
+    public fun setFromColor(c: Color): Vector3 {
+        x = c.r
+        y = c.g
+        z = c.b
+
+        return this
+    }
 
     /**
      * Sets `x = array[offset]`, `y = array[offset + 1]`, `z = array[offset + 2]`.
