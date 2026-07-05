@@ -104,11 +104,35 @@ files:
       - "min/max are val (D2); isBox2 flag omitted; equals/hashCode/toString overridden (D3)."
       - "_vector file-level scratch removed — setFromCenterAndSize/distanceToPoint inlined as component math (audit §3.1)."
       - "setFromPoints takes Iterable<Vector2> (D4); inherited three.js doc bugs fixed."
-  src/math/Box3.js:     { kotlin: math/Box3.kt, status: pending, tests: none }
-  src/math/Sphere.js:   { kotlin: math/Sphere.kt, status: pending, tests: none }
-  src/math/Plane.js:    { kotlin: math/Plane.kt, status: pending, tests: none }
-  src/math/Ray.js:      { kotlin: math/Ray.kt, status: pending, tests: none }
-  src/math/Line3.js:    { kotlin: math/Line3.kt, status: pending, tests: none }
+  src/math/Box3.js:
+    kotlin: math/Box3.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "min/max val; equals/hashCode/toString overridden; no file-level scratch (locals)."
+      - "setFromObject/expandByObject deferred (need core Object3D); setFromBufferAttribute takes explicit count:Int (AttributeLike has no .count); toJSON/fromJSON flattened to DoubleArray."
+  src/math/Sphere.js:
+    kotlin: math/Sphere.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "center val, radius var; equals/hashCode/toString overridden; no file-level scratch."
+      - "toJSON/fromJSON omitted (no serialization type in the math layer)."
+  src/math/Plane.js:
+    kotlin: math/Plane.kt
+    status: ported
+    tests: ported
+    deviations: ["normal val, constant var; equals/hashCode/toString overridden; no file-level scratch (locals)."]
+  src/math/Ray.js:
+    kotlin: math/Ray.kt
+    status: ported
+    tests: ported
+    deviations: ["origin/direction val; equals/hashCode/toString overridden; every module temp replaced with a local."]
+  src/math/Line3.js:
+    kotlin: math/Line3.kt
+    status: ported
+    tests: ported
+    deviations: ["start/end val; equals/hashCode/toString overridden; no file-level scratch."]
   src/math/Triangle.js:
     kotlin: math/Triangle.kt
     status: ported

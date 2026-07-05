@@ -1,6 +1,6 @@
 # Kite3D
 
-![status](https://img.shields.io/badge/status-pre--alpha%20(math%20layer)-orange)
+![status](https://img.shields.io/badge/status-alpha%20(math%20layer%20ported)-orange)
 ![kotlin](https://img.shields.io/badge/Kotlin-2.4.0-7F52FF?logo=kotlin&logoColor=white)
 ![license](https://img.shields.io/badge/license-MIT-blue)
 
@@ -24,19 +24,30 @@ three.js (r184) already splits along the seam Kite3D needs:
 
 ## Status
 
-Porting in dependency order. **Current: the `math` layer.**
+Porting in dependency order. **The `math` layer is ported.** Every class in
+three.js `src/math` is now common Kotlin, with the upstream unit-test suites
+translated to `kotlin-test` and green on the JVM, native (macOS arm64) and JS
+(Node). See [port-ledger.yaml](port-ledger.yaml) for the per-file record and
+[PORTING.md](PORTING.md) for the porting dialect.
 
 | Layer | three.js src | State |
 |-------|--------------|-------|
-| math  | `src/math`   | porting |
+| math  | `src/math`   | **ported** — vectors, matrices, quaternion, euler; box/sphere/plane/ray/line3/triangle; frustum; spherical/cylindrical; color; interpolants |
 | core / scene graph | `src/core`, `src/objects`, ... | next |
-| geometry | `src/geometries` | next |
+| geometry | `src/geometries` | later |
 | TSL nodes | `src/nodes` | later |
 | renderer core + backend | `src/renderers/common` + cinterop | later |
 
+A few `math` methods that reach into not-yet-ported layers are deferred (tracked
+in the ledger): `Box3.setFromObject`, `Frustum.intersectsObject` (need the core
+scene graph), `Vector3.project`/`unproject` (need a `Camera`), and `Color`'s
+CSS-string / named-color parsing.
+
 Numeric note: three.js math uses JS `number` (IEEE-754 double). Kite3D math
 classes use Kotlin `Double` to match three.js semantics and its unit-test
-expectations exactly. GPU buffers use `Float` further down the stack.
+expectations exactly. GPU buffers use `Float` further down the stack. Because
+`sin`/`cos`/`exp`/… are not bit-identical across JS, JVM and native `libm`, tests
+of transcendental results use tolerances; pure algebraic results are asserted exactly.
 
 ## License
 
