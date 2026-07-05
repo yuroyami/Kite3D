@@ -661,3 +661,91 @@ layer/seam architecture (it matches three.js's actual `renderers/common/Backend`
   `src/math/Vector3.js` (1263 lines), contents API listing of `src/math/`.
 - `git rev-parse --is-inside-work-tree` → "fatal: not a git repository".
 - Source-set listing: `commonMain`, `commonTest` only.
+
+---
+
+# Phase 2 — Execution Record (Opus 4.8, piloted by this audit)
+
+> Executed 2026-07-05 in one session. The repo went from **one broken file that did not compile**
+> to the **entire three.js `r184` `src/math` layer ported to common Kotlin**, compiling on all 22
+> targets and green on three engines. What follows is the record so the next phase (core / scene
+> graph) starts from ground truth.
+
+## Outcome vs. the 0%→100% scorecard
+
+| Dimension | Then | Now |
+|---|---|---|
+| Compiles | 0% (proven failure) | **100%** — 22/22 targets `assemble`; the `math` layer is complete |
+| Port fidelity | 85% (of one file) | **~100%** for `src/math` — every class ported against upstream code, faithful op-order |
+| Kotlin idiomaticity | 15% | **high** — primary ctors, no `this.` noise, `Iterable`, enums for orders/spaces, no duck-type flags |
+| Concurrency correctness | 0% (file-level `_vector` race) | **fixed** — zero file-level mutable scratch; a JVM `ConcurrencyTest` guards it |
+| Tests | 0% | **447 test methods** (ported upstream suites + Kite3D-only guards), green on jvm / macosArm64 / js(node) |
+| API hygiene | 20% | `explicitApi()` strict; `equals`/`hashCode`(-0.0)/`toString` on every value type |
+| Build hygiene | 45% | dead flags/dups removed, jvmTarget 11, rename, version catalog |
+| Repo/process | 5% | git repo + 7 commits, `.gitignore`, CI matrix, CONTRIBUTING, PORTING.md, machine ledger |
+
+## What was delivered
+
+- **Full `src/math` port** (30 commonMain files): `MathUtils`, `Vector2/3/4`, `Matrix2/3/4`,
+  `Quaternion`, `Euler`, `Box2/3`, `Sphere`, `Plane`, `Ray`, `Line3`, `Triangle`, `Frustum`,
+  `FrustumArray`, `Spherical`, `Cylindrical`, `SphericalHarmonics3`, `Color`, `ColorManagement`,
+  `Interpolant` + `Linear/Discrete/Cubic/QuaternionLinear/Bezier` interpolants, plus the
+  `AttributeLike` seam (D5).
+- **Every upstream test suite ported** to `kotlin-test` (28 test files, 447 `@Test`), applying the
+  transcendental-tolerance rule discovered in execution (V8/JVM/native `libm` differ ~1 ulp, so
+  transcendental results assert with tolerance; algebraic results stay exact).
+- **Kite3D-only guards** the audit asked for (§7.1): `MathContractTest` (empty-box `+∞` clamp canary,
+  `-0.0` hashCode normalization, `NaN` inequality, `==`⇔`.equals` agreement) and a JVM
+  `ConcurrencyTest` proving the no-shared-scratch invariant under contention.
+- **Scaffolding**: `PORTING.md` (the normative dialect), `port-ledger.yaml` (per-file status +
+  deviations), GitHub Actions CI (linux/apple/windows matrix), CONTRIBUTING.
+
+## The five top findings — resolved
+
+1. **[BLOCKER] Did not compile** → the whole layer compiles on 22 targets; `Vector2`/`Vector3` exist and are complete.
+2. **[BLOCKER] File-level `_vector` race (§3.1)** → policy applied library-wide: temps inlined as
+   component math or localized; **zero** file-level mutable state; `ConcurrencyTest` locks it.
+3. **[HIGH] `equals` overload schism (§3.2)** → `equals(Any?)`/`hashCode`(-0.0 normalized)/`toString`
+   overridden on every value type; `MathContractTest` asserts `==`⇔`.equals`.
+4. **[HIGH] `coerceIn` clamp trap (§6.1)** → all clamps go through `MathUtils.clamp` (`max(lo,min(hi,x))`);
+   the empty-box `distanceToPoint == +∞` canary passes on all three engines.
+5. **[HIGH] No git repo (§8.1)** → `git init` + `.gitignore` + 7 structured commits (baseline preserved).
+
+## Decisions taken during execution (beyond the audit's D1–D9)
+
+- **Enums replace JS string/int constants**: `EulerOrder`, `ProperEulerOrder`, `CoordinateSystem`
+  (WebGL/WebGPU), `ColorSpace`, `ColorTransfer`, `ComponentType`, `InterpolantEnding` — exhaustive
+  `when`, so upstream's unreachable "unknown order/system" `throw`/`warn` branches are dropped.
+- **`slerp`** ported faithfully to r184 (the `acos`/`0.9995` form — NOT the older `cosHalfTheta`
+  version; verified against source, not memory).
+- **Color transfer tests** use upstream's `numEqual` tolerance (0.1); the sRGB pair is byte-identical
+  to r184 (truncated `0.41666` exponent → the pair is not an exact inverse; ~2e-6 round-trip).
+- **Method / arg overloads** replace JS `x.isFoo` runtime dispatch (`Matrix4.setPosition(Vector3)` +
+  `(x,y,z)`, etc.).
+
+## Deferred (need not-yet-ported layers — tracked in `port-ledger.yaml`)
+
+- `Vector3.project`/`unproject` (core `Camera`) — ship as ext fns in the camera layer.
+- `Box3.setFromObject`/`expandByObject`, `Frustum(Array).intersectsObject`/`intersectsSprite`
+  (core `Object3D`/geometry).
+- `Color` CSS-string (`setStyle`/`getStyle`) + X11 named-color table — likely an `ext/` CSS module.
+- `Box3.setFromBufferAttribute` takes an explicit `count: Int` until the real `BufferAttribute` (with
+  `.count`) implements `AttributeLike`.
+
+## Remaining follow-ups (not blockers; deliberately not done this session)
+
+- **BCV + detekt/ktlint** — audit B10/B11. Deferred: the public API will churn heavily as core/geometry/
+  renderer layers land, so a binary-compat baseline now is premature (audit itself says "before first
+  publish"). Add when the API stabilizes.
+- **Push to a remote** — `git init` and local commits done; POMs point at `github.com/yuroyami/Kite3D`,
+  but creating/pushing the remote is left to the owner (not done without explicit ask).
+- **Dokka `sourceLink` + module docs** — add once the remote exists.
+- **kotlinx-benchmark** — audit step 8; correctly premature until there's perf-motivated work.
+
+## Next phase (core / scene graph) — entry notes
+
+- The seam is ready: `AttributeLike` is the read seam the real `BufferAttribute` implements; the
+  `math` layer takes no `core` type. `CameraLike`/`Object3D` methods listed above get restored as the
+  core types land, then their skipped tests re-enabled.
+- Keep porting under `PORTING.md` and update `port-ledger.yaml` per file; a class isn't "ported"
+  until its upstream tests are green on jvm + one native + js.
