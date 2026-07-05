@@ -9,15 +9,27 @@ files:
   # --- core scalars & interfaces ------------------------------------------------
   src/math/MathUtils.js:
     kotlin: math/MathUtils.kt
-    status: pending
-    tests: none
+    status: ported
+    tests: ported
+    deviations:
+      - "ComponentType enum replaces JS TypedArray-constructor dispatch in normalize/denormalize."
+      - "setQuaternionFromProperEuler still deferred (lands with Quaternion)."
+      - "jsRound(x)=floor(x+0.5) replaces JS Math.round (Kotlin round is half-to-even)."
   AttributeLike (Kite3D-only, no upstream file):
     kotlin: math/AttributeLike.kt
     note: "D5 seam for BufferAttribute; core implements it later."
-    status: pending
+    status: ported
 
   # --- vectors ------------------------------------------------------------------
-  src/math/Vector2.js: { kotlin: math/Vector2.kt, status: pending, tests: none }
+  src/math/Vector2.js:
+    kotlin: math/Vector2.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "isVector2 flag omitted (dialect rule 11)."
+      - "equals(Any?)/hashCode(-0.0 normalized)/toString overridden (D3)."
+      - "Iterable<Double> replaces Symbol.iterator; toArray uses MutableList (no array holes)."
+      - "applyMatrix3 temporarily omitted — restored at the Matrix3 checkpoint."
   src/math/Vector3.js: { kotlin: math/Vector3.kt, status: pending, tests: none }
   src/math/Vector4.js: { kotlin: math/Vector4.kt, status: pending, tests: none }
 
@@ -29,7 +41,14 @@ files:
   src/math/Euler.js:      { kotlin: math/Euler.kt, status: pending, tests: none }
 
   # --- boxes & primitives -------------------------------------------------------
-  src/math/Box2.js:     { kotlin: math/Box2.kt, status: in-progress, tests: none, note: "rework of the broken baseline file" }
+  src/math/Box2.js:
+    kotlin: math/Box2.kt
+    status: ported
+    tests: ported
+    deviations:
+      - "min/max are val (D2); isBox2 flag omitted; equals/hashCode/toString overridden (D3)."
+      - "_vector file-level scratch removed — setFromCenterAndSize/distanceToPoint inlined as component math (audit §3.1)."
+      - "setFromPoints takes Iterable<Vector2> (D4); inherited three.js doc bugs fixed."
   src/math/Box3.js:     { kotlin: math/Box3.kt, status: pending, tests: none }
   src/math/Sphere.js:   { kotlin: math/Sphere.kt, status: pending, tests: none }
   src/math/Plane.js:    { kotlin: math/Plane.kt, status: pending, tests: none }

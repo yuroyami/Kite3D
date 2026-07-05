@@ -1,387 +1,256 @@
 /*
  * Copyright (c) 2026 yuroyami - MIT.
- * Ported to Kotlin for Kite3D from three.js src/math/Box2.js (MIT).
+ * Ported to Kotlin for Kite3D from three.js r184 src/math/Box2.js (MIT).
  * Original three.js (c) 2010-2026 three.js authors.
  */
 package io.github.yuroyami.kite3d.math
 
-private val _vector = Vector2()
+import kotlin.math.sqrt
 
 /**
- * Represents an axis-aligned bounding box (AABB) in 2D space.
+ * An axis-aligned bounding box (AABB) in 2D space.
+ *
+ * The box is **mutable** and **not thread-safe**; confine an instance to a single
+ * thread, as in three.js.
+ *
+ * The constructor stores the given vectors **by reference** (it does not copy
+ * them). Passing the same vector as both bounds — or sharing a vector with another
+ * object — means later mutations are visible through every alias; use [set] or
+ * [clone] when you need independent storage.
  */
-class Box2 {
+public class Box2(
+    /** The lower (min) boundary of the box. */
+    public val min: Vector2 = Vector2(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
+    /** The upper (max) boundary of the box. */
+    public val max: Vector2 = Vector2(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY),
+) {
 
     /**
-     * This flag can be used for type testing.
-     */
-    val isBox2: Boolean = true
-
-    /**
-     * The lower boundary of the box.
-     */
-    var min: Vector2
-
-    /**
-     * The upper boundary of the box.
-     */
-    var max: Vector2
-
-    /**
-     * Constructs a new bounding box.
+     * Copies the values of [min] and [max] into this box's bounds.
      *
-     * @param min A vector representing the lower boundary of the box.
-     * @param max A vector representing the upper boundary of the box.
+     * @return A reference to this box.
      */
-    constructor(
-        min: Vector2 = Vector2(+Double.POSITIVE_INFINITY, +Double.POSITIVE_INFINITY),
-        max: Vector2 = Vector2(-Double.POSITIVE_INFINITY, -Double.POSITIVE_INFINITY)
-    ) {
-
-        this.min = min
-        this.max = max
-
-    }
-
-    /**
-     * Sets the lower and upper boundaries of this box.
-     * Please note that this method only copies the values from the given objects.
-     *
-     * @param min The lower boundary of the box.
-     * @param max The upper boundary of the box.
-     * @return A reference to this bounding box.
-     */
-    fun set(min: Vector2, max: Vector2): Box2 {
-
+    public fun set(min: Vector2, max: Vector2): Box2 {
         this.min.copy(min)
         this.max.copy(max)
-
         return this
-
     }
 
     /**
-     * Sets the upper and lower bounds of this box so it encloses the position data
-     * in the given array.
+     * Expands this box to enclose all the given [points]. An empty sequence leaves
+     * the box empty.
      *
-     * @param points An array holding 2D position data as instances of [Vector2].
-     * @return A reference to this bounding box.
+     * @return A reference to this box.
      */
-    fun setFromPoints(points: Array<Vector2>): Box2 {
-
-        this.makeEmpty()
-
-        var i = 0
-        val il = points.size
-        while (i < il) {
-
-            this.expandByPoint(points[i])
-
-            i++
-        }
-
+    public fun setFromPoints(points: Iterable<Vector2>): Box2 {
+        makeEmpty()
+        for (point in points) expandByPoint(point)
         return this
-
     }
 
     /**
-     * Centers this box on the given center vector and sets this box's width, height and
-     * depth to the given size values.
+     * Centers this box on [center] and sets its width and height to [size].
      *
-     * @param center The center of the box.
-     * @param size The x and y dimensions of the box.
-     * @return A reference to this bounding box.
+     * @return A reference to this box.
      */
-    fun setFromCenterAndSize(center: Vector2, size: Vector2): Box2 {
-
-        val halfSize = _vector.copy(size).multiplyScalar(0.5)
-        this.min.copy(center).sub(halfSize)
-        this.max.copy(center).add(halfSize)
-
+    public fun setFromCenterAndSize(center: Vector2, size: Vector2): Box2 {
+        val halfX = size.x * 0.5
+        val halfY = size.y * 0.5
+        min.set(center.x - halfX, center.y - halfY)
+        max.set(center.x + halfX, center.y + halfY)
         return this
-
     }
 
     /**
-     * Returns a new box with copied values from this instance.
+     * Returns a new box with copied bounds (independent storage).
      *
      * @return A clone of this instance.
      */
-    fun clone(): Box2 {
-
-        return Box2().copy(this)
-
-    }
+    public fun clone(): Box2 = Box2(min.clone(), max.clone())
 
     /**
-     * Copies the values of the given box to this instance.
+     * Copies the bounds of [box] into this instance.
      *
-     * @param box The box to copy.
-     * @return A reference to this bounding box.
+     * @return A reference to this box.
      */
-    fun copy(box: Box2): Box2 {
-
-        this.min.copy(box.min)
-        this.max.copy(box.max)
-
+    public fun copy(box: Box2): Box2 {
+        min.copy(box.min)
+        max.copy(box.max)
         return this
-
     }
 
     /**
-     * Makes this box empty which means in encloses a zero space in 2D.
+     * Makes this box empty (encloses zero space): min = +infinity, max = -infinity.
      *
-     * @return A reference to this bounding box.
+     * @return A reference to this box.
      */
-    fun makeEmpty(): Box2 {
-
-        this.min.y = +Double.POSITIVE_INFINITY
-        this.min.x = this.min.y
-        this.max.y = -Double.POSITIVE_INFINITY
-        this.max.x = this.max.y
-
+    public fun makeEmpty(): Box2 {
+        min.set(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
+        max.set(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY)
         return this
-
     }
 
     /**
-     * Returns true if this box includes zero points within its bounds.
-     * Note that a box with equal lower and upper bounds still includes one
-     * point, the one both bounds share.
-     *
-     * @return Whether this box is empty or not.
+     * Returns `true` if this box encloses no volume. A box with equal lower and
+     * upper bounds is **not** empty — it still contains the single shared point.
      */
-    fun isEmpty(): Boolean {
-
-        // this is a more robust check for empty than ( volume <= 0 ) because volume can get positive with two negative axes
-
-        return (this.max.x < this.min.x) || (this.max.y < this.min.y)
-
+    public fun isEmpty(): Boolean {
+        // More robust than (volume <= 0), which can go positive with two negative axes.
+        return max.x < min.x || max.y < min.y
     }
 
     /**
-     * Returns the center point of this box.
+     * Writes the center of this box into [target] (the zero vector if empty).
      *
-     * @param target The target vector that is used to store the method's result.
-     * @return The center point.
+     * @return [target].
      */
-    fun getCenter(target: Vector2): Vector2 {
-
-        return if (this.isEmpty()) target.set(0.0, 0.0) else target.addVectors(this.min, this.max).multiplyScalar(0.5)
-
-    }
+    public fun getCenter(target: Vector2): Vector2 =
+        if (isEmpty()) target.set(0.0, 0.0) else target.addVectors(min, max).multiplyScalar(0.5)
 
     /**
-     * Returns the dimensions of this box.
+     * Writes the width/height of this box into [target] (the zero vector if empty).
      *
-     * @param target The target vector that is used to store the method's result.
-     * @return The size.
+     * @return [target].
      */
-    fun getSize(target: Vector2): Vector2 {
-
-        return if (this.isEmpty()) target.set(0.0, 0.0) else target.subVectors(this.max, this.min)
-
-    }
+    public fun getSize(target: Vector2): Vector2 =
+        if (isEmpty()) target.set(0.0, 0.0) else target.subVectors(max, min)
 
     /**
-     * Expands the boundaries of this box to include the given point.
+     * Expands this box to include [point].
      *
-     * @param point The point that should be included by the bounding box.
-     * @return A reference to this bounding box.
+     * @return A reference to this box.
      */
-    fun expandByPoint(point: Vector2): Box2 {
-
-        this.min.min(point)
-        this.max.max(point)
-
+    public fun expandByPoint(point: Vector2): Box2 {
+        min.min(point)
+        max.max(point)
         return this
-
     }
 
     /**
-     * Expands this box equilaterally by the given vector. The width of this
-     * box will be expanded by the x component of the vector in both
-     * directions. The height of this box will be expanded by the y component of
-     * the vector in both directions.
+     * Expands this box equilaterally by [vector] (x on both horizontal sides, y on
+     * both vertical sides).
      *
-     * @param vector The vector that should expand the bounding box.
-     * @return A reference to this bounding box.
+     * @return A reference to this box.
      */
-    fun expandByVector(vector: Vector2): Box2 {
-
-        this.min.sub(vector)
-        this.max.add(vector)
-
+    public fun expandByVector(vector: Vector2): Box2 {
+        min.sub(vector)
+        max.add(vector)
         return this
-
     }
 
     /**
-     * Expands each dimension of the box by the given scalar. If negative, the
-     * dimensions of the box will be contracted.
+     * Expands each dimension by [scalar]. A negative scalar contracts the box and
+     * can invert it (making it [isEmpty]).
      *
-     * @param scalar The scalar value that should expand the bounding box.
-     * @return A reference to this bounding box.
+     * @return A reference to this box.
      */
-    fun expandByScalar(scalar: Double): Box2 {
-
-        this.min.addScalar(-scalar)
-        this.max.addScalar(scalar)
-
+    public fun expandByScalar(scalar: Double): Box2 {
+        min.addScalar(-scalar)
+        max.addScalar(scalar)
         return this
-
     }
 
     /**
-     * Returns `true` if the given point lies within or on the boundaries of this box.
-     *
-     * @param point The point to test.
-     * @return Whether the bounding box contains the given point or not.
+     * Returns `true` if [point] lies within or on the boundary of this box.
      */
-    fun containsPoint(point: Vector2): Boolean {
-
-        return point.x >= this.min.x && point.x <= this.max.x &&
-            point.y >= this.min.y && point.y <= this.max.y
-
-    }
+    public fun containsPoint(point: Vector2): Boolean =
+        point.x >= min.x && point.x <= max.x &&
+            point.y >= min.y && point.y <= max.y
 
     /**
-     * Returns `true` if this bounding box includes the entirety of the given bounding box.
-     * If this box and the given one are identical, this function also returns `true`.
-     *
-     * @param box The bounding box to test.
-     * @return Whether the bounding box contains the given bounding box or not.
+     * Returns `true` if this box fully contains [box] (an identical box counts as
+     * contained).
      */
-    fun containsBox(box: Box2): Boolean {
-
-        return this.min.x <= box.min.x && box.max.x <= this.max.x &&
-            this.min.y <= box.min.y && box.max.y <= this.max.y
-
-    }
+    public fun containsBox(box: Box2): Boolean =
+        min.x <= box.min.x && box.max.x <= max.x &&
+            min.y <= box.min.y && box.max.y <= max.y
 
     /**
-     * Returns a point as a proportion of this box's width and height.
+     * Writes [point] as a proportion of this box's width and height into [target].
      *
-     * @param point A point in 2D space.
-     * @param target The target vector that is used to store the method's result.
-     * @return A point as a proportion of this box's width and height.
+     * A dimension of size `0` yields a division by zero (`+/-Infinity` or `NaN`) in
+     * the corresponding component.
+     *
+     * @return [target].
      */
-    fun getParameter(point: Vector2, target: Vector2): Vector2 {
-
-        // This can potentially have a divide by zero if the box
-        // has a size dimension of 0.
-
-        return target.set(
-            (point.x - this.min.x) / (this.max.x - this.min.x),
-            (point.y - this.min.y) / (this.max.y - this.min.y)
+    public fun getParameter(point: Vector2, target: Vector2): Vector2 =
+        target.set(
+            (point.x - min.x) / (max.x - min.x),
+            (point.y - min.y) / (max.y - min.y),
         )
 
+    /**
+     * Returns `true` if [box] intersects this box (touching edges count).
+     */
+    public fun intersectsBox(box: Box2): Boolean =
+        // 4 splitting planes rule out intersection.
+        box.max.x >= min.x && box.min.x <= max.x &&
+            box.max.y >= min.y && box.min.y <= max.y
+
+    /**
+     * Writes [point] clamped into this box's bounds into [target].
+     *
+     * @return [target].
+     */
+    public fun clampPoint(point: Vector2, target: Vector2): Vector2 =
+        target.copy(point).clamp(min, max)
+
+    /**
+     * Returns the Euclidean distance from [point] to the nearest edge of this box
+     * (`0` if inside). An empty box yields `+Infinity`.
+     */
+    public fun distanceToPoint(point: Vector2): Double {
+        // Inlined clampPoint(point).distanceTo(point) — no shared scratch vector.
+        val clampedX = MathUtils.clamp(point.x, min.x, max.x)
+        val clampedY = MathUtils.clamp(point.y, min.y, max.y)
+        val dx = clampedX - point.x
+        val dy = clampedY - point.y
+        return sqrt(dx * dx + dy * dy)
     }
 
     /**
-     * Returns `true` if the given bounding box intersects with this bounding box.
+     * Intersects this box with [box] (keeps the overlapping region), making this box
+     * empty if there is no overlap.
      *
-     * @param box The bounding box to test.
-     * @return Whether the given bounding box intersects with this bounding box.
+     * @return A reference to this box.
      */
-    fun intersectsBox(box: Box2): Boolean {
-
-        // using 4 splitting planes to rule out intersections
-
-        return box.max.x >= this.min.x && box.min.x <= this.max.x &&
-            box.max.y >= this.min.y && box.min.y <= this.max.y
-
-    }
-
-    /**
-     * Clamps the given point within the bounds of this box.
-     *
-     * @param point The point to clamp.
-     * @param target The target vector that is used to store the method's result.
-     * @return The clamped point.
-     */
-    fun clampPoint(point: Vector2, target: Vector2): Vector2 {
-
-        return target.copy(point).clamp(this.min, this.max)
-
-    }
-
-    /**
-     * Returns the euclidean distance from any edge of this box to the specified point. If
-     * the given point lies inside of this box, the distance will be `0`.
-     *
-     * @param point The point to compute the distance to.
-     * @return The euclidean distance.
-     */
-    fun distanceToPoint(point: Vector2): Double {
-
-        return this.clampPoint(point, _vector).distanceTo(point)
-
-    }
-
-    /**
-     * Computes the intersection of this bounding box and the given one, setting the upper
-     * bound of this box to the lesser of the two boxes' upper bounds and the
-     * lower bound of this box to the greater of the two boxes' lower bounds. If
-     * there's no overlap, makes this box empty.
-     *
-     * @param box The bounding box to intersect with.
-     * @return A reference to this bounding box.
-     */
-    fun intersect(box: Box2): Box2 {
-
-        this.min.max(box.min)
-        this.max.min(box.max)
-
-        if (this.isEmpty()) this.makeEmpty()
-
+    public fun intersect(box: Box2): Box2 {
+        min.max(box.min)
+        max.min(box.max)
+        // Canonicalize a non-overlapping result to the standard empty box.
+        if (isEmpty()) makeEmpty()
         return this
-
     }
 
     /**
-     * Computes the union of this box and another and the given one, setting the upper
-     * bound of this box to the greater of the two boxes' upper bounds and the
-     * lower bound of this box to the lesser of the two boxes' lower bounds.
+     * Unions this box with [box] (grows to enclose both).
      *
-     * @param box The bounding box that will be unioned with this instance.
-     * @return A reference to this bounding box.
+     * @return A reference to this box.
      */
-    fun union(box: Box2): Box2 {
-
-        this.min.min(box.min)
-        this.max.max(box.max)
-
+    public fun union(box: Box2): Box2 {
+        min.min(box.min)
+        max.max(box.max)
         return this
-
     }
 
     /**
-     * Adds the given offset to both the upper and lower bounds of this bounding box,
-     * effectively moving it in 2D space.
+     * Translates this box by [offset], moving both bounds.
      *
-     * @param offset The offset that should be used to translate the bounding box.
-     * @return A reference to this bounding box.
+     * @return A reference to this box.
      */
-    fun translate(offset: Vector2): Box2 {
-
-        this.min.add(offset)
-        this.max.add(offset)
-
+    public fun translate(offset: Vector2): Box2 {
+        min.add(offset)
+        max.add(offset)
         return this
-
     }
 
     /**
-     * Returns `true` if this bounding box is equal with the given one.
-     *
-     * @param box The box to test for equality.
-     * @return Whether this bounding box is equal with the given one.
+     * Structural equality: `true` when [other] is a [Box2] with equal bounds.
      */
-    fun equals(box: Box2): Boolean {
+    override fun equals(other: Any?): Boolean =
+        other is Box2 && other.min == min && other.max == max
 
-        return box.min.equals(this.min) && box.max.equals(this.max)
+    override fun hashCode(): Int = 31 * min.hashCode() + max.hashCode()
 
-    }
-
+    override fun toString(): String = "Box2(min=$min, max=$max)"
 }
