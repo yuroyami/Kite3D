@@ -1,7 +1,7 @@
 # Kite3D
 
 ![status](https://img.shields.io/badge/status-alpha%20(math%20layer%20ported)-orange)
-![kotlin](https://img.shields.io/badge/Kotlin-2.4.0-7F52FF?logo=kotlin&logoColor=white)
+![kotlin](https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?logo=kotlin&logoColor=white)
 ![license](https://img.shields.io/badge/license-MIT-blue)
 
 **One pure-Kotlin 3D engine for Kotlin Multiplatform. A from-scratch port of [three.js](https://github.com/mrdoob/three.js) — scene graph, math, geometry and shading — from `commonMain`, with pluggable GPU backends.**
@@ -26,9 +26,9 @@ three.js (r184) already splits along the seam Kite3D needs:
 
 Porting in dependency order. **The `math` layer is ported.** Every class in
 three.js `src/math` is now common Kotlin, with the upstream unit-test suites
-translated to `kotlin-test` and green on the JVM, native (macOS arm64) and JS
-(Node). See [port-ledger.yaml](port-ledger.yaml) for the per-file record and
-[PORTING.md](PORTING.md) for the porting dialect.
+translated to `kotlin-test` and green on the JVM, native (macOS arm64), JS (Node)
+and Wasm (Node and WASI). See [port-ledger.yaml](port-ledger.yaml) for the
+per-file record and [PORTING.md](PORTING.md) for the porting dialect.
 
 | Layer | three.js src | State |
 |-------|--------------|-------|

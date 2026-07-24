@@ -29,7 +29,6 @@ files:
       - "isVector2 flag omitted (dialect rule 11)."
       - "equals(Any?)/hashCode(-0.0 normalized)/toString overridden (D3)."
       - "Iterable<Double> replaces Symbol.iterator; toArray uses MutableList (no array holes)."
-      - "applyMatrix3 temporarily omitted — restored at the Matrix3 checkpoint."
   src/math/Vector3.js:
     kotlin: math/Vector3.kt
     status: ported
@@ -72,6 +71,7 @@ files:
       - "CoordinateSystem enum {WebGL,WebGPU} (top-level) replaces WebGL/WebGPUCoordinateSystem int constants; default WebGL. Exhaustive when needs no invalid-system throw branch."
       - "setPosition/makeTranslation split into Vector3 + scalar overloads (JS x.isVector3 dispatch); row-major element constructor deferred to ext/ (rule 3)."
       - "makeRotationFromEuler switches on EulerOrder enum (not the 'XYZ' string); compose reads quaternion.x/y/z/w public getters (JS reads _x/_y/_z/_w backing — identical value)."
+      - "determinantAffine() ported (upper-left 3x3 only, bottom row assumed [0,0,0,1]); extractBasis/extractRotation/decompose guard on it, matching r184. Both upstream determinantAffine tests ported."
   src/math/Quaternion.js:
     kotlin: math/Quaternion.kt
     status: ported
@@ -83,6 +83,7 @@ files:
       - "slerp/slerpFlat: local `sin` renamed to `sinTheta` to avoid shadowing kotlin.math.sin (op order preserved)."
       - "slerpFlat/multiplyQuaternionsFlat in companion object; operate on DoubleArray. toArray uses MutableList (no array holes); toJSON returns MutableList<Double>."
       - "slerp does NOT use MathUtils.EPSILON (upstream r184 uses literal 0.9995 threshold; contract note was doc-level)."
+      - "onChange(cb) replaces JS _onChange/_onChangeCallback (same shape as Euler); reads never fire the callback. Upstream's _onChangeCallback test is therefore not ported."
   src/math/Euler.js:
     kotlin: math/Euler.kt
     status: ported
@@ -117,7 +118,7 @@ files:
     tests: ported
     deviations:
       - "center val, radius var; equals/hashCode/toString overridden; no file-level scratch."
-      - "toJSON/fromJSON omitted (no serialization type in the math layer)."
+      - "toJSON/fromJSON flattened to DoubleArray [cx,cy,cz,radius] (JS returns {radius, center}); same treatment as Box3. Upstream has no test for them — a fresh round-trip test was added (as was Box3's)."
   src/math/Plane.js:
     kotlin: math/Plane.kt
     status: ported
@@ -162,6 +163,7 @@ files:
     deviations:
       - "coordinateSystem is a CoordinateSystem enum (JS WebGLCoordinateSystem default → WebGL); clone() returns a fresh FrustumArray (faithful; does not copy coordinateSystem)."
       - "All 5 intersection methods (intersectsObject/Sprite/Sphere/Box/containsPoint) DEFERRED: each iterates cameraArray.cameras and reads camera.projectionMatrix/matrixWorldInverse/coordinateSystem/reversedDepth then delegates to Frustum (incl. the deferred Frustum.intersectsObject/Sprite). Need the core ArrayCamera/Camera layer."
+      - "setFromArrayCamera(arrayCamera) DEFERRED for the same reason — it reads arrayCamera.cameras and each camera's projectionMatrix/matrixWorldInverse. Nothing about it is portable before the camera layer."
   src/math/Spherical.js:          { kotlin: math/Spherical.kt, status: ported, tests: ported, deviations: ["equals/hashCode/toString added (upstream has none); makeSafe EPS as private const."] }
   src/math/Cylindrical.js:        { kotlin: math/Cylindrical.kt, status: ported, tests: ported, deviations: ["equals/hashCode/toString added (upstream has none)."] }
   src/math/SphericalHarmonics3.js:
@@ -208,6 +210,15 @@ files:
       - "Ending modes: InterpolantEnding enum {ZeroCurvature,ZeroSlope,WrapAround} (top-level) replaces ZeroCurvatureEnding/ZeroSlopeEnding/WrapAroundEnding ints (2400/2401/2402)."
       - "r184 has NO beforeStart_/afterEnd_ hooks (that was an older three.js shape referenced by the task brief); r184 inlines copySampleValue_ at the boundary returns — ported faithfully to r184 source. interpolate_ is protected abstract; intervalChanged_ protected open (no-op default)."
       - "Instancing/copySampleValue_ tests pass DoubleArray(0) where JS passes null (pinned ctor is non-nullable); construction never reads those buffers."
+      - "copySampleValue_ is `public open` (JS methods are all overridable). Derived classes with a non-flat keyframe layout must override it — the CUBICSPLINE/GLTFCubicSplineInterpolant case. Kotlin members are final by default, so without `open` that whole subclass shape is impossible."
+  test/unit/src/math/interpolants/CustomInterpolant.tests.js:
+    kotlin: math/interpolants/CustomInterpolantTest.kt
+    note: "Test-only: upstream has no matching src/ class, so this entry records a suite rather than a port."
+    status: ported
+    tests: ported
+    deviations:
+      - "Defines a private CubicSplineInterpolant mirroring GLTFLoader's GLTFCubicSplineInterpolant; exists to pin the Interpolant extension seam (overriding copySampleValue_ AND interpolate_)."
+      - "resultBuffer is DoubleArray(1) where JS passes [0]/[]; assert.deepEqual on the buffer becomes assertContentEquals."
   src/math/interpolants/LinearInterpolant.js:
     kotlin: math/interpolants/LinearInterpolant.kt
     status: ported
@@ -244,4 +255,4 @@ deferred:
   - "Color.setStyle / Color.setColorName / Color.getStyle / Color.NAMES + _colorKeywords X11 table: CSS-string parsing and the 140-entry named-color table; port later (likely an ext/ CSS module). Their tests (setStyle*, setColorName, Color.NAMES, getStyle, copyColorString, setWithString) are skipped with comments."
   - "BezierInterpolant.tests.js: no upstream test file exists in three.js r184 — interpolate_ ported without a ported test (linear-fallback path is covered indirectly by the shared base/Linear logic)."
   - "Frustum.intersectsObject / Frustum.intersectsSprite: need core Object3D/Sprite/BufferGeometry (boundingSphere, computeBoundingSphere, matrixWorld). Reintroduce in the camera/objects-aware layer; their Frustum.tests.js cases are skipped with comments."
-  - "FrustumArray.intersectsObject / intersectsSprite / intersectsSphere / intersectsBox / containsPoint: need core ArrayCamera/Camera (projectionMatrix, matrixWorldInverse, coordinateSystem, reversedDepth) and the deferred Frustum object/sprite tests. Only coordinateSystem + clone() are portable now. No upstream test file exists."
+  - "FrustumArray.setFromArrayCamera / intersectsObject / intersectsSprite / intersectsSphere / intersectsBox / containsPoint: need core ArrayCamera/Camera (cameras, projectionMatrix, matrixWorldInverse, coordinateSystem, reversedDepth) and the deferred Frustum object/sprite tests. Only coordinateSystem + clone() are portable now. No upstream test file exists."

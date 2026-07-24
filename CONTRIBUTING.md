@@ -4,6 +4,20 @@ Kite3D is a from-scratch port of [three.js](https://github.com/mrdoob/three.js)
 (`r184`) to Kotlin Multiplatform. Almost all contributions right now are **ports**:
 turning a three.js source file into common Kotlin.
 
+## Getting the three.js reference
+
+Porting means reading the upstream file side by side with its Kotlin counterpart,
+so you need a local checkout of three.js at the pinned revision. It lives at
+`three.js-ref/` and is **git-ignored** — it is not part of Kite3D and is never
+committed:
+
+```bash
+git clone --depth 1 --branch r184 https://github.com/mrdoob/three.js.git three.js-ref
+```
+
+The sources you will want are `three.js-ref/src/math/…` and their suites in
+`three.js-ref/test/unit/src/math/…`.
+
 ## Before you port a file
 
 Read **[PORTING.md](PORTING.md)** — the binding dialect. It covers structure,
@@ -24,12 +38,32 @@ land in the same commit.
 ./gradlew :kite3d:jvmTest          # JVM
 ./gradlew :kite3d:jsNodeTest       # JS (Node)
 ./gradlew :kite3d:macosArm64Test   # native (on Apple silicon)
+./gradlew :kite3d:wasmJsNodeTest   # Wasm (Node)
+./gradlew :kite3d:wasmWasiNodeTest # Wasm (WASI)
 ```
 
 A port is "done" only when its ported test suite is green on **jvm, one native
 target, and js** — the three engines have different `libm` implementations, so a
 tolerance that passes on the JVM can still fail on native (see PORTING.md, the
 transcendental-tolerance rule).
+
+## Public API changes
+
+The public ABI is dumped to `kite3d/api/` and checked in. CI fails when the code
+drifts from the dump:
+
+```bash
+./gradlew :kite3d:checkKotlinAbi
+```
+
+If the change is intended, regenerate and commit the dump in the same PR:
+
+```bash
+./gradlew :kite3d:updateKotlinAbi
+```
+
+Regenerate on macOS when you can — it is the only host that builds every target in
+the matrix, so a dump produced anywhere else covers fewer klibs.
 
 Toolchain: JDK 21 builds the project (`jvmToolchain(21)`), but the JVM bytecode
 target is 11, so consumers on JDK 11+ and Android are supported.
