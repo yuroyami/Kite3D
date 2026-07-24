@@ -432,6 +432,41 @@ class Matrix4Test {
     }
 
     @Test
+    fun determinantAffine() {
+        // for affine matrices (the typical object world matrix), the 3x3 result
+        // equals the full 4x4 determinant since the bottom row is [ 0, 0, 0, 1 ]
+
+        val a = Matrix4()
+        val position = Vector3(5.0, -2.0, 3.0)
+        val quaternion = Quaternion().setFromEuler(Euler(0.1, -0.7, 1.3))
+
+        // translation + rotation + non-uniform scale
+
+        a.compose(position, quaternion, Vector3(2.0, 3.0, 0.5))
+        assertTrue(abs(a.determinantAffine() - a.determinant()) <= eps, "Affine matrix: Passed!")
+
+        // reflection (negative scale on one axis flips the winding order)
+
+        a.compose(position, quaternion, Vector3(2.0, 3.0, -0.5))
+        assertTrue(a.determinantAffine() < 0.0, "Reflection produces a negative determinant!")
+        assertTrue(abs(a.determinantAffine() - a.determinant()) <= eps, "Reflection matrix: Passed!")
+
+        // shear
+
+        a.multiply(Matrix4().makeShear(0.5, 0.0, 0.2, 0.0, 0.7, 0.0))
+        assertTrue(abs(a.determinantAffine() - a.determinant()) <= eps, "Shear matrix: Passed!")
+    }
+
+    @Test
+    fun determinantAffineProjectiveMatrix() {
+        // for non-affine (projective) matrices, the bottom row is not [ 0, 0, 0, 1 ]
+        // and so the 3x3 result generally differs from the full 4x4 determinant
+
+        val a = Matrix4().makePerspective(-1.0, 1.0, 1.0, -1.0, 1.0, 100.0)
+        assertTrue(abs(a.determinantAffine() - a.determinant()) > eps, "Passed!")
+    }
+
+    @Test
     fun transpose() {
         val a = Matrix4()
         var b = a.clone().transpose()

@@ -159,7 +159,7 @@ public class Matrix4 {
      * @return A reference to this matrix.
      */
     public fun extractBasis(xAxis: Vector3, yAxis: Vector3, zAxis: Vector3): Matrix4 {
-        if (determinant() == 0.0) {
+        if (determinantAffine() == 0.0) {
             xAxis.set(1.0, 0.0, 0.0)
             yAxis.set(0.0, 1.0, 0.0)
             zAxis.set(0.0, 0.0, 1.0)
@@ -199,7 +199,7 @@ public class Matrix4 {
      * @return A reference to this matrix.
      */
     public fun extractRotation(m: Matrix4): Matrix4 {
-        if (m.determinant() == 0.0) {
+        if (m.determinantAffine() == 0.0) {
             return identity()
         }
 
@@ -526,6 +526,30 @@ public class Matrix4 {
             n12 * (n41 * t11 - n43 * t21 + n44 * t22) +
             n13 * (n41 * t12 - n42 * t21 + n44 * t23) -
             n14 * (n41 * t13 - n42 * t22 + n43 * t23)
+    }
+
+    /**
+     * Computes and returns the determinant of this matrix assuming it is affine,
+     * saving some computations.
+     *
+     * Only the upper-left 3x3 block participates; the bottom row is assumed to be
+     * `[0, 0, 0, 1]`. For affine matrices (an object's world matrix, say) the
+     * result equals [determinant] but is cheaper. For projective matrices — a
+     * perspective projection, whose bottom row is not `[0, 0, 0, 1]` — the two
+     * generally differ.
+     *
+     * @return The determinant of the upper-left 3x3 block.
+     */
+    public fun determinantAffine(): Double {
+        val te = elements
+
+        val n11 = te[0]; val n12 = te[4]; val n13 = te[8]
+        val n21 = te[1]; val n22 = te[5]; val n23 = te[9]
+        val n31 = te[2]; val n32 = te[6]; val n33 = te[10]
+
+        return n11 * (n22 * n33 - n23 * n32) -
+            n12 * (n21 * n33 - n23 * n31) +
+            n13 * (n21 * n32 - n22 * n31)
     }
 
     /**
@@ -894,7 +918,7 @@ public class Matrix4 {
         position.y = te[13]
         position.z = te[14]
 
-        val det = determinant()
+        val det = determinantAffine()
 
         if (det == 0.0) {
             scale.set(1.0, 1.0, 1.0)
