@@ -18,3 +18,7 @@ local.properties
 # OS / editor
 *.swp
 *~
+
+# The three.js reference checkout used while porting. It is not part of Kite3D
+# and is never committed; see CONTRIBUTING.md for how to obtain it.
+three.js-ref/
