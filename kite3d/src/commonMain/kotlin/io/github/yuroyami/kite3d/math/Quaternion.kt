@@ -74,6 +74,10 @@ public class Quaternion(
     /**
      * Sets the quaternion components.
      *
+     * @param x The x value of this quaternion.
+     * @param y The y value of this quaternion.
+     * @param z The z value of this quaternion.
+     * @param w The w value of this quaternion.
      * @return A reference to this quaternion.
      */
     public fun set(x: Double, y: Double, z: Double, w: Double): Quaternion {
@@ -507,6 +511,7 @@ public class Quaternion(
      * Performs a spherical linear interpolation between [qa] and [qb] and stores
      * the result in this quaternion.
      *
+     * @param t The interpolation factor in the closed interval `[0, 1]`.
      * @return A reference to this quaternion.
      */
     public fun slerpQuaternions(qa: Quaternion, qb: Quaternion, t: Double): Quaternion =
@@ -560,6 +565,8 @@ public class Quaternion(
     /**
      * Writes the components of this quaternion into [array] at [offset], growing
      * the list as needed, and returns it.
+     *
+     * @return The quaternion components.
      */
     public fun toArray(array: MutableList<Double> = mutableListOf(), offset: Int = 0): MutableList<Double> {
         while (array.size < offset + 4) array.add(0.0)

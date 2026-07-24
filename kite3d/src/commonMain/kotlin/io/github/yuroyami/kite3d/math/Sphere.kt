@@ -32,6 +32,8 @@ public class Sphere(
     /**
      * Sets the sphere's components by copying the given values.
      *
+     * @param center The center.
+     * @param radius The radius.
      * @return A reference to this sphere.
      */
     public fun set(center: Vector3, radius: Double): Sphere {
@@ -88,6 +90,8 @@ public class Sphere(
      *
      * Spheres with a radius of `0` contain only their center point and are not
      * considered to be empty.
+     *
+     * @return Whether this sphere is empty or not.
      */
     public fun isEmpty(): Boolean =
         radius < 0
@@ -107,6 +111,8 @@ public class Sphere(
     /**
      * Returns `true` if this sphere contains the given [point] inclusive of the
      * surface of the sphere.
+     *
+     * @return Whether this sphere contains the given point or not.
      */
     public fun containsPoint(point: Vector3): Boolean =
         point.distanceToSquared(center) <= (radius * radius)
@@ -114,12 +120,16 @@ public class Sphere(
     /**
      * Returns the closest distance from the boundary of the sphere to the given
      * [point]. If the sphere contains the point, the distance will be negative.
+     *
+     * @return The distance to the point.
      */
     public fun distanceToPoint(point: Vector3): Double =
         point.distanceTo(center) - radius
 
     /**
      * Returns `true` if this sphere intersects with the given one [sphere].
+     *
+     * @return Whether this sphere intersects with the given one or not.
      */
     public fun intersectsSphere(sphere: Sphere): Boolean {
         val radiusSum = radius + sphere.radius
@@ -129,12 +139,16 @@ public class Sphere(
 
     /**
      * Returns `true` if this sphere intersects with the given [box].
+     *
+     * @return Whether this sphere intersects with the given box or not.
      */
     public fun intersectsBox(box: Box3): Boolean =
         box.intersectsSphere(this)
 
     /**
      * Returns `true` if this sphere intersects with the given [plane].
+     *
+     * @return Whether this sphere intersects with the given plane or not.
      */
     public fun intersectsPlane(plane: Plane): Boolean =
         abs(plane.distanceToPoint(center)) <= radius
@@ -283,6 +297,8 @@ public class Sphere(
      * center.toArray() }`); flattened here since the math layer has no JS object
      * type. Center first, so the leading three components are exactly what
      * [Vector3.toArray] would write.
+     *
+     * @return Serialized structure with fields representing the object state.
      */
     public fun toJSON(): DoubleArray = doubleArrayOf(center.x, center.y, center.z, radius)
 

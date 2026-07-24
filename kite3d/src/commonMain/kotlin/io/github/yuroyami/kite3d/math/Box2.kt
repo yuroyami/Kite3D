@@ -93,6 +93,8 @@ public class Box2(
     /**
      * Returns `true` if this box encloses no volume. A box with equal lower and
      * upper bounds is **not** empty — it still contains the single shared point.
+     *
+     * @return Whether this box is empty or not.
      */
     public fun isEmpty(): Boolean {
         // More robust than (volume <= 0), which can go positive with two negative axes.
@@ -152,6 +154,8 @@ public class Box2(
 
     /**
      * Returns `true` if [point] lies within or on the boundary of this box.
+     *
+     * @return Whether the bounding box contains the given point or not.
      */
     public fun containsPoint(point: Vector2): Boolean =
         point.x >= min.x && point.x <= max.x &&
@@ -160,6 +164,8 @@ public class Box2(
     /**
      * Returns `true` if this box fully contains [box] (an identical box counts as
      * contained).
+     *
+     * @return Whether the bounding box contains the given bounding box or not.
      */
     public fun containsBox(box: Box2): Boolean =
         min.x <= box.min.x && box.max.x <= max.x &&
@@ -181,6 +187,8 @@ public class Box2(
 
     /**
      * Returns `true` if [box] intersects this box (touching edges count).
+     *
+     * @return Whether the given bounding box intersects with this bounding box.
      */
     public fun intersectsBox(box: Box2): Boolean =
         // 4 splitting planes rule out intersection.
@@ -198,6 +206,8 @@ public class Box2(
     /**
      * Returns the Euclidean distance from [point] to the nearest edge of this box
      * (`0` if inside). An empty box yields `+Infinity`.
+     *
+     * @return The euclidean distance.
      */
     public fun distanceToPoint(point: Vector2): Double {
         // Inlined clampPoint(point).distanceTo(point) — no shared scratch vector.

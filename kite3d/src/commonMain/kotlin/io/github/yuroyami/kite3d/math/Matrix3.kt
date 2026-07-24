@@ -39,6 +39,15 @@ public class Matrix3 {
      * Sets the elements of the matrix. The arguments are supposed to be in
      * row-major order.
      *
+     * @param n11 1-1 matrix element.
+     * @param n12 1-2 matrix element.
+     * @param n13 1-3 matrix element.
+     * @param n21 2-1 matrix element.
+     * @param n22 2-2 matrix element.
+     * @param n23 2-3 matrix element.
+     * @param n31 3-1 matrix element.
+     * @param n32 3-2 matrix element.
+     * @param n33 3-3 matrix element.
      * @return A reference to this matrix.
      */
     public fun set(
@@ -89,6 +98,9 @@ public class Matrix3 {
     /**
      * Extracts the basis of this matrix into the three axis vectors provided.
      *
+     * @param xAxis The basis's x axis.
+     * @param yAxis The basis's y axis.
+     * @param zAxis The basis's z axis.
      * @return A reference to this matrix.
      */
     public fun extractBasis(xAxis: Vector3, yAxis: Vector3, zAxis: Vector3): Matrix3 {
@@ -446,6 +458,7 @@ public class Matrix3 {
      * order), growing the list as needed, and returns it.
      *
      * @param offset Index of the first element in the array.
+     * @return The matrix elements in column-major order.
      */
     public fun toArray(array: MutableList<Double> = mutableListOf(), offset: Int = 0): MutableList<Double> {
         val te = elements

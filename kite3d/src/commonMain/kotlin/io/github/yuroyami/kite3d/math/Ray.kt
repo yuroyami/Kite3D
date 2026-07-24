@@ -101,12 +101,16 @@ public class Ray(
 
     /**
      * Returns the distance of closest approach between this ray and [point].
+     *
+     * @return The distance.
      */
     public fun distanceToPoint(point: Vector3): Double =
         sqrt(distanceSqToPoint(point))
 
     /**
      * Returns the squared distance of closest approach between this ray and [point].
+     *
+     * @return The squared distance.
      */
     public fun distanceSqToPoint(point: Vector3): Double {
         val vector = Vector3()
@@ -130,6 +134,8 @@ public class Ray(
      * the segment, and [optionalPointOnSegment] receives the point on the segment
      * closest to this ray.
      *
+     * @param v0 The start point of the line segment.
+     * @param v1 The end point of the line segment.
      * @return The squared distance.
      */
     public fun distanceSqToSegment(
@@ -273,6 +279,8 @@ public class Ray(
 
     /**
      * Returns `true` if this ray intersects [sphere].
+     *
+     * @return Whether this ray intersects with the given sphere or not.
      */
     public fun intersectsSphere(sphere: Sphere): Boolean {
         if (sphere.radius < 0) return false // handle empty spheres, see #31187
@@ -283,6 +291,8 @@ public class Ray(
     /**
      * Returns the distance from this ray's origin to [plane], or `null` if the ray
      * does not intersect the plane.
+     *
+     * @return Whether this ray intersects with the given sphere or not.
      */
     public fun distanceToPlane(plane: Plane): Double? {
         val denominator = plane.normal.dot(direction)
@@ -323,6 +333,8 @@ public class Ray(
 
     /**
      * Returns `true` if this ray intersects [plane].
+     *
+     * @return Whether this ray intersects with the given plane or not.
      */
     public fun intersectsPlane(plane: Plane): Boolean {
         // check if the ray lies on the plane first
@@ -411,6 +423,8 @@ public class Ray(
 
     /**
      * Returns `true` if this ray intersects [box].
+     *
+     * @return Whether this ray intersects with the given box or not.
      */
     public fun intersectsBox(box: Box3): Boolean {
         val vector = Vector3()
@@ -422,6 +436,9 @@ public class Ray(
      * point into [target].
      *
      * @param backfaceCulling if `true`, backfacing triangles are not intersected.
+     * @param a The first vertex of the triangle.
+     * @param b The second vertex of the triangle.
+     * @param c The third vertex of the triangle.
      * @return [target] on a hit, or `null` if there is no intersection.
      */
     public fun intersectTriangle(

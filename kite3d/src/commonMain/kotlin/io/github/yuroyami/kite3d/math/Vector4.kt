@@ -53,6 +53,10 @@ public class Vector4(
     /**
      * Sets the vector components.
      *
+     * @param x The value of the x component.
+     * @param y The value of the y component.
+     * @param z The value of the z component.
+     * @param w The value of the w component.
      * @return A reference to this vector.
      */
     public fun set(x: Double, y: Double, z: Double, w: Double): Vector4 {
@@ -79,6 +83,7 @@ public class Vector4(
     /**
      * Sets the vector's x component.
      *
+     * @param x The value to set.
      * @return A reference to this vector.
      */
     public fun setX(x: Double): Vector4 {
@@ -89,6 +94,7 @@ public class Vector4(
     /**
      * Sets the vector's y component.
      *
+     * @param y The value to set.
      * @return A reference to this vector.
      */
     public fun setY(y: Double): Vector4 {
@@ -99,6 +105,7 @@ public class Vector4(
     /**
      * Sets the vector's z component.
      *
+     * @param z The value to set.
      * @return A reference to this vector.
      */
     public fun setZ(z: Double): Vector4 {
@@ -109,6 +116,7 @@ public class Vector4(
     /**
      * Sets the vector's w component.
      *
+     * @param w The value to set.
      * @return A reference to this vector.
      */
     public fun setW(w: Double): Vector4 {
@@ -137,6 +145,8 @@ public class Vector4(
      * Returns the component at [index] (`0` = x, `1` = y, `2` = z, `3` = w).
      *
      * @throws IllegalArgumentException if [index] is out of range.
+     *
+     * @return A vector component value.
      */
     public fun getComponent(index: Int): Double = when (index) {
         0 -> x
@@ -197,6 +207,8 @@ public class Vector4(
     /**
      * Sets this vector to `a + b`.
      *
+     * @param a The first vector.
+     * @param b The second vector.
      * @return A reference to this vector.
      */
     public fun addVectors(a: Vector4, b: Vector4): Vector4 {
@@ -249,6 +261,8 @@ public class Vector4(
     /**
      * Sets this vector to `a - b`.
      *
+     * @param a The first vector.
+     * @param b The second vector.
      * @return A reference to this vector.
      */
     public fun subVectors(a: Vector4, b: Vector4): Vector4 {
@@ -531,6 +545,8 @@ public class Vector4(
      * Clamps each component into the range `[min, max]` (assumed component-wise
      * `min <= max`).
      *
+     * @param min The minimum x, y and z values.
+     * @param max The maximum x, y and z values in the desired range.
      * @return A reference to this vector.
      */
     public fun clamp(min: Vector4, max: Vector4): Vector4 {
@@ -545,6 +561,8 @@ public class Vector4(
     /**
      * Clamps each component into the scalar range `[minVal, maxVal]`.
      *
+     * @param minVal The minimum value the components will be clamped to.
+     * @param maxVal The maximum value the components will be clamped to.
      * @return A reference to this vector.
      */
     public fun clampScalar(minVal: Double, maxVal: Double): Vector4 {
@@ -558,6 +576,8 @@ public class Vector4(
     /**
      * Clamps this vector's length into `[min, max]`.
      *
+     * @param min The minimum value the vector length will be clamped to.
+     * @param max The maximum value the vector length will be clamped to.
      * @return A reference to this vector.
      */
     public fun clampLength(min: Double, max: Double): Vector4 {
@@ -633,21 +653,29 @@ public class Vector4(
 
     /**
      * Returns the dot product of this vector and [v].
+     *
+     * @return The result of the dot product.
      */
     public fun dot(v: Vector4): Double = x * v.x + y * v.y + z * v.z + w * v.w
 
     /**
      * Returns the squared Euclidean length of this vector.
+     *
+     * @return The square length of this vector.
      */
     public fun lengthSq(): Double = x * x + y * y + z * z + w * w
 
     /**
      * Returns the Euclidean length of this vector.
+     *
+     * @return The length of this vector.
      */
     public fun length(): Double = sqrt(x * x + y * y + z * z + w * w)
 
     /**
      * Returns the Manhattan length of this vector.
+     *
+     * @return The length of this vector.
      */
     public fun manhattanLength(): Double = abs(x) + abs(y) + abs(z) + abs(w)
 
@@ -695,6 +723,7 @@ public class Vector4(
      * Sets `x = array[offset]`, `y = array[offset + 1]`, `z = array[offset + 2]`,
      * `w = array[offset + 3]`.
      *
+     * @param array An array holding the vector component values.
      * @return A reference to this vector.
      */
     public fun fromArray(array: DoubleArray, offset: Int = 0): Vector4 {
@@ -708,6 +737,8 @@ public class Vector4(
     /**
      * Writes this vector's components into [array] at [offset], growing the list as
      * needed, and returns it.
+     *
+     * @return The vector components.
      */
     public fun toArray(array: MutableList<Double> = mutableListOf(), offset: Int = 0): MutableList<Double> {
         while (array.size < offset + 4) array.add(0.0)

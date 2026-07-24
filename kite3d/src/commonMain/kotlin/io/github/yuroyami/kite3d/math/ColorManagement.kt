@@ -163,6 +163,8 @@ public object ColorManagement {
 
     /**
      * Returns the primaries (chromaticity coordinates) of the given [colorSpace].
+     *
+     * @return The chromaticity coordinates of the color space's primaries.
      */
     public fun getPrimaries(colorSpace: ColorSpace): DoubleArray =
         spaces.getValue(colorSpace).primaries
@@ -170,6 +172,8 @@ public object ColorManagement {
     /**
      * Returns the transfer function of the given [colorSpace]. Returns
      * [ColorTransfer.Linear] for [ColorSpace.NoColorSpace].
+     *
+     * @return The transfer function of the color space.
      */
     public fun getTransfer(colorSpace: ColorSpace): ColorTransfer {
 
@@ -212,8 +216,15 @@ public object ColorManagement {
     /**
      * Deprecated alias for [workingToColorSpace] (renamed in three.js r177).
      *
+     * @param color The color to convert.
+     * @param targetColorSpace The target color space.
      * @return The converted [color].
      */
+    @Deprecated(
+        "Renamed in three.js r177.",
+        ReplaceWith("workingToColorSpace(color, targetColorSpace)"),
+        DeprecationLevel.WARNING,
+    )
     public fun fromWorkingColorSpace(color: Color, targetColorSpace: ColorSpace): Color {
         println("THREE.ColorManagement: .fromWorkingColorSpace() has been renamed to .workingToColorSpace().")
         return workingToColorSpace(color, targetColorSpace)
@@ -222,8 +233,15 @@ public object ColorManagement {
     /**
      * Deprecated alias for [colorSpaceToWorking] (renamed in three.js r177).
      *
+     * @param color The color to convert.
+     * @param sourceColorSpace The source color space.
      * @return The converted [color].
      */
+    @Deprecated(
+        "Renamed in three.js r177.",
+        ReplaceWith("colorSpaceToWorking(color, sourceColorSpace)"),
+        DeprecationLevel.WARNING,
+    )
     public fun toWorkingColorSpace(color: Color, sourceColorSpace: ColorSpace): Color {
         println("THREE.ColorManagement: .toWorkingColorSpace() has been renamed to .colorSpaceToWorking().")
         return colorSpaceToWorking(color, sourceColorSpace)

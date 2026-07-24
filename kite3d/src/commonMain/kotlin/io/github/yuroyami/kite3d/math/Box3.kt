@@ -155,6 +155,8 @@ public class Box3(
     /**
      * Returns `true` if this box encloses no volume. A box with equal lower and
      * upper bounds is **not** empty — it still contains the single shared point.
+     *
+     * @return Whether this box is empty or not.
      */
     public fun isEmpty(): Boolean {
         // More robust than (volume <= 0), which can go positive with two negative axes.
@@ -218,6 +220,8 @@ public class Box3(
 
     /**
      * Returns `true` if [point] lies within or on the boundary of this box.
+     *
+     * @return Whether the bounding box contains the given point or not.
      */
     public fun containsPoint(point: Vector3): Boolean =
         point.x >= min.x && point.x <= max.x &&
@@ -227,6 +231,8 @@ public class Box3(
     /**
      * Returns `true` if this box fully contains [box] (an identical box counts as
      * contained).
+     *
+     * @return Whether the bounding box contains the given bounding box or not.
      */
     public fun containsBox(box: Box3): Boolean =
         min.x <= box.min.x && box.max.x <= max.x &&
@@ -253,6 +259,8 @@ public class Box3(
 
     /**
      * Returns `true` if [box] intersects this box (touching edges count).
+     *
+     * @return Whether the given bounding box intersects with this bounding box.
      */
     public fun intersectsBox(box: Box3): Boolean =
         // Using 6 splitting planes to rule out intersections.
@@ -262,6 +270,8 @@ public class Box3(
 
     /**
      * Returns `true` if [sphere] intersects this box.
+     *
+     * @return Whether the given bounding sphere intersects with this bounding box.
      */
     public fun intersectsSphere(sphere: Sphere): Boolean {
         // Find the point on the AABB closest to the sphere center.
@@ -274,6 +284,8 @@ public class Box3(
 
     /**
      * Returns `true` if [plane] intersects this box.
+     *
+     * @return Whether the given plane intersects with this bounding box.
      */
     public fun intersectsPlane(plane: Plane): Boolean {
         // We compute the minimum and maximum dot product values. If those values
@@ -312,6 +324,8 @@ public class Box3(
 
     /**
      * Returns `true` if [triangle] intersects this box.
+     *
+     * @return Whether the given triangle intersects with this bounding box.
      */
     public fun intersectsTriangle(triangle: Triangle): Boolean {
         if (isEmpty()) {
@@ -380,6 +394,8 @@ public class Box3(
     /**
      * Returns the Euclidean distance from [point] to the nearest edge of this box
      * (`0` if inside). An empty box yields `+Infinity`.
+     *
+     * @return The euclidean distance.
      */
     public fun distanceToPoint(point: Vector3): Double {
         val vector = Vector3()
@@ -482,6 +498,8 @@ public class Box3(
      *
      * Mirrors three.js `toJSON()` (which produces `{ min: min.toArray(), max:
      * max.toArray() }`); flattened here since the math layer has no JS object type.
+     *
+     * @return Serialized structure with fields representing the object state.
      */
     public fun toJSON(): DoubleArray = doubleArrayOf(min.x, min.y, min.z, max.x, max.y, max.z)
 

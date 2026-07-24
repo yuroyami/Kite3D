@@ -227,6 +227,9 @@ public class Triangle(
     /**
      * Sets the triangle's vertices by copying the given values.
      *
+     * @param a The first corner of the triangle.
+     * @param b The second corner of the triangle.
+     * @param c The third corner of the triangle.
      * @return A reference to this triangle.
      */
     public fun set(a: Vector3, b: Vector3, c: Vector3): Triangle {

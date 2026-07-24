@@ -44,6 +44,12 @@ public class Frustum(
     /**
      * Sets the frustum planes by copying the given planes.
      *
+     * @param p0 The first plane that encloses the frustum.
+     * @param p1 The second plane that encloses the frustum.
+     * @param p2 The third plane that encloses the frustum.
+     * @param p3 The fourth plane that encloses the frustum.
+     * @param p4 The fifth plane that encloses the frustum.
+     * @param p5 The sixth plane that encloses the frustum.
      * @return A reference to this frustum.
      */
     public fun set(p0: Plane, p1: Plane, p2: Plane, p3: Plane, p4: Plane, p5: Plane): Frustum {

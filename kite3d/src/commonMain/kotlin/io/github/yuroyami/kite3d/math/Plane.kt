@@ -27,6 +27,8 @@ public class Plane(
     /**
      * Sets the plane components by copying the given values.
      *
+     * @param normal The normal.
+     * @param constant The constant.
      * @return A reference to this plane.
      */
     public fun set(normal: Vector3, constant: Double): Plane {
@@ -40,6 +42,10 @@ public class Plane(
      * Sets the plane components by defining `x`, `y`, `z` as the plane normal and
      * `w` as the constant.
      *
+     * @param x The value for the normal's x component.
+     * @param y The value for the normal's y component.
+     * @param z The value for the normal's z component.
+     * @param w The constant value.
      * @return A reference to this plane.
      */
     public fun setComponents(x: Double, y: Double, z: Double, w: Double): Plane {
@@ -122,12 +128,16 @@ public class Plane(
 
     /**
      * Returns the signed distance from the given [point] to this plane.
+     *
+     * @return The signed distance.
      */
     public fun distanceToPoint(point: Vector3): Double =
         normal.dot(point) + constant
 
     /**
      * Returns the signed distance from the given [sphere] to this plane.
+     *
+     * @return The signed distance.
      */
     public fun distanceToSphere(sphere: Sphere): Double =
         distanceToPoint(sphere.center) - sphere.radius
@@ -178,6 +188,8 @@ public class Plane(
     /**
      * Returns `true` if the given line segment [line] intersects with (passes
      * through) the plane.
+     *
+     * @return Whether the given line segment intersects with the plane or not.
      */
     public fun intersectsLine(line: Line3): Boolean {
         // Note: this tests if a line intersects the plane, not whether it (or its
@@ -191,12 +203,16 @@ public class Plane(
 
     /**
      * Returns `true` if the given bounding box [box] intersects with the plane.
+     *
+     * @return Whether the given bounding box intersects with the plane or not.
      */
     public fun intersectsBox(box: Box3): Boolean =
         box.intersectsPlane(this)
 
     /**
      * Returns `true` if the given bounding sphere [sphere] intersects with the plane.
+     *
+     * @return Whether the given bounding sphere intersects with the plane or not.
      */
     public fun intersectsSphere(sphere: Sphere): Boolean =
         sphere.intersectsPlane(this)

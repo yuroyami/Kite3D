@@ -43,6 +43,9 @@ public class Vector3(
      * (Upstream also has a `z === undefined` guard for `sprite.scale.set(x, y)`;
      * in Kotlin `set` takes three required [Double]s, so that guard is dropped.)
      *
+     * @param x The value of the x component.
+     * @param y The value of the y component.
+     * @param z The value of the z component.
      * @return A reference to this vector.
      */
     public fun set(x: Double, y: Double, z: Double): Vector3 {
@@ -67,6 +70,7 @@ public class Vector3(
     /**
      * Sets the vector's x component.
      *
+     * @param x The value to set.
      * @return A reference to this vector.
      */
     public fun setX(x: Double): Vector3 {
@@ -77,6 +81,7 @@ public class Vector3(
     /**
      * Sets the vector's y component.
      *
+     * @param y The value to set.
      * @return A reference to this vector.
      */
     public fun setY(y: Double): Vector3 {
@@ -87,6 +92,7 @@ public class Vector3(
     /**
      * Sets the vector's z component.
      *
+     * @param z The value to set.
      * @return A reference to this vector.
      */
     public fun setZ(z: Double): Vector3 {
@@ -114,6 +120,8 @@ public class Vector3(
      * Returns the component at [index] (`0` = x, `1` = y, `2` = z).
      *
      * @throws IllegalArgumentException if [index] is out of range.
+     *
+     * @return A vector component value.
      */
     public fun getComponent(index: Int): Double = when (index) {
         0 -> x
@@ -168,6 +176,8 @@ public class Vector3(
     /**
      * Sets this vector to `a + b`.
      *
+     * @param a The first vector.
+     * @param b The second vector.
      * @return A reference to this vector.
      */
     public fun addVectors(a: Vector3, b: Vector3): Vector3 {
@@ -216,6 +226,8 @@ public class Vector3(
     /**
      * Sets this vector to `a - b`.
      *
+     * @param a The first vector.
+     * @param b The second vector.
      * @return A reference to this vector.
      */
     public fun subVectors(a: Vector3, b: Vector3): Vector3 {
@@ -252,6 +264,8 @@ public class Vector3(
     /**
      * Sets this vector to `a * b` (component-wise).
      *
+     * @param a The first vector.
+     * @param b The second vector.
      * @return A reference to this vector.
      */
     public fun multiplyVectors(a: Vector3, b: Vector3): Vector3 {
@@ -425,6 +439,8 @@ public class Vector3(
      * Clamps each component into the range `[min, max]` (assumed component-wise
      * `min <= max`).
      *
+     * @param min The minimum x, y and z values.
+     * @param max The maximum x, y and z values in the desired range.
      * @return A reference to this vector.
      */
     public fun clamp(min: Vector3, max: Vector3): Vector3 {
@@ -438,6 +454,8 @@ public class Vector3(
     /**
      * Clamps each component into the scalar range `[minVal, maxVal]`.
      *
+     * @param minVal The minimum value the components will be clamped to.
+     * @param maxVal The maximum value the components will be clamped to.
      * @return A reference to this vector.
      */
     public fun clampScalar(minVal: Double, maxVal: Double): Vector3 {
@@ -450,6 +468,8 @@ public class Vector3(
     /**
      * Clamps this vector's length into `[min, max]`.
      *
+     * @param min The minimum value the vector length will be clamped to.
+     * @param max The maximum value the vector length will be clamped to.
      * @return A reference to this vector.
      */
     public fun clampLength(min: Double, max: Double): Vector3 {
@@ -520,21 +540,29 @@ public class Vector3(
 
     /**
      * Returns the dot product of this vector and [v].
+     *
+     * @return The result of the dot product.
      */
     public fun dot(v: Vector3): Double = x * v.x + y * v.y + z * v.z
 
     /**
      * Returns the squared Euclidean length of this vector.
+     *
+     * @return The square length of this vector.
      */
     public fun lengthSq(): Double = x * x + y * y + z * z
 
     /**
      * Returns the Euclidean length of this vector.
+     *
+     * @return The length of this vector.
      */
     public fun length(): Double = sqrt(x * x + y * y + z * z)
 
     /**
      * Returns the Manhattan length of this vector.
+     *
+     * @return The length of this vector.
      */
     public fun manhattanLength(): Double = abs(x) + abs(y) + abs(z)
 
@@ -662,6 +690,8 @@ public class Vector3(
 
     /**
      * Returns the angle between this vector and [v], in radians.
+     *
+     * @return The angle in radians.
      */
     public fun angleTo(v: Vector3): Double {
         val denominator = sqrt(lengthSq() * v.lengthSq())
@@ -676,11 +706,15 @@ public class Vector3(
 
     /**
      * Returns the distance from this vector to [v].
+     *
+     * @return The distance.
      */
     public fun distanceTo(v: Vector3): Double = sqrt(distanceToSquared(v))
 
     /**
      * Returns the squared distance from this vector to [v].
+     *
+     * @return The squared distance.
      */
     public fun distanceToSquared(v: Vector3): Double {
         val dx = x - v.x
@@ -691,6 +725,8 @@ public class Vector3(
 
     /**
      * Returns the Manhattan distance from this vector to [v].
+     *
+     * @return The Manhattan distance.
      */
     public fun manhattanDistanceTo(v: Vector3): Double =
         abs(x - v.x) + abs(y - v.y) + abs(z - v.z)
@@ -821,6 +857,7 @@ public class Vector3(
     /**
      * Sets `x = array[offset]`, `y = array[offset + 1]`, `z = array[offset + 2]`.
      *
+     * @param array An array holding the vector component values.
      * @return A reference to this vector.
      */
     public fun fromArray(array: DoubleArray, offset: Int = 0): Vector3 {
@@ -833,6 +870,8 @@ public class Vector3(
     /**
      * Writes this vector's components into [array] at [offset], growing the list as
      * needed, and returns it.
+     *
+     * @return The vector components.
      */
     public fun toArray(array: MutableList<Double> = mutableListOf(), offset: Int = 0): MutableList<Double> {
         while (array.size < offset + 3) array.add(0.0)

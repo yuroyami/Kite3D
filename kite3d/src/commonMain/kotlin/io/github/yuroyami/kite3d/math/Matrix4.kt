@@ -59,6 +59,22 @@ public class Matrix4 {
      * Sets the elements of the matrix. The arguments are supposed to be in
      * row-major order.
      *
+     * @param n11 1-1 matrix element.
+     * @param n12 1-2 matrix element.
+     * @param n13 1-3 matrix element.
+     * @param n14 1-4 matrix element.
+     * @param n21 2-1 matrix element.
+     * @param n22 2-2 matrix element.
+     * @param n23 2-3 matrix element.
+     * @param n24 2-4 matrix element.
+     * @param n31 3-1 matrix element.
+     * @param n32 3-2 matrix element.
+     * @param n33 3-3 matrix element.
+     * @param n34 3-4 matrix element.
+     * @param n41 4-1 matrix element.
+     * @param n42 4-2 matrix element.
+     * @param n43 4-3 matrix element.
+     * @param n44 4-4 matrix element.
      * @return A reference to this matrix.
      */
     public fun set(
@@ -156,6 +172,9 @@ public class Matrix4 {
     /**
      * Extracts the basis of this matrix into the three axis vectors provided.
      *
+     * @param xAxis The basis's x axis.
+     * @param yAxis The basis's y axis.
+     * @param zAxis The basis's z axis.
      * @return A reference to this matrix.
      */
     public fun extractBasis(xAxis: Vector3, yAxis: Vector3, zAxis: Vector3): Matrix4 {
@@ -177,6 +196,9 @@ public class Matrix4 {
     /**
      * Sets the given basis vectors as the columns of this matrix.
      *
+     * @param xAxis The basis's x axis.
+     * @param yAxis The basis's y axis.
+     * @param zAxis The basis's z axis.
      * @return A reference to this matrix.
      */
     public fun makeBasis(xAxis: Vector3, yAxis: Vector3, zAxis: Vector3): Matrix4 {
@@ -592,6 +614,9 @@ public class Matrix4 {
      * Sets the position component of this matrix from the given components, without
      * affecting the rest of the matrix.
      *
+     * @param x The x component of the vector or alternatively the vector object.
+     * @param y The y component of the vector.
+     * @param z The z component of the vector.
      * @return A reference to this matrix.
      */
     public fun setPosition(x: Double, y: Double, z: Double): Matrix4 {
@@ -1108,6 +1133,7 @@ public class Matrix4 {
      * order), growing the list as needed, and returns it.
      *
      * @param offset Index of the first element in the array.
+     * @return The matrix elements in column-major order.
      */
     public fun toArray(array: MutableList<Double> = mutableListOf(), offset: Int = 0): MutableList<Double> {
         val te = elements

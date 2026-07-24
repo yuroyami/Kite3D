@@ -10,6 +10,10 @@ import kotlin.math.floor
 /**
  * The result of [Color.getHSL]: hue, saturation and lightness, each in `[0, 1]`.
  * Mirrors the `{ h, s, l }` target object three.js writes into.
+ *
+ * @property h The hue, in `[0, 1]`.
+ * @property s The saturation, in `[0, 1]`.
+ * @property l The lightness, in `[0, 1]`.
  */
 public class HSL(
     public var h: Double = 0.0,
@@ -301,6 +305,7 @@ public class Color : Iterable<Double> {
      * Returns the hexadecimal value of this color as a 6-digit lowercase string
      * (for example, `"ffffff"`).
      *
+     * @param colorSpace The color space the value is reported in.
      * @return The hexadecimal value as a string.
      */
     public fun getHexString(colorSpace: ColorSpace = ColorSpace.SRGB): String =
@@ -381,6 +386,9 @@ public class Color : Iterable<Double> {
      * Adds the given HSL values to this color's values (via a round-trip through
      * HSL).
      *
+     * @param h Hue value between `0.0` and `1.0`.
+     * @param s Saturation value between `0.0` and `1.0`.
+     * @param l Lightness value between `0.0` and `1.0`.
      * @return A reference to this color.
      */
     public fun offsetHSL(h: Double, s: Double, l: Double): Color {
@@ -568,6 +576,8 @@ public class Color : Iterable<Double> {
     /**
      * Writes this color's RGB components into [array] at [offset], growing the list
      * as needed, and returns it.
+     *
+     * @return The color components.
      */
     public fun toArray(array: MutableList<Double> = mutableListOf(), offset: Int = 0): MutableList<Double> {
         while (array.size < offset + 3) array.add(0.0)

@@ -26,6 +26,8 @@ public class Line3(
     /**
      * Sets the start and end values by copying the given vectors.
      *
+     * @param start The start point.
+     * @param end The end point.
      * @return A reference to this line segment.
      */
     public fun set(start: Vector3, end: Vector3): Line3 {
@@ -66,12 +68,16 @@ public class Line3(
 
     /**
      * Returns the squared Euclidean distance between the line's start and end point.
+     *
+     * @return The squared Euclidean distance.
      */
     public fun distanceSq(): Double =
         start.distanceToSquared(end)
 
     /**
      * Returns the Euclidean distance between the line's start and end point.
+     *
+     * @return The Euclidean distance.
      */
     public fun distance(): Double =
         start.distanceTo(end)

@@ -105,6 +105,8 @@ public object MathUtils {
     /**
      * Computes the Euclidean modulo `((n % m) + m) % m`.
      *
+     * @param n The dividend.
+     * @param m The divisor.
      * @return The Euclidean modulo.
      */
     public fun euclideanModulo(n: Double, m: Double): Double =
@@ -113,6 +115,10 @@ public object MathUtils {
     /**
      * Linearly maps [x] from range `[a1, a2]` to range `[b1, b2]`.
      *
+     * @param a1 Minimum value for range A.
+     * @param a2 Maximum value for range A.
+     * @param b1 Minimum value for range B.
+     * @param b2 Maximum value for range B.
      * @return The mapped value.
      */
     public fun mapLinear(x: Double, a1: Double, a2: Double, b1: Double, b2: Double): Double =
@@ -148,6 +154,7 @@ public object MathUtils {
     /**
      * Returns a value that alternates ("ping-pongs") between `0` and [length].
      *
+     * @param x The value to pingpong.
      * @return The alternated value.
      */
     public fun pingpong(x: Double, length: Double = 1.0): Double =
@@ -174,6 +181,9 @@ public object MathUtils {
      * Smootherstep: a variation on [smoothstep] with zero 1st and 2nd derivatives
      * at both ends.
      *
+     * @param x The value to evaluate based on its position between min and max.
+     * @param minVal Any x value below this is `0`.
+     * @param maxVal Any x value above this is `1`.
      * @return The smoothed value.
      */
     public fun smootherstep(x: Double, minVal: Double, maxVal: Double): Double {
@@ -190,6 +200,8 @@ public object MathUtils {
     /**
      * Returns a random integer in the closed interval `[low, high]`.
      *
+     * @param low The lower value boundary.
+     * @param high The upper value boundary.
      * @return A random integer.
      */
     public fun randInt(low: Int, high: Int): Int =
@@ -198,6 +210,8 @@ public object MathUtils {
     /**
      * Returns a random float in the interval `[low, high)`.
      *
+     * @param low The lower value boundary.
+     * @param high The upper value boundary.
      * @return A random float.
      */
     public fun randFloat(low: Double, high: Double): Double =
@@ -206,6 +220,7 @@ public object MathUtils {
     /**
      * Returns a random float in the interval `(-range/2, range/2)`.
      *
+     * @param range Defines the value range.
      * @return A random float.
      */
     public fun randFloatSpread(range: Double): Double =
@@ -249,6 +264,8 @@ public object MathUtils {
 
     /**
      * Returns `true` if [value] is a power of two.
+     *
+     * @return Whether the given number is a power of two or not.
      */
     public fun isPowerOfTwo(value: Int): Boolean =
         (value and (value - 1)) == 0 && value != 0
@@ -256,6 +273,8 @@ public object MathUtils {
     /**
      * Returns the smallest power of two greater than or equal to [value]
      * (which must be greater than `0`).
+     *
+     * @return The smallest power of two that is greater than or equal to the given number.
      */
     public fun ceilPowerOfTwo(value: Double): Double =
         2.0.pow(ceil(ln(value) / ln(2.0)))
@@ -263,6 +282,8 @@ public object MathUtils {
     /**
      * Returns the largest power of two less than or equal to [value]
      * (which must be greater than `0`).
+     *
+     * @return The largest power of two that is less than or equal to the given number.
      */
     public fun floorPowerOfTwo(value: Double): Double =
         2.0.pow(floor(ln(value) / ln(2.0)))

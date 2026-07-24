@@ -88,6 +88,10 @@ public class Euler(
     /**
      * Sets the Euler components.
      *
+     * @param x The angle of the x axis in radians.
+     * @param y The angle of the y axis in radians.
+     * @param z The angle of the z axis in radians.
+     * @param order The order in which the rotations are applied.
      * @return A reference to this Euler instance.
      */
     public fun set(x: Double, y: Double, z: Double, order: EulerOrder = _order): Euler {
@@ -292,6 +296,8 @@ public class Euler(
      * Writes the components of this Euler instance into [array] at [offset],
      * growing the list as needed, and returns it. The order is written as the
      * fourth element (an [EulerOrder]).
+     *
+     * @return The Euler components.
      */
     public fun toArray(array: MutableList<Any> = mutableListOf(), offset: Int = 0): MutableList<Any> {
         while (array.size < offset + 4) array.add(0.0)

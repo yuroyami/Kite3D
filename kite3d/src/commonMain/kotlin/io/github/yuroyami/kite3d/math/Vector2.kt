@@ -45,6 +45,8 @@ public class Vector2(
     /**
      * Sets the vector components.
      *
+     * @param x The value of the x component.
+     * @param y The value of the y component.
      * @return A reference to this vector.
      */
     public fun set(x: Double, y: Double): Vector2 {
@@ -67,6 +69,7 @@ public class Vector2(
     /**
      * Sets the vector's x component.
      *
+     * @param x The value to set.
      * @return A reference to this vector.
      */
     public fun setX(x: Double): Vector2 {
@@ -77,6 +80,7 @@ public class Vector2(
     /**
      * Sets the vector's y component.
      *
+     * @param y The value to set.
      * @return A reference to this vector.
      */
     public fun setY(y: Double): Vector2 {
@@ -103,6 +107,8 @@ public class Vector2(
      * Returns the component at [index] (`0` = x, `1` = y).
      *
      * @throws IllegalArgumentException if [index] is out of range.
+     *
+     * @return A vector component value.
      */
     public fun getComponent(index: Int): Double = when (index) {
         0 -> x
@@ -153,6 +159,8 @@ public class Vector2(
     /**
      * Sets this vector to `a + b`.
      *
+     * @param a The first vector.
+     * @param b The second vector.
      * @return A reference to this vector.
      */
     public fun addVectors(a: Vector2, b: Vector2): Vector2 {
@@ -197,6 +205,8 @@ public class Vector2(
     /**
      * Sets this vector to `a - b`.
      *
+     * @param a The first vector.
+     * @param b The second vector.
      * @return A reference to this vector.
      */
     public fun subVectors(a: Vector2, b: Vector2): Vector2 {
@@ -287,6 +297,8 @@ public class Vector2(
      * Clamps each component into the range `[min, max]` (assumed component-wise
      * `min <= max`).
      *
+     * @param min The minimum x and y values.
+     * @param max The maximum x and y values in the desired range.
      * @return A reference to this vector.
      */
     public fun clamp(min: Vector2, max: Vector2): Vector2 {
@@ -298,6 +310,8 @@ public class Vector2(
     /**
      * Clamps each component into the scalar range `[minVal, maxVal]`.
      *
+     * @param minVal The minimum value the components will be clamped to.
+     * @param maxVal The maximum value the components will be clamped to.
      * @return A reference to this vector.
      */
     public fun clampScalar(minVal: Double, maxVal: Double): Vector2 {
@@ -309,6 +323,8 @@ public class Vector2(
     /**
      * Clamps this vector's length into `[min, max]`.
      *
+     * @param min The minimum value the vector length will be clamped to.
+     * @param max The maximum value the vector length will be clamped to.
      * @return A reference to this vector.
      */
     public fun clampLength(min: Double, max: Double): Vector2 {
@@ -374,26 +390,36 @@ public class Vector2(
 
     /**
      * Returns the dot product of this vector and [v].
+     *
+     * @return The result of the dot product.
      */
     public fun dot(v: Vector2): Double = x * v.x + y * v.y
 
     /**
      * Returns the (scalar) cross product of this vector and [v].
+     *
+     * @return The result of the cross product.
      */
     public fun cross(v: Vector2): Double = x * v.y - y * v.x
 
     /**
      * Returns the squared Euclidean length of this vector.
+     *
+     * @return The square length of this vector.
      */
     public fun lengthSq(): Double = x * x + y * y
 
     /**
      * Returns the Euclidean length of this vector.
+     *
+     * @return The length of this vector.
      */
     public fun length(): Double = sqrt(x * x + y * y)
 
     /**
      * Returns the Manhattan length of this vector.
+     *
+     * @return The length of this vector.
      */
     public fun manhattanLength(): Double = abs(x) + abs(y)
 
@@ -407,11 +433,15 @@ public class Vector2(
     /**
      * Returns the angle of this vector relative to the positive x-axis, in radians,
      * in `[0, 2*PI)`.
+     *
+     * @return The angle in radians.
      */
     public fun angle(): Double = atan2(-y, -x) + PI
 
     /**
      * Returns the angle between this vector and [v], in radians.
+     *
+     * @return The angle in radians.
      */
     public fun angleTo(v: Vector2): Double {
         val denominator = sqrt(lengthSq() * v.lengthSq())
@@ -423,11 +453,15 @@ public class Vector2(
 
     /**
      * Returns the distance from this vector to [v].
+     *
+     * @return The distance.
      */
     public fun distanceTo(v: Vector2): Double = sqrt(distanceToSquared(v))
 
     /**
      * Returns the squared distance from this vector to [v].
+     *
+     * @return The squared distance.
      */
     public fun distanceToSquared(v: Vector2): Double {
         val dx = x - v.x
@@ -437,6 +471,8 @@ public class Vector2(
 
     /**
      * Returns the Manhattan distance from this vector to [v].
+     *
+     * @return The Manhattan distance.
      */
     public fun manhattanDistanceTo(v: Vector2): Double = abs(x - v.x) + abs(y - v.y)
 
@@ -472,6 +508,7 @@ public class Vector2(
     /**
      * Sets `x = array[offset]`, `y = array[offset + 1]`.
      *
+     * @param array An array holding the vector component values.
      * @return A reference to this vector.
      */
     public fun fromArray(array: DoubleArray, offset: Int = 0): Vector2 {
@@ -483,6 +520,8 @@ public class Vector2(
     /**
      * Writes this vector's components into [array] at [offset], growing the list as
      * needed, and returns it.
+     *
+     * @return The vector components.
      */
     public fun toArray(array: MutableList<Double> = mutableListOf(), offset: Int = 0): MutableList<Double> {
         while (array.size < offset + 2) array.add(0.0)

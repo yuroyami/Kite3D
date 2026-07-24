@@ -14,15 +14,35 @@ package io.github.yuroyami.kite3d.math
  */
 public interface AttributeLike {
 
-    /** Returns the x component of the vector at the given [index]. */
+    /**
+     * Returns the x component of the vector at the given [index].
+     *
+     * @param index The vertex index.
+     * @return The x component of the vector at that index.
+     */
     public fun getX(index: Int): Double
 
-    /** Returns the y component of the vector at the given [index]. */
+    /**
+     * Returns the y component of the vector at the given [index].
+     *
+     * @param index The vertex index.
+     * @return The y component of the vector at that index.
+     */
     public fun getY(index: Int): Double
 
-    /** Returns the z component of the vector at the given [index]. */
+    /**
+     * Returns the z component of the vector at the given [index].
+     *
+     * @param index The vertex index.
+     * @return The z component of the vector at that index.
+     */
     public fun getZ(index: Int): Double
 
-    /** Returns the w component of the vector at the given [index]. */
+    /**
+     * Returns the w component of the vector at the given [index].
+     *
+     * @param index The vertex index.
+     * @return The w component of the vector at that index.
+     */
     public fun getW(index: Int): Double
 }
