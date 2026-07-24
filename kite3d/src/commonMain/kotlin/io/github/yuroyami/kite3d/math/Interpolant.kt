@@ -264,10 +264,16 @@ public abstract class Interpolant(
     /**
      * Copies a sample value to the result buffer.
      *
+     * Overridable: derived classes whose keyframe layout is not a flat run of
+     * `valueSize` components per sample must translate [index] themselves. The
+     * canonical case is a CUBICSPLINE track, whose layout is
+     * `[ inTangent, splineVertex, outTangent, … ]` — three blocks per keyframe —
+     * so the sample lives at `index * valueSize * 3 + valueSize`.
+     *
      * @param index An index into the sample value buffer.
      * @return The result buffer.
      */
-    public fun copySampleValue_(index: Int): DoubleArray {
+    public open fun copySampleValue_(index: Int): DoubleArray {
         // copies a sample value to the result buffer
         val result = resultBuffer
         val values = sampleValues
