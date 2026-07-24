@@ -1,0 +1,1016 @@
+public abstract interface class io/github/yuroyami/kite3d/math/AttributeLike {
+	public abstract fun getW (I)D
+	public abstract fun getX (I)D
+	public abstract fun getY (I)D
+	public abstract fun getZ (I)D
+}
+
+public final class io/github/yuroyami/kite3d/math/Box2 {
+	public fun <init> ()V
+	public fun <init> (Lio/github/yuroyami/kite3d/math/Vector2;Lio/github/yuroyami/kite3d/math/Vector2;)V
+	public synthetic fun <init> (Lio/github/yuroyami/kite3d/math/Vector2;Lio/github/yuroyami/kite3d/math/Vector2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clampPoint (Lio/github/yuroyami/kite3d/math/Vector2;Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Box2;
+	public final fun containsBox (Lio/github/yuroyami/kite3d/math/Box2;)Z
+	public final fun containsPoint (Lio/github/yuroyami/kite3d/math/Vector2;)Z
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Box2;)Lio/github/yuroyami/kite3d/math/Box2;
+	public final fun distanceToPoint (Lio/github/yuroyami/kite3d/math/Vector2;)D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun expandByPoint (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Box2;
+	public final fun expandByScalar (D)Lio/github/yuroyami/kite3d/math/Box2;
+	public final fun expandByVector (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Box2;
+	public final fun getCenter (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun getMax ()Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun getMin ()Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun getParameter (Lio/github/yuroyami/kite3d/math/Vector2;Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun getSize (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public fun hashCode ()I
+	public final fun intersect (Lio/github/yuroyami/kite3d/math/Box2;)Lio/github/yuroyami/kite3d/math/Box2;
+	public final fun intersectsBox (Lio/github/yuroyami/kite3d/math/Box2;)Z
+	public final fun isEmpty ()Z
+	public final fun makeEmpty ()Lio/github/yuroyami/kite3d/math/Box2;
+	public final fun set (Lio/github/yuroyami/kite3d/math/Vector2;Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Box2;
+	public final fun setFromCenterAndSize (Lio/github/yuroyami/kite3d/math/Vector2;Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Box2;
+	public final fun setFromPoints (Ljava/lang/Iterable;)Lio/github/yuroyami/kite3d/math/Box2;
+	public fun toString ()Ljava/lang/String;
+	public final fun translate (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Box2;
+	public final fun union (Lio/github/yuroyami/kite3d/math/Box2;)Lio/github/yuroyami/kite3d/math/Box2;
+}
+
+public final class io/github/yuroyami/kite3d/math/Box3 {
+	public fun <init> ()V
+	public fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)V
+	public synthetic fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun applyMatrix4 (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun clampPoint (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun containsBox (Lio/github/yuroyami/kite3d/math/Box3;)Z
+	public final fun containsPoint (Lio/github/yuroyami/kite3d/math/Vector3;)Z
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Box3;)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun distanceToPoint (Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun expandByPoint (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun expandByScalar (D)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun expandByVector (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun fromJSON ([D)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun getBoundingSphere (Lio/github/yuroyami/kite3d/math/Sphere;)Lio/github/yuroyami/kite3d/math/Sphere;
+	public final fun getCenter (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getMax ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getMin ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getParameter (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getSize (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public fun hashCode ()I
+	public final fun intersect (Lio/github/yuroyami/kite3d/math/Box3;)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun intersectsBox (Lio/github/yuroyami/kite3d/math/Box3;)Z
+	public final fun intersectsPlane (Lio/github/yuroyami/kite3d/math/Plane;)Z
+	public final fun intersectsSphere (Lio/github/yuroyami/kite3d/math/Sphere;)Z
+	public final fun intersectsTriangle (Lio/github/yuroyami/kite3d/math/Triangle;)Z
+	public final fun isEmpty ()Z
+	public final fun makeEmpty ()Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun set (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun setFromArray ([D)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun setFromBufferAttribute (Lio/github/yuroyami/kite3d/math/AttributeLike;I)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun setFromCenterAndSize (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun setFromPoints (Ljava/lang/Iterable;)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun toJSON ()[D
+	public fun toString ()Ljava/lang/String;
+	public final fun translate (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun union (Lio/github/yuroyami/kite3d/math/Box3;)Lio/github/yuroyami/kite3d/math/Box3;
+}
+
+public final class io/github/yuroyami/kite3d/math/Color : java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
+	public fun <init> ()V
+	public fun <init> (DDD)V
+	public fun <init> (I)V
+	public fun <init> (Lio/github/yuroyami/kite3d/math/Color;)V
+	public final fun add (Lio/github/yuroyami/kite3d/math/Color;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun addColors (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/Color;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun addScalar (D)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun applyMatrix3 (Lio/github/yuroyami/kite3d/math/Matrix3;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Color;
+	public final fun convertLinearToSRGB ()Lio/github/yuroyami/kite3d/math/Color;
+	public final fun convertSRGBToLinear ()Lio/github/yuroyami/kite3d/math/Color;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Color;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun copyLinearToSRGB (Lio/github/yuroyami/kite3d/math/Color;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun copySRGBToLinear (Lio/github/yuroyami/kite3d/math/Color;)Lio/github/yuroyami/kite3d/math/Color;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun fromArray ([DI)Lio/github/yuroyami/kite3d/math/Color;
+	public static synthetic fun fromArray$default (Lio/github/yuroyami/kite3d/math/Color;[DIILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun fromBufferAttribute (Lio/github/yuroyami/kite3d/math/AttributeLike;I)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun getB ()D
+	public final fun getG ()D
+	public final fun getHSL (Lio/github/yuroyami/kite3d/math/HSL;Lio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/HSL;
+	public static synthetic fun getHSL$default (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/HSL;Lio/github/yuroyami/kite3d/math/ColorSpace;ILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/HSL;
+	public final fun getHex (Lio/github/yuroyami/kite3d/math/ColorSpace;)I
+	public static synthetic fun getHex$default (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/ColorSpace;ILjava/lang/Object;)I
+	public final fun getHexString (Lio/github/yuroyami/kite3d/math/ColorSpace;)Ljava/lang/String;
+	public static synthetic fun getHexString$default (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/ColorSpace;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun getR ()D
+	public final fun getRGB (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Color;
+	public static synthetic fun getRGB$default (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/ColorSpace;ILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Color;
+	public fun hashCode ()I
+	public fun iterator ()Ljava/util/Iterator;
+	public final fun lerp (Lio/github/yuroyami/kite3d/math/Color;D)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun lerpColors (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/Color;D)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun lerpHSL (Lio/github/yuroyami/kite3d/math/Color;D)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun multiply (Lio/github/yuroyami/kite3d/math/Color;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun multiplyScalar (D)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun offsetHSL (DDD)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun set (DDD)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun set (I)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun set (Lio/github/yuroyami/kite3d/math/Color;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun setB (D)V
+	public final fun setFromVector3 (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun setG (D)V
+	public final fun setHSL (DDDLio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Color;
+	public static synthetic fun setHSL$default (Lio/github/yuroyami/kite3d/math/Color;DDDLio/github/yuroyami/kite3d/math/ColorSpace;ILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun setHex (ILio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Color;
+	public static synthetic fun setHex$default (Lio/github/yuroyami/kite3d/math/Color;ILio/github/yuroyami/kite3d/math/ColorSpace;ILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun setR (D)V
+	public final fun setRGB (DDDLio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Color;
+	public static synthetic fun setRGB$default (Lio/github/yuroyami/kite3d/math/Color;DDDLio/github/yuroyami/kite3d/math/ColorSpace;ILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun setScalar (D)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun sub (Lio/github/yuroyami/kite3d/math/Color;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun toArray (Ljava/util/List;I)Ljava/util/List;
+	public static synthetic fun toArray$default (Lio/github/yuroyami/kite3d/math/Color;Ljava/util/List;IILjava/lang/Object;)Ljava/util/List;
+	public final fun toJSON ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/ColorManagement {
+	public static final field INSTANCE Lio/github/yuroyami/kite3d/math/ColorManagement;
+	public final fun colorSpaceToWorking (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun convert (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/ColorSpace;Lio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun define (Ljava/util/Map;)V
+	public final fun fromWorkingColorSpace (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun getEnabled ()Z
+	public final fun getLuminanceCoefficients (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public static synthetic fun getLuminanceCoefficients$default (Lio/github/yuroyami/kite3d/math/ColorManagement;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/ColorSpace;ILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getMatrix (Lio/github/yuroyami/kite3d/math/Matrix3;Lio/github/yuroyami/kite3d/math/ColorSpace;Lio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun getPrimaries (Lio/github/yuroyami/kite3d/math/ColorSpace;)[D
+	public final fun getSpaces ()Ljava/util/Map;
+	public final fun getTransfer (Lio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/ColorTransfer;
+	public final fun getWorkingColorSpace ()Lio/github/yuroyami/kite3d/math/ColorSpace;
+	public final fun setEnabled (Z)V
+	public final fun setWorkingColorSpace (Lio/github/yuroyami/kite3d/math/ColorSpace;)V
+	public final fun toWorkingColorSpace (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Color;
+	public final fun workingToColorSpace (Lio/github/yuroyami/kite3d/math/Color;Lio/github/yuroyami/kite3d/math/ColorSpace;)Lio/github/yuroyami/kite3d/math/Color;
+}
+
+public final class io/github/yuroyami/kite3d/math/ColorManagementKt {
+	public static final fun LinearToSRGB (D)D
+	public static final fun SRGBToLinear (D)D
+}
+
+public final class io/github/yuroyami/kite3d/math/ColorSpace : java/lang/Enum {
+	public static final field DisplayP3 Lio/github/yuroyami/kite3d/math/ColorSpace;
+	public static final field LinearDisplayP3 Lio/github/yuroyami/kite3d/math/ColorSpace;
+	public static final field LinearSRGB Lio/github/yuroyami/kite3d/math/ColorSpace;
+	public static final field NoColorSpace Lio/github/yuroyami/kite3d/math/ColorSpace;
+	public static final field SRGB Lio/github/yuroyami/kite3d/math/ColorSpace;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/kite3d/math/ColorSpace;
+	public static fun values ()[Lio/github/yuroyami/kite3d/math/ColorSpace;
+}
+
+public final class io/github/yuroyami/kite3d/math/ColorSpaceDefinition {
+	public fun <init> ([D[DLio/github/yuroyami/kite3d/math/ColorTransfer;Lio/github/yuroyami/kite3d/math/Matrix3;Lio/github/yuroyami/kite3d/math/Matrix3;[D)V
+	public final fun getFromXYZ ()Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun getLuminanceCoefficients ()[D
+	public final fun getPrimaries ()[D
+	public final fun getToXYZ ()Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun getTransfer ()Lio/github/yuroyami/kite3d/math/ColorTransfer;
+	public final fun getWhitePoint ()[D
+}
+
+public final class io/github/yuroyami/kite3d/math/ColorTransfer : java/lang/Enum {
+	public static final field Linear Lio/github/yuroyami/kite3d/math/ColorTransfer;
+	public static final field SRGB Lio/github/yuroyami/kite3d/math/ColorTransfer;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/kite3d/math/ColorTransfer;
+	public static fun values ()[Lio/github/yuroyami/kite3d/math/ColorTransfer;
+}
+
+public final class io/github/yuroyami/kite3d/math/ComponentType : java/lang/Enum {
+	public static final field Float32 Lio/github/yuroyami/kite3d/math/ComponentType;
+	public static final field Int16 Lio/github/yuroyami/kite3d/math/ComponentType;
+	public static final field Int32 Lio/github/yuroyami/kite3d/math/ComponentType;
+	public static final field Int8 Lio/github/yuroyami/kite3d/math/ComponentType;
+	public static final field Uint16 Lio/github/yuroyami/kite3d/math/ComponentType;
+	public static final field Uint32 Lio/github/yuroyami/kite3d/math/ComponentType;
+	public static final field Uint8 Lio/github/yuroyami/kite3d/math/ComponentType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/kite3d/math/ComponentType;
+	public static fun values ()[Lio/github/yuroyami/kite3d/math/ComponentType;
+}
+
+public final class io/github/yuroyami/kite3d/math/CoordinateSystem : java/lang/Enum {
+	public static final field WebGL Lio/github/yuroyami/kite3d/math/CoordinateSystem;
+	public static final field WebGPU Lio/github/yuroyami/kite3d/math/CoordinateSystem;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/kite3d/math/CoordinateSystem;
+	public static fun values ()[Lio/github/yuroyami/kite3d/math/CoordinateSystem;
+}
+
+public final class io/github/yuroyami/kite3d/math/Cylindrical {
+	public fun <init> ()V
+	public fun <init> (DDD)V
+	public synthetic fun <init> (DDDILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Cylindrical;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Cylindrical;)Lio/github/yuroyami/kite3d/math/Cylindrical;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRadius ()D
+	public final fun getTheta ()D
+	public final fun getY ()D
+	public fun hashCode ()I
+	public final fun set (DDD)Lio/github/yuroyami/kite3d/math/Cylindrical;
+	public final fun setFromCartesianCoords (DDD)Lio/github/yuroyami/kite3d/math/Cylindrical;
+	public final fun setFromVector3 (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Cylindrical;
+	public final fun setRadius (D)V
+	public final fun setTheta (D)V
+	public final fun setY (D)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/Euler : java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
+	public static final field Companion Lio/github/yuroyami/kite3d/math/Euler$Companion;
+	public fun <init> ()V
+	public fun <init> (DDDLio/github/yuroyami/kite3d/math/EulerOrder;)V
+	public synthetic fun <init> (DDDLio/github/yuroyami/kite3d/math/EulerOrder;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Euler;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Euler;)Lio/github/yuroyami/kite3d/math/Euler;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun fromArray (Ljava/util/List;)Lio/github/yuroyami/kite3d/math/Euler;
+	public final fun getOrder ()Lio/github/yuroyami/kite3d/math/EulerOrder;
+	public final fun getX ()D
+	public final fun getY ()D
+	public final fun getZ ()D
+	public fun hashCode ()I
+	public fun iterator ()Ljava/util/Iterator;
+	public final fun onChange (Lkotlin/jvm/functions/Function0;)Lio/github/yuroyami/kite3d/math/Euler;
+	public final fun reorder (Lio/github/yuroyami/kite3d/math/EulerOrder;)Lio/github/yuroyami/kite3d/math/Euler;
+	public final fun set (DDDLio/github/yuroyami/kite3d/math/EulerOrder;)Lio/github/yuroyami/kite3d/math/Euler;
+	public static synthetic fun set$default (Lio/github/yuroyami/kite3d/math/Euler;DDDLio/github/yuroyami/kite3d/math/EulerOrder;ILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Euler;
+	public final fun setFromQuaternion (Lio/github/yuroyami/kite3d/math/Quaternion;Lio/github/yuroyami/kite3d/math/EulerOrder;Z)Lio/github/yuroyami/kite3d/math/Euler;
+	public static synthetic fun setFromQuaternion$default (Lio/github/yuroyami/kite3d/math/Euler;Lio/github/yuroyami/kite3d/math/Quaternion;Lio/github/yuroyami/kite3d/math/EulerOrder;ZILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Euler;
+	public final fun setFromRotationMatrix (Lio/github/yuroyami/kite3d/math/Matrix4;Lio/github/yuroyami/kite3d/math/EulerOrder;Z)Lio/github/yuroyami/kite3d/math/Euler;
+	public static synthetic fun setFromRotationMatrix$default (Lio/github/yuroyami/kite3d/math/Euler;Lio/github/yuroyami/kite3d/math/Matrix4;Lio/github/yuroyami/kite3d/math/EulerOrder;ZILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Euler;
+	public final fun setFromVector3 (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/EulerOrder;)Lio/github/yuroyami/kite3d/math/Euler;
+	public static synthetic fun setFromVector3$default (Lio/github/yuroyami/kite3d/math/Euler;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/EulerOrder;ILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Euler;
+	public final fun setOrder (Lio/github/yuroyami/kite3d/math/EulerOrder;)V
+	public final fun setX (D)V
+	public final fun setY (D)V
+	public final fun setZ (D)V
+	public final fun toArray (Ljava/util/List;I)Ljava/util/List;
+	public static synthetic fun toArray$default (Lio/github/yuroyami/kite3d/math/Euler;Ljava/util/List;IILjava/lang/Object;)Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/Euler$Companion {
+	public final fun getDEFAULT_ORDER ()Lio/github/yuroyami/kite3d/math/EulerOrder;
+}
+
+public final class io/github/yuroyami/kite3d/math/EulerKt {
+	public static final fun getDEFAULT_ORDER ()Lio/github/yuroyami/kite3d/math/EulerOrder;
+}
+
+public final class io/github/yuroyami/kite3d/math/EulerOrder : java/lang/Enum {
+	public static final field XYZ Lio/github/yuroyami/kite3d/math/EulerOrder;
+	public static final field XZY Lio/github/yuroyami/kite3d/math/EulerOrder;
+	public static final field YXZ Lio/github/yuroyami/kite3d/math/EulerOrder;
+	public static final field YZX Lio/github/yuroyami/kite3d/math/EulerOrder;
+	public static final field ZXY Lio/github/yuroyami/kite3d/math/EulerOrder;
+	public static final field ZYX Lio/github/yuroyami/kite3d/math/EulerOrder;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/kite3d/math/EulerOrder;
+	public static fun values ()[Lio/github/yuroyami/kite3d/math/EulerOrder;
+}
+
+public final class io/github/yuroyami/kite3d/math/Frustum {
+	public fun <init> ()V
+	public fun <init> (Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;)V
+	public synthetic fun <init> (Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Frustum;
+	public final fun containsPoint (Lio/github/yuroyami/kite3d/math/Vector3;)Z
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Frustum;)Lio/github/yuroyami/kite3d/math/Frustum;
+	public final fun getPlanes ()[Lio/github/yuroyami/kite3d/math/Plane;
+	public final fun intersectsBox (Lio/github/yuroyami/kite3d/math/Box3;)Z
+	public final fun intersectsSphere (Lio/github/yuroyami/kite3d/math/Sphere;)Z
+	public final fun set (Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Plane;)Lio/github/yuroyami/kite3d/math/Frustum;
+	public final fun setFromProjectionMatrix (Lio/github/yuroyami/kite3d/math/Matrix4;Lio/github/yuroyami/kite3d/math/CoordinateSystem;Z)Lio/github/yuroyami/kite3d/math/Frustum;
+	public static synthetic fun setFromProjectionMatrix$default (Lio/github/yuroyami/kite3d/math/Frustum;Lio/github/yuroyami/kite3d/math/Matrix4;Lio/github/yuroyami/kite3d/math/CoordinateSystem;ZILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Frustum;
+}
+
+public final class io/github/yuroyami/kite3d/math/FrustumArray {
+	public fun <init> ()V
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/FrustumArray;
+	public final fun getCoordinateSystem ()Lio/github/yuroyami/kite3d/math/CoordinateSystem;
+	public final fun setCoordinateSystem (Lio/github/yuroyami/kite3d/math/CoordinateSystem;)V
+}
+
+public final class io/github/yuroyami/kite3d/math/HSL {
+	public fun <init> ()V
+	public fun <init> (DDD)V
+	public synthetic fun <init> (DDDILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getH ()D
+	public final fun getL ()D
+	public final fun getS ()D
+	public final fun setH (D)V
+	public final fun setL (D)V
+	public final fun setS (D)V
+}
+
+public abstract class io/github/yuroyami/kite3d/math/Interpolant {
+	public fun <init> ([D[DI[D)V
+	public synthetic fun <init> ([D[DI[DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun copySampleValue_ (I)[D
+	public final fun evaluate (D)[D
+	public fun getDefaultSettings_ ()Lio/github/yuroyami/kite3d/math/InterpolantSettings;
+	public final fun getParameterPositions ()[D
+	public final fun getResultBuffer ()[D
+	public final fun getSampleValues ()[D
+	public final fun getSettings ()Lio/github/yuroyami/kite3d/math/InterpolantSettings;
+	public final fun getSettings_ ()Lio/github/yuroyami/kite3d/math/InterpolantSettings;
+	public final fun getValueSize ()I
+	protected abstract fun interpolate_ (IDDD)[D
+	protected fun intervalChanged_ (IDD)V
+	public final fun setSettings (Lio/github/yuroyami/kite3d/math/InterpolantSettings;)V
+}
+
+public final class io/github/yuroyami/kite3d/math/InterpolantEnding : java/lang/Enum {
+	public static final field WrapAround Lio/github/yuroyami/kite3d/math/InterpolantEnding;
+	public static final field ZeroCurvature Lio/github/yuroyami/kite3d/math/InterpolantEnding;
+	public static final field ZeroSlope Lio/github/yuroyami/kite3d/math/InterpolantEnding;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/kite3d/math/InterpolantEnding;
+	public static fun values ()[Lio/github/yuroyami/kite3d/math/InterpolantEnding;
+}
+
+public final class io/github/yuroyami/kite3d/math/InterpolantSettings {
+	public fun <init> ()V
+	public fun <init> (Lio/github/yuroyami/kite3d/math/InterpolantEnding;Lio/github/yuroyami/kite3d/math/InterpolantEnding;[D[D)V
+	public synthetic fun <init> (Lio/github/yuroyami/kite3d/math/InterpolantEnding;Lio/github/yuroyami/kite3d/math/InterpolantEnding;[D[DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getEndingEnd ()Lio/github/yuroyami/kite3d/math/InterpolantEnding;
+	public final fun getEndingStart ()Lio/github/yuroyami/kite3d/math/InterpolantEnding;
+	public final fun getInTangents ()[D
+	public final fun getOutTangents ()[D
+	public final fun setEndingEnd (Lio/github/yuroyami/kite3d/math/InterpolantEnding;)V
+	public final fun setEndingStart (Lio/github/yuroyami/kite3d/math/InterpolantEnding;)V
+	public final fun setInTangents ([D)V
+	public final fun setOutTangents ([D)V
+}
+
+public final class io/github/yuroyami/kite3d/math/Line3 {
+	public fun <init> ()V
+	public fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)V
+	public synthetic fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun applyMatrix4 (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Line3;
+	public final fun at (DLio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Line3;
+	public final fun closestPointToPoint (Lio/github/yuroyami/kite3d/math/Vector3;ZLio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun closestPointToPointParameter (Lio/github/yuroyami/kite3d/math/Vector3;Z)D
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Line3;)Lio/github/yuroyami/kite3d/math/Line3;
+	public final fun delta (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun distance ()D
+	public final fun distanceSq ()D
+	public final fun distanceSqToLine3 (Lio/github/yuroyami/kite3d/math/Line3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public static synthetic fun distanceSqToLine3$default (Lio/github/yuroyami/kite3d/math/Line3;Lio/github/yuroyami/kite3d/math/Line3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;ILjava/lang/Object;)D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCenter (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getEnd ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getStart ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public fun hashCode ()I
+	public final fun set (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Line3;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/MathUtils {
+	public static final field DEG2RAD D
+	public static final field INSTANCE Lio/github/yuroyami/kite3d/math/MathUtils;
+	public static final field RAD2DEG D
+	public final fun ceilPowerOfTwo (D)D
+	public final fun clamp (DDD)D
+	public final fun damp (DDDD)D
+	public final fun degToRad (D)D
+	public final fun denormalize (DLio/github/yuroyami/kite3d/math/ComponentType;)D
+	public final fun euclideanModulo (DD)D
+	public final fun floorPowerOfTwo (D)D
+	public final fun generateUUID ()Ljava/lang/String;
+	public final fun inverseLerp (DDD)D
+	public final fun isPowerOfTwo (I)Z
+	public final fun lerp (DDD)D
+	public final fun mapLinear (DDDDD)D
+	public final fun normalize (DLio/github/yuroyami/kite3d/math/ComponentType;)D
+	public final fun pingpong (DD)D
+	public static synthetic fun pingpong$default (Lio/github/yuroyami/kite3d/math/MathUtils;DDILjava/lang/Object;)D
+	public final fun radToDeg (D)D
+	public final fun randFloat (DD)D
+	public final fun randFloatSpread (D)D
+	public final fun randInt (II)I
+	public final fun seededRandom (Ljava/lang/Integer;)D
+	public static synthetic fun seededRandom$default (Lio/github/yuroyami/kite3d/math/MathUtils;Ljava/lang/Integer;ILjava/lang/Object;)D
+	public final fun setQuaternionFromProperEuler (Lio/github/yuroyami/kite3d/math/Quaternion;DDDLio/github/yuroyami/kite3d/math/ProperEulerOrder;)V
+	public final fun smootherstep (DDD)D
+	public final fun smoothstep (DDD)D
+}
+
+public final class io/github/yuroyami/kite3d/math/Matrix2 {
+	public fun <init> ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun fromArray ([DI)Lio/github/yuroyami/kite3d/math/Matrix2;
+	public static synthetic fun fromArray$default (Lio/github/yuroyami/kite3d/math/Matrix2;[DIILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Matrix2;
+	public final fun getElements ()[D
+	public fun hashCode ()I
+	public final fun identity ()Lio/github/yuroyami/kite3d/math/Matrix2;
+	public final fun set (DDDD)Lio/github/yuroyami/kite3d/math/Matrix2;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/Matrix3 {
+	public fun <init> ()V
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Matrix3;)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun determinant ()D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun extractBasis (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun fromArray ([DI)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public static synthetic fun fromArray$default (Lio/github/yuroyami/kite3d/math/Matrix3;[DIILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun getElements ()[D
+	public final fun getNormalMatrix (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public fun hashCode ()I
+	public final fun identity ()Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun invert ()Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun makeRotation (D)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun makeScale (DD)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun makeTranslation (DD)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun makeTranslation (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun multiply (Lio/github/yuroyami/kite3d/math/Matrix3;)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun multiplyMatrices (Lio/github/yuroyami/kite3d/math/Matrix3;Lio/github/yuroyami/kite3d/math/Matrix3;)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun multiplyScalar (D)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun premultiply (Lio/github/yuroyami/kite3d/math/Matrix3;)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun rotate (D)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun scale (DD)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun set (DDDDDDDDD)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun setFromMatrix4 (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun setUvTransform (DDDDDDD)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun toArray (Ljava/util/List;I)Ljava/util/List;
+	public static synthetic fun toArray$default (Lio/github/yuroyami/kite3d/math/Matrix3;Ljava/util/List;IILjava/lang/Object;)Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+	public final fun translate (DD)Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun transpose ()Lio/github/yuroyami/kite3d/math/Matrix3;
+	public final fun transposeIntoArray ([D)Lio/github/yuroyami/kite3d/math/Matrix3;
+}
+
+public final class io/github/yuroyami/kite3d/math/Matrix4 {
+	public fun <init> ()V
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun compose (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Quaternion;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun copyPosition (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun decompose (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Quaternion;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun determinant ()D
+	public final fun determinantAffine ()D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun extractBasis (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun extractRotation (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun fromArray ([DI)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public static synthetic fun fromArray$default (Lio/github/yuroyami/kite3d/math/Matrix4;[DIILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun getElements ()[D
+	public final fun getMaxScaleOnAxis ()D
+	public fun hashCode ()I
+	public final fun identity ()Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun invert ()Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun lookAt (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeBasis (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeOrthographic (DDDDDDLio/github/yuroyami/kite3d/math/CoordinateSystem;Z)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public static synthetic fun makeOrthographic$default (Lio/github/yuroyami/kite3d/math/Matrix4;DDDDDDLio/github/yuroyami/kite3d/math/CoordinateSystem;ZILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makePerspective (DDDDDDLio/github/yuroyami/kite3d/math/CoordinateSystem;Z)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public static synthetic fun makePerspective$default (Lio/github/yuroyami/kite3d/math/Matrix4;DDDDDDLio/github/yuroyami/kite3d/math/CoordinateSystem;ZILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeRotationAxis (Lio/github/yuroyami/kite3d/math/Vector3;D)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeRotationFromEuler (Lio/github/yuroyami/kite3d/math/Euler;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeRotationFromQuaternion (Lio/github/yuroyami/kite3d/math/Quaternion;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeRotationX (D)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeRotationY (D)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeRotationZ (D)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeScale (DDD)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeShear (DDDDDD)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeTranslation (DDD)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun makeTranslation (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun multiply (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun multiplyMatrices (Lio/github/yuroyami/kite3d/math/Matrix4;Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun multiplyScalar (D)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun premultiply (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun scale (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun set (DDDDDDDDDDDDDDDD)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun setFromMatrix3 (Lio/github/yuroyami/kite3d/math/Matrix3;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun setPosition (DDD)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun setPosition (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun toArray (Ljava/util/List;I)Ljava/util/List;
+	public static synthetic fun toArray$default (Lio/github/yuroyami/kite3d/math/Matrix4;Ljava/util/List;IILjava/lang/Object;)Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+	public final fun transpose ()Lio/github/yuroyami/kite3d/math/Matrix4;
+}
+
+public final class io/github/yuroyami/kite3d/math/Plane {
+	public fun <init> ()V
+	public fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;D)V
+	public synthetic fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun applyMatrix4 (Lio/github/yuroyami/kite3d/math/Matrix4;Lio/github/yuroyami/kite3d/math/Matrix3;)Lio/github/yuroyami/kite3d/math/Plane;
+	public static synthetic fun applyMatrix4$default (Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Matrix4;Lio/github/yuroyami/kite3d/math/Matrix3;ILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Plane;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Plane;
+	public final fun coplanarPoint (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Plane;)Lio/github/yuroyami/kite3d/math/Plane;
+	public final fun distanceToPoint (Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public final fun distanceToSphere (Lio/github/yuroyami/kite3d/math/Sphere;)D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConstant ()D
+	public final fun getNormal ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public fun hashCode ()I
+	public final fun intersectLine (Lio/github/yuroyami/kite3d/math/Line3;Lio/github/yuroyami/kite3d/math/Vector3;Z)Lio/github/yuroyami/kite3d/math/Vector3;
+	public static synthetic fun intersectLine$default (Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Line3;Lio/github/yuroyami/kite3d/math/Vector3;ZILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun intersectsBox (Lio/github/yuroyami/kite3d/math/Box3;)Z
+	public final fun intersectsLine (Lio/github/yuroyami/kite3d/math/Line3;)Z
+	public final fun intersectsSphere (Lio/github/yuroyami/kite3d/math/Sphere;)Z
+	public final fun negate ()Lio/github/yuroyami/kite3d/math/Plane;
+	public final fun normalize ()Lio/github/yuroyami/kite3d/math/Plane;
+	public final fun projectPoint (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun set (Lio/github/yuroyami/kite3d/math/Vector3;D)Lio/github/yuroyami/kite3d/math/Plane;
+	public final fun setComponents (DDDD)Lio/github/yuroyami/kite3d/math/Plane;
+	public final fun setConstant (D)V
+	public final fun setFromCoplanarPoints (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Plane;
+	public final fun setFromNormalAndCoplanarPoint (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Plane;
+	public fun toString ()Ljava/lang/String;
+	public final fun translate (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Plane;
+}
+
+public final class io/github/yuroyami/kite3d/math/ProperEulerOrder : java/lang/Enum {
+	public static final field XYX Lio/github/yuroyami/kite3d/math/ProperEulerOrder;
+	public static final field XZX Lio/github/yuroyami/kite3d/math/ProperEulerOrder;
+	public static final field YXY Lio/github/yuroyami/kite3d/math/ProperEulerOrder;
+	public static final field YZY Lio/github/yuroyami/kite3d/math/ProperEulerOrder;
+	public static final field ZXZ Lio/github/yuroyami/kite3d/math/ProperEulerOrder;
+	public static final field ZYZ Lio/github/yuroyami/kite3d/math/ProperEulerOrder;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/kite3d/math/ProperEulerOrder;
+	public static fun values ()[Lio/github/yuroyami/kite3d/math/ProperEulerOrder;
+}
+
+public final class io/github/yuroyami/kite3d/math/Quaternion : java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
+	public static final field Companion Lio/github/yuroyami/kite3d/math/Quaternion$Companion;
+	public fun <init> ()V
+	public fun <init> (DDDD)V
+	public synthetic fun <init> (DDDDILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun angleTo (Lio/github/yuroyami/kite3d/math/Quaternion;)D
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun conjugate ()Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Quaternion;)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun dot (Lio/github/yuroyami/kite3d/math/Quaternion;)D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun fromArray ([DI)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public static synthetic fun fromArray$default (Lio/github/yuroyami/kite3d/math/Quaternion;[DIILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun fromBufferAttribute (Lio/github/yuroyami/kite3d/math/AttributeLike;I)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun getW ()D
+	public final fun getX ()D
+	public final fun getY ()D
+	public final fun getZ ()D
+	public fun hashCode ()I
+	public final fun identity ()Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun invert ()Lio/github/yuroyami/kite3d/math/Quaternion;
+	public fun iterator ()Ljava/util/Iterator;
+	public final fun length ()D
+	public final fun lengthSq ()D
+	public final fun multiply (Lio/github/yuroyami/kite3d/math/Quaternion;)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun multiplyQuaternions (Lio/github/yuroyami/kite3d/math/Quaternion;Lio/github/yuroyami/kite3d/math/Quaternion;)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun normalize ()Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun onChange (Lkotlin/jvm/functions/Function0;)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun premultiply (Lio/github/yuroyami/kite3d/math/Quaternion;)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun random ()Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun rotateTowards (Lio/github/yuroyami/kite3d/math/Quaternion;D)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun set (DDDD)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun setFromAxisAngle (Lio/github/yuroyami/kite3d/math/Vector3;D)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun setFromEuler (Lio/github/yuroyami/kite3d/math/Euler;Z)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public static synthetic fun setFromEuler$default (Lio/github/yuroyami/kite3d/math/Quaternion;Lio/github/yuroyami/kite3d/math/Euler;ZILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun setFromRotationMatrix (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun setFromUnitVectors (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun setW (D)V
+	public final fun setX (D)V
+	public final fun setY (D)V
+	public final fun setZ (D)V
+	public final fun slerp (Lio/github/yuroyami/kite3d/math/Quaternion;D)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun slerpQuaternions (Lio/github/yuroyami/kite3d/math/Quaternion;Lio/github/yuroyami/kite3d/math/Quaternion;D)Lio/github/yuroyami/kite3d/math/Quaternion;
+	public final fun toArray (Ljava/util/List;I)Ljava/util/List;
+	public static synthetic fun toArray$default (Lio/github/yuroyami/kite3d/math/Quaternion;Ljava/util/List;IILjava/lang/Object;)Ljava/util/List;
+	public final fun toJSON ()Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/Quaternion$Companion {
+	public final fun multiplyQuaternionsFlat ([DI[DI[DI)[D
+	public final fun slerpFlat ([DI[DI[DID)V
+}
+
+public final class io/github/yuroyami/kite3d/math/Ray {
+	public fun <init> ()V
+	public fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)V
+	public synthetic fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun applyMatrix4 (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Ray;
+	public final fun at (DLio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Ray;
+	public final fun closestPointToPoint (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Ray;)Lio/github/yuroyami/kite3d/math/Ray;
+	public final fun distanceSqToPoint (Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public final fun distanceSqToSegment (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public static synthetic fun distanceSqToSegment$default (Lio/github/yuroyami/kite3d/math/Ray;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;ILjava/lang/Object;)D
+	public final fun distanceToPlane (Lio/github/yuroyami/kite3d/math/Plane;)Ljava/lang/Double;
+	public final fun distanceToPoint (Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDirection ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getOrigin ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public fun hashCode ()I
+	public final fun intersectBox (Lio/github/yuroyami/kite3d/math/Box3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun intersectPlane (Lio/github/yuroyami/kite3d/math/Plane;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun intersectSphere (Lio/github/yuroyami/kite3d/math/Sphere;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun intersectTriangle (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;ZLio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun intersectsBox (Lio/github/yuroyami/kite3d/math/Box3;)Z
+	public final fun intersectsPlane (Lio/github/yuroyami/kite3d/math/Plane;)Z
+	public final fun intersectsSphere (Lio/github/yuroyami/kite3d/math/Sphere;)Z
+	public final fun lookAt (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Ray;
+	public final fun recast (D)Lio/github/yuroyami/kite3d/math/Ray;
+	public final fun set (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Ray;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/Sphere {
+	public fun <init> ()V
+	public fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;D)V
+	public synthetic fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun applyMatrix4 (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Sphere;
+	public final fun clampPoint (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Sphere;
+	public final fun containsPoint (Lio/github/yuroyami/kite3d/math/Vector3;)Z
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Sphere;)Lio/github/yuroyami/kite3d/math/Sphere;
+	public final fun distanceToPoint (Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun expandByPoint (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Sphere;
+	public final fun fromJSON ([D)Lio/github/yuroyami/kite3d/math/Sphere;
+	public final fun getBoundingBox (Lio/github/yuroyami/kite3d/math/Box3;)Lio/github/yuroyami/kite3d/math/Box3;
+	public final fun getCenter ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getRadius ()D
+	public fun hashCode ()I
+	public final fun intersectsBox (Lio/github/yuroyami/kite3d/math/Box3;)Z
+	public final fun intersectsPlane (Lio/github/yuroyami/kite3d/math/Plane;)Z
+	public final fun intersectsSphere (Lio/github/yuroyami/kite3d/math/Sphere;)Z
+	public final fun isEmpty ()Z
+	public final fun makeEmpty ()Lio/github/yuroyami/kite3d/math/Sphere;
+	public final fun set (Lio/github/yuroyami/kite3d/math/Vector3;D)Lio/github/yuroyami/kite3d/math/Sphere;
+	public final fun setFromPoints (Ljava/util/List;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Sphere;
+	public static synthetic fun setFromPoints$default (Lio/github/yuroyami/kite3d/math/Sphere;Ljava/util/List;Lio/github/yuroyami/kite3d/math/Vector3;ILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Sphere;
+	public final fun setRadius (D)V
+	public final fun toJSON ()[D
+	public fun toString ()Ljava/lang/String;
+	public final fun translate (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Sphere;
+	public final fun union (Lio/github/yuroyami/kite3d/math/Sphere;)Lio/github/yuroyami/kite3d/math/Sphere;
+}
+
+public final class io/github/yuroyami/kite3d/math/Spherical {
+	public fun <init> ()V
+	public fun <init> (DDD)V
+	public synthetic fun <init> (DDDILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Spherical;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Spherical;)Lio/github/yuroyami/kite3d/math/Spherical;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPhi ()D
+	public final fun getRadius ()D
+	public final fun getTheta ()D
+	public fun hashCode ()I
+	public final fun makeSafe ()Lio/github/yuroyami/kite3d/math/Spherical;
+	public final fun set (DDD)Lio/github/yuroyami/kite3d/math/Spherical;
+	public final fun setFromCartesianCoords (DDD)Lio/github/yuroyami/kite3d/math/Spherical;
+	public final fun setFromVector3 (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Spherical;
+	public final fun setPhi (D)V
+	public final fun setRadius (D)V
+	public final fun setTheta (D)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/SphericalHarmonics3 {
+	public static final field Companion Lio/github/yuroyami/kite3d/math/SphericalHarmonics3$Companion;
+	public fun <init> ()V
+	public final fun add (Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;)Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;
+	public final fun addScaledSH (Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;D)Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;)Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun fromArray ([DI)Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;
+	public static synthetic fun fromArray$default (Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;[DIILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;
+	public final fun getAt (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getCoefficients ()[Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getIrradianceAt (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public fun hashCode ()I
+	public final fun lerp (Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;D)Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;
+	public final fun scale (D)Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;
+	public final fun set ([Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;
+	public final fun toArray (Ljava/util/List;I)Ljava/util/List;
+	public static synthetic fun toArray$default (Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;Ljava/util/List;IILjava/lang/Object;)Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+	public final fun zero ()Lio/github/yuroyami/kite3d/math/SphericalHarmonics3;
+}
+
+public final class io/github/yuroyami/kite3d/math/SphericalHarmonics3$Companion {
+	public final fun getBasisAt (Lio/github/yuroyami/kite3d/math/Vector3;[D)V
+}
+
+public final class io/github/yuroyami/kite3d/math/Triangle {
+	public static final field Companion Lio/github/yuroyami/kite3d/math/Triangle$Companion;
+	public fun <init> ()V
+	public fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)V
+	public synthetic fun <init> (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Triangle;
+	public final fun closestPointToPoint (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun containsPoint (Lio/github/yuroyami/kite3d/math/Vector3;)Z
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Triangle;)Lio/github/yuroyami/kite3d/math/Triangle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getA ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getArea ()D
+	public final fun getB ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getBarycoord (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getC ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getInterpolation (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getMidpoint (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getNormal (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getPlane (Lio/github/yuroyami/kite3d/math/Plane;)Lio/github/yuroyami/kite3d/math/Plane;
+	public fun hashCode ()I
+	public final fun intersectsBox (Lio/github/yuroyami/kite3d/math/Box3;)Z
+	public final fun isFrontFacing (Lio/github/yuroyami/kite3d/math/Vector3;)Z
+	public final fun set (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Triangle;
+	public final fun setA (Lio/github/yuroyami/kite3d/math/Vector3;)V
+	public final fun setB (Lio/github/yuroyami/kite3d/math/Vector3;)V
+	public final fun setC (Lio/github/yuroyami/kite3d/math/Vector3;)V
+	public final fun setFromAttributeAndIndices (Lio/github/yuroyami/kite3d/math/AttributeLike;III)Lio/github/yuroyami/kite3d/math/Triangle;
+	public final fun setFromPointsAndIndices (Ljava/util/List;III)Lio/github/yuroyami/kite3d/math/Triangle;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/Triangle$Companion {
+	public final fun containsPoint (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Z
+	public final fun getBarycoord (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getInterpolatedAttribute (Lio/github/yuroyami/kite3d/math/AttributeLike;IIILio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getInterpolation (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getNormal (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun isFrontFacing (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Z
+}
+
+public final class io/github/yuroyami/kite3d/math/Vector2 : java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
+	public fun <init> ()V
+	public fun <init> (DD)V
+	public synthetic fun <init> (DDILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun add (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun addScalar (D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun addScaledVector (Lio/github/yuroyami/kite3d/math/Vector2;D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun addVectors (Lio/github/yuroyami/kite3d/math/Vector2;Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun angle ()D
+	public final fun angleTo (Lio/github/yuroyami/kite3d/math/Vector2;)D
+	public final fun applyMatrix3 (Lio/github/yuroyami/kite3d/math/Matrix3;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun ceil ()Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun clamp (Lio/github/yuroyami/kite3d/math/Vector2;Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun clampLength (DD)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun clampScalar (DD)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun cross (Lio/github/yuroyami/kite3d/math/Vector2;)D
+	public final fun distanceTo (Lio/github/yuroyami/kite3d/math/Vector2;)D
+	public final fun distanceToSquared (Lio/github/yuroyami/kite3d/math/Vector2;)D
+	public final fun divide (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun divideScalar (D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun dot (Lio/github/yuroyami/kite3d/math/Vector2;)D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun floor ()Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun fromArray ([DI)Lio/github/yuroyami/kite3d/math/Vector2;
+	public static synthetic fun fromArray$default (Lio/github/yuroyami/kite3d/math/Vector2;[DIILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun fromBufferAttribute (Lio/github/yuroyami/kite3d/math/AttributeLike;I)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun getComponent (I)D
+	public final fun getHeight ()D
+	public final fun getWidth ()D
+	public final fun getX ()D
+	public final fun getY ()D
+	public fun hashCode ()I
+	public fun iterator ()Ljava/util/Iterator;
+	public final fun length ()D
+	public final fun lengthSq ()D
+	public final fun lerp (Lio/github/yuroyami/kite3d/math/Vector2;D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun lerpVectors (Lio/github/yuroyami/kite3d/math/Vector2;Lio/github/yuroyami/kite3d/math/Vector2;D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun manhattanDistanceTo (Lio/github/yuroyami/kite3d/math/Vector2;)D
+	public final fun manhattanLength ()D
+	public final fun max (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun min (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun multiply (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun multiplyScalar (D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun negate ()Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun normalize ()Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun random ()Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun rotateAround (Lio/github/yuroyami/kite3d/math/Vector2;D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun round ()Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun roundToZero ()Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun set (DD)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun setComponent (ID)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun setHeight (D)V
+	public final fun setLength (D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun setScalar (D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun setWidth (D)V
+	public final fun setX (D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun setX (D)V
+	public final fun setY (D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun setY (D)V
+	public final fun sub (Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun subScalar (D)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun subVectors (Lio/github/yuroyami/kite3d/math/Vector2;Lio/github/yuroyami/kite3d/math/Vector2;)Lio/github/yuroyami/kite3d/math/Vector2;
+	public final fun toArray (Ljava/util/List;I)Ljava/util/List;
+	public static synthetic fun toArray$default (Lio/github/yuroyami/kite3d/math/Vector2;Ljava/util/List;IILjava/lang/Object;)Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/Vector3 : java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
+	public fun <init> ()V
+	public fun <init> (DDD)V
+	public synthetic fun <init> (DDDILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun add (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun addScalar (D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun addScaledVector (Lio/github/yuroyami/kite3d/math/Vector3;D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun addVectors (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun angleTo (Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public final fun applyAxisAngle (Lio/github/yuroyami/kite3d/math/Vector3;D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun applyEuler (Lio/github/yuroyami/kite3d/math/Euler;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun applyMatrix3 (Lio/github/yuroyami/kite3d/math/Matrix3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun applyMatrix4 (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun applyNormalMatrix (Lio/github/yuroyami/kite3d/math/Matrix3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun applyQuaternion (Lio/github/yuroyami/kite3d/math/Quaternion;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun ceil ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun clamp (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun clampLength (DD)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun clampScalar (DD)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun cross (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun crossVectors (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun distanceTo (Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public final fun distanceToSquared (Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public final fun divide (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun divideScalar (D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun dot (Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun floor ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun fromArray ([DI)Lio/github/yuroyami/kite3d/math/Vector3;
+	public static synthetic fun fromArray$default (Lio/github/yuroyami/kite3d/math/Vector3;[DIILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun fromBufferAttribute (Lio/github/yuroyami/kite3d/math/AttributeLike;I)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getComponent (I)D
+	public final fun getX ()D
+	public final fun getY ()D
+	public final fun getZ ()D
+	public fun hashCode ()I
+	public fun iterator ()Ljava/util/Iterator;
+	public final fun length ()D
+	public final fun lengthSq ()D
+	public final fun lerp (Lio/github/yuroyami/kite3d/math/Vector3;D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun lerpVectors (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun manhattanDistanceTo (Lio/github/yuroyami/kite3d/math/Vector3;)D
+	public final fun manhattanLength ()D
+	public final fun max (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun min (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun multiply (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun multiplyScalar (D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun multiplyVectors (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun negate ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun normalize ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun projectOnPlane (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun projectOnVector (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun random ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun randomDirection ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun reflect (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun round ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun roundToZero ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun set (DDD)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setComponent (ID)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setFromColor (Lio/github/yuroyami/kite3d/math/Color;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setFromCylindrical (Lio/github/yuroyami/kite3d/math/Cylindrical;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setFromCylindricalCoords (DDD)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setFromEuler (Lio/github/yuroyami/kite3d/math/Euler;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setFromMatrix3Column (Lio/github/yuroyami/kite3d/math/Matrix3;I)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setFromMatrixColumn (Lio/github/yuroyami/kite3d/math/Matrix4;I)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setFromMatrixPosition (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setFromMatrixScale (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setFromSpherical (Lio/github/yuroyami/kite3d/math/Spherical;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setFromSphericalCoords (DDD)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setLength (D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setScalar (D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setX (D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setX (D)V
+	public final fun setY (D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setY (D)V
+	public final fun setZ (D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun setZ (D)V
+	public final fun sub (Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun subScalar (D)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun subVectors (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun toArray (Ljava/util/List;I)Ljava/util/List;
+	public static synthetic fun toArray$default (Lio/github/yuroyami/kite3d/math/Vector3;Ljava/util/List;IILjava/lang/Object;)Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+	public final fun transformDirection (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Vector3;
+}
+
+public final class io/github/yuroyami/kite3d/math/Vector4 : java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
+	public fun <init> ()V
+	public fun <init> (DDDD)V
+	public synthetic fun <init> (DDDDILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun add (Lio/github/yuroyami/kite3d/math/Vector4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun addScalar (D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun addScaledVector (Lio/github/yuroyami/kite3d/math/Vector4;D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun addVectors (Lio/github/yuroyami/kite3d/math/Vector4;Lio/github/yuroyami/kite3d/math/Vector4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun applyMatrix4 (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun ceil ()Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun clamp (Lio/github/yuroyami/kite3d/math/Vector4;Lio/github/yuroyami/kite3d/math/Vector4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun clampLength (DD)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun clampScalar (DD)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun clone ()Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun copy (Lio/github/yuroyami/kite3d/math/Vector4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun divide (Lio/github/yuroyami/kite3d/math/Vector4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun divideScalar (D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun dot (Lio/github/yuroyami/kite3d/math/Vector4;)D
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun floor ()Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun fromArray ([DI)Lio/github/yuroyami/kite3d/math/Vector4;
+	public static synthetic fun fromArray$default (Lio/github/yuroyami/kite3d/math/Vector4;[DIILjava/lang/Object;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun fromBufferAttribute (Lio/github/yuroyami/kite3d/math/AttributeLike;I)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun getComponent (I)D
+	public final fun getHeight ()D
+	public final fun getW ()D
+	public final fun getWidth ()D
+	public final fun getX ()D
+	public final fun getY ()D
+	public final fun getZ ()D
+	public fun hashCode ()I
+	public fun iterator ()Ljava/util/Iterator;
+	public final fun length ()D
+	public final fun lengthSq ()D
+	public final fun lerp (Lio/github/yuroyami/kite3d/math/Vector4;D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun lerpVectors (Lio/github/yuroyami/kite3d/math/Vector4;Lio/github/yuroyami/kite3d/math/Vector4;D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun manhattanLength ()D
+	public final fun max (Lio/github/yuroyami/kite3d/math/Vector4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun min (Lio/github/yuroyami/kite3d/math/Vector4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun multiply (Lio/github/yuroyami/kite3d/math/Vector4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun multiplyScalar (D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun negate ()Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun normalize ()Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun random ()Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun round ()Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun roundToZero ()Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun set (DDDD)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setAxisAngleFromQuaternion (Lio/github/yuroyami/kite3d/math/Quaternion;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setAxisAngleFromRotationMatrix (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setComponent (ID)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setFromMatrixPosition (Lio/github/yuroyami/kite3d/math/Matrix4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setHeight (D)V
+	public final fun setLength (D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setScalar (D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setW (D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setW (D)V
+	public final fun setWidth (D)V
+	public final fun setX (D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setX (D)V
+	public final fun setY (D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setY (D)V
+	public final fun setZ (D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun setZ (D)V
+	public final fun sub (Lio/github/yuroyami/kite3d/math/Vector4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun subScalar (D)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun subVectors (Lio/github/yuroyami/kite3d/math/Vector4;Lio/github/yuroyami/kite3d/math/Vector4;)Lio/github/yuroyami/kite3d/math/Vector4;
+	public final fun toArray (Ljava/util/List;I)Ljava/util/List;
+	public static synthetic fun toArray$default (Lio/github/yuroyami/kite3d/math/Vector4;Ljava/util/List;IILjava/lang/Object;)Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/kite3d/math/interpolants/BezierInterpolant : io/github/yuroyami/kite3d/math/Interpolant {
+	public fun <init> ([D[DI[D)V
+	public synthetic fun <init> ([D[DI[DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class io/github/yuroyami/kite3d/math/interpolants/CubicInterpolant : io/github/yuroyami/kite3d/math/Interpolant {
+	public fun <init> ([D[DI[D)V
+	public synthetic fun <init> ([D[DI[DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getDefaultSettings_ ()Lio/github/yuroyami/kite3d/math/InterpolantSettings;
+}
+
+public final class io/github/yuroyami/kite3d/math/interpolants/DiscreteInterpolant : io/github/yuroyami/kite3d/math/Interpolant {
+	public fun <init> ([D[DI[D)V
+	public synthetic fun <init> ([D[DI[DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class io/github/yuroyami/kite3d/math/interpolants/LinearInterpolant : io/github/yuroyami/kite3d/math/Interpolant {
+	public fun <init> ([D[DI[D)V
+	public synthetic fun <init> ([D[DI[DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class io/github/yuroyami/kite3d/math/interpolants/QuaternionLinearInterpolant : io/github/yuroyami/kite3d/math/Interpolant {
+	public fun <init> ([D[DI[D)V
+	public synthetic fun <init> ([D[DI[DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+

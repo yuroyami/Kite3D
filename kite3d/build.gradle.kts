@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -29,6 +30,14 @@ kotlin {
     // Every unmarked declaration in a published library would otherwise leak as
     // public API. Strict explicit-API forces an intentional visibility on each.
     explicitApi()
+
+    // Checked-in ABI dumps under kite3d/api/. `checkKotlinAbi` fails the build when
+    // the public API drifts from the dump, so a breaking change can never land
+    // silently; `updateKotlinAbi` regenerates it when the change is intended.
+    // Calling the block is what enables validation; klib dumps (native/js/wasm)
+    // are produced alongside the JVM one automatically.
+    @OptIn(ExperimentalAbiValidation::class)
+    abiValidation {}
 
     jvm {
         // Build with JDK 21 (toolchain) but emit bytecode that JDK 11 runtimes
