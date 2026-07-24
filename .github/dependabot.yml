@@ -1,0 +1,20 @@
+version: 2
+
+# The core has no runtime dependencies, so this only tracks the build itself:
+# the Kotlin/Dokka/publishing plugins and the actions used by CI.
+updates:
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
