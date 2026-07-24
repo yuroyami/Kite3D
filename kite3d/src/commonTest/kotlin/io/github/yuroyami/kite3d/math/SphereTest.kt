@@ -6,6 +6,7 @@ package io.github.yuroyami.kite3d.math
 
 import kotlin.math.abs
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -274,5 +275,17 @@ class SphereTest {
 
         a.copy(b)
         assertEquals(true, a == b, "a equals b after copy()")
+    }
+
+    // Upstream Sphere.tests.js has no toJSON/fromJSON case; this one is written
+    // fresh to cover the flattened DoubleArray round-trip the port exposes.
+    @Test
+    fun toJSONFromJSON() {
+        val a = Sphere(Vector3(1.0, -2.0, 3.0), 4.0)
+
+        assertContentEquals(doubleArrayOf(1.0, -2.0, 3.0, 4.0), a.toJSON(), "toJSON is [cx, cy, cz, radius]")
+
+        val b = Sphere().fromJSON(a.toJSON())
+        assertEquals(a, b, "fromJSON(toJSON()) round-trips")
     }
 }

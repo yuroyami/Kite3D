@@ -271,6 +271,32 @@ public class Sphere(
      */
     public fun clone(): Sphere = Sphere().copy(this)
 
+    // --- JSON round-trip ------------------------------------------------------
+    // three.js returns/consumes a plain JS object; common Kotlin has no such JSON
+    // value type at this layer, so these are exposed as array round-trips — same
+    // shape as Box3.toJSON/fromJSON.
+
+    /**
+     * Writes this sphere as `[centerX, centerY, centerZ, radius]`.
+     *
+     * Mirrors three.js `toJSON()` (which produces `{ radius, center:
+     * center.toArray() }`); flattened here since the math layer has no JS object
+     * type. Center first, so the leading three components are exactly what
+     * [Vector3.toArray] would write.
+     */
+    public fun toJSON(): DoubleArray = doubleArrayOf(center.x, center.y, center.z, radius)
+
+    /**
+     * Sets this sphere from [json] laid out as `[centerX, centerY, centerZ, radius]`.
+     *
+     * @return A reference to this sphere.
+     */
+    public fun fromJSON(json: DoubleArray): Sphere {
+        center.fromArray(json, 0)
+        radius = json[3]
+        return this
+    }
+
     /**
      * Structural equality: `true` when [other] is a [Sphere] with an equal [center]
      * (via [Vector3.equals]) and an equal [radius] (primitive `==`, so `NaN != NaN`).

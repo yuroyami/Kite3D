@@ -6,6 +6,8 @@ package io.github.yuroyami.kite3d.math
 
 import kotlin.math.sqrt
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -513,5 +515,21 @@ class Box3Test {
         b = Box3(one3, one3)
         assertFalse(b == a)
         assertFalse(a == b)
+    }
+
+    // Upstream Box3.tests.js has no toJSON/fromJSON case; this one is written
+    // fresh to cover the flattened DoubleArray round-trip the port exposes.
+    @Test
+    fun toJSONFromJSON() {
+        val a = Box3(Vector3(-1.0, -2.0, -3.0), Vector3(4.0, 5.0, 6.0))
+
+        assertContentEquals(
+            doubleArrayOf(-1.0, -2.0, -3.0, 4.0, 5.0, 6.0),
+            a.toJSON(),
+            "toJSON is [minX, minY, minZ, maxX, maxY, maxZ]",
+        )
+
+        val b = Box3().fromJSON(a.toJSON())
+        assertEquals(a, b, "fromJSON(toJSON()) round-trips")
     }
 }
