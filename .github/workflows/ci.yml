@@ -11,11 +11,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Linux runner: compiles the whole target matrix and runs every test whose host
-  # is Linux/JS/Wasm. Compilation is host-agnostic; only test *execution* is gated
-  # on the host, so this job proves all targets compile.
+  # Linux runner: everything whose test host is Linux, JS, or Wasm.
+  #
+  # NOTE: this job does NOT prove the whole target matrix compiles — Kotlin/Native
+  # cannot build the Apple targets without Xcode, so `assemble` here silently skips
+  # them. The apple job below is what covers those; between the two, every declared
+  # target is compiled somewhere.
   linux:
-    name: build + jvm/js/wasm/linux tests
+    name: jvm/js/wasm/linux tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,14 +27,22 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
-      - name: Assemble all targets
+      - name: Assemble (non-Apple targets)
         run: ./gradlew assemble --stacktrace
-      - name: Test (jvm, js-node, wasmJs-node, linuxX64)
-        run: ./gradlew jvmTest jsNodeTest wasmJsNodeTest linuxX64Test --stacktrace
+      - name: Test (jvm, js-node, wasmJs-node, wasmWasi-node, linuxX64)
+        run: ./gradlew jvmTest jsNodeTest wasmJsNodeTest wasmWasiNodeTest linuxX64Test --stacktrace
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-linux
+          path: kite3d/build/reports/tests/
 
-  # Apple runner: the only host that can run the Apple-family and macos native tests.
+  # Apple runner: the only host that can compile and run the Apple-family targets.
+  # It is also the only host that can build every klib in the matrix, so the ABI
+  # dump is checked here.
   apple:
-    name: apple + macos native tests
+    name: apple tests + ABI check
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,8 +51,20 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
-      - name: Test (macosArm64, iosSimulatorArm64)
-        run: ./gradlew macosArm64Test iosSimulatorArm64Test --stacktrace
+      - name: Check public ABI against the checked-in dump
+        run: ./gradlew :kite3d:checkKotlinAbi --stacktrace
+      - name: Assemble Apple targets
+        run: ./gradlew assemble --stacktrace
+      # macos-latest is arm64: the x64 and 32-bit simulator variants have no host
+      # to run on, so they are compile-only (covered by `assemble` above).
+      - name: Test (macosArm64, iosSimulatorArm64, tvosSimulatorArm64, watchosSimulatorArm64)
+        run: ./gradlew macosArm64Test iosSimulatorArm64Test tvosSimulatorArm64Test watchosSimulatorArm64Test --stacktrace
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-apple
+          path: kite3d/build/reports/tests/
 
   # Windows runner: the only host that can run the mingw native tests.
   windows:
@@ -56,3 +79,33 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Test (mingwX64)
         run: ./gradlew mingwX64Test --stacktrace
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-windows
+          path: kite3d/build/reports/tests/
+
+  # Docs build. Not a gate on correctness, but a broken Dokka run should not first
+  # surface during a release.
+  docs:
+    name: dokka
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Generate API reference
+        run: ./gradlew dokkaGenerate --stacktrace
+
+# Targets deliberately not exercised here, and why:
+#   linuxArm64, iosArm64/X64, tvosArm64, watchosArm32/Arm64/DeviceArm64,
+#   macosX64, androidNative*  — no GitHub-hosted runner can execute their tests;
+#                               they are compile-checked by `assemble`.
+#   jsBrowserTest, wasmJsBrowserTest — the browser bundles are the same compiled
+#                               output the Node tasks already run, and the core is
+#                               pure common Kotlin with no DOM surface, so a Karma
+#                               job would add flake without adding coverage.

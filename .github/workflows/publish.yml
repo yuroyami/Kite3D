@@ -1,0 +1,66 @@
+name: Publish
+
+# Releases are cut by pushing a tag, e.g.:
+#   git tag v0.1.0 && git push origin v0.1.0
+# The tag must match `version` in gradle.properties; the job below refuses to
+# publish if they disagree, so a mistyped tag cannot ship a mislabelled artifact.
+#
+# Required repository secrets (vanniktech maven-publish reads them as Gradle
+# properties via the ORG_GRADLE_PROJECT_ prefix):
+#   MAVEN_CENTRAL_USERNAME        Central Portal token username
+#   MAVEN_CENTRAL_PASSWORD        Central Portal token password
+#   SIGNING_KEY                   ASCII-armoured GPG private key
+#   SIGNING_KEY_ID                short key id
+#   SIGNING_PASSWORD              passphrase for that key
+#
+# `publishToMavenCentral` uploads and validates a staged deployment. Releasing it
+# is a manual click in the Central Portal unless you also set
+# `mavenCentralAutomaticPublishing=true` in gradle.properties.
+
+on:
+  push:
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: publish to Maven Central
+    # macOS is the only host that can build every target in the matrix, so it is
+    # the only host that can produce a complete multiplatform publication.
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Verify the tag matches the project version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG="${GITHUB_REF#refs/tags/v}"
+          VERSION="$(grep '^version=' gradle.properties | cut -d= -f2)"
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "Tag v$TAG does not match gradle.properties version $VERSION" >&2
+            exit 1
+          fi
+
+      - name: Check public ABI against the checked-in dump
+        run: ./gradlew :kite3d:checkKotlinAbi --stacktrace
+
+      - name: Test before publishing
+        run: ./gradlew jvmTest jsNodeTest macosArm64Test --stacktrace
+
+      - name: Publish
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+        run: ./gradlew publishToMavenCentral --no-configuration-cache --stacktrace
