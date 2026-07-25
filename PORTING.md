@@ -1,8 +1,8 @@
-# PORTING.md — the Kite3D port dialect
+# PORTING.md: the Kite3D port dialect
 
 Normative rules for porting three.js (`r184`) into common Kotlin. Every file in
 `:kite3d` follows these. Derived from FABLE5_AUDIT.md §5/§6. When upstream and
-this document disagree, **this document wins** — but deviate from upstream
+this document disagree, **this document wins**. Deviate from upstream
 *semantics* only when a rule below forces it, and record every deviation in
 `port-ledger.yaml`.
 
@@ -20,7 +20,7 @@ tests. Fix upstream *doc* bugs.
    convenience) lives in **separate `ext/` files** (`ext/Vector2Ext.kt`), never
    interleaved into a ported file. Ported files stay 1:1 mappable.
 4. Port each class **with its upstream test file in the same commit**. A class
-   without its green tests is not "ported" — it is "started".
+   without its green tests is not "ported". It is "started".
 
 ## Language mapping
 
@@ -36,7 +36,7 @@ tests. Fix upstream *doc* bugs.
 10. `isFoo` duck-type flags: **omit**. Type tests use `is Foo`. (Revisit only if a
     later layer's ported logic dispatches on the string/flag.)
 11. `equals` / `hashCode` / `toString`: **override all three** on every value-ish
-    math type. Never ship a bare `equals(SameType)` overload — it desyncs `==`
+    math type. Never ship a bare `equals(SameType)` overload, because it desyncs `==`
     from `.equals`. `hashCode` must normalize `-0.0` (`(x + 0.0)`), so it stays
     consistent with `-0.0 == 0.0`. `equals` compares components with primitive
     `Double` `==` (so `NaN != NaN`, matching JS `===`).
