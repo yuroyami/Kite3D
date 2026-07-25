@@ -4,6 +4,7 @@ A 3D maths library for Kotlin Multiplatform: three.js's `src/math` layer ported
 file for file to common Kotlin, for anyone who needs vectors, matrices,
 quaternions, bounding volumes and colour without a rendering engine attached.
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.yuroyami/kite3d)](https://central.sonatype.com/artifact/io.github.yuroyami/kite3d)
 [![CI](https://img.shields.io/github/actions/workflow/status/yuroyami/Kite3D/ci.yml?branch=main&label=CI)](https://github.com/yuroyami/Kite3D/actions/workflows/ci.yml)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -41,17 +42,6 @@ frustum.intersectsBox(box)                          // true — it now crosses t
 ```
 
 ## Install
-
-`0.1.0` is not on Maven Central. Nothing has been released yet, so the only way
-to depend on Kite3D right now is to build it locally.
-
-```bash
-git clone https://github.com/yuroyami/Kite3D.git
-cd Kite3D
-./gradlew publishToMavenLocal -PRELEASE_SIGNING_ENABLED=false
-```
-
-Add `mavenLocal()` to your repositories, then:
 
 ```kotlin
 kotlin {
@@ -301,10 +291,7 @@ them: `Matrix2`, `BezierInterpolant` and `FrustumArray`.
 
 ## Documentation
 
-A documentation site is set up but has not been deployed yet — the workflow
-publishes to <https://yuroyami.github.io/Kite3D/> on the first push to `main`.
-Until then, generate the API reference locally with `./gradlew dokkaGenerate` and
-open `build/dokka/html/index.html`.
+[Guides and the full API reference](https://yuroyami.github.io/Kite3D/).
 
 [port-ledger.yaml](port-ledger.yaml) records every ported file, its test status
 and each intentional difference from upstream. [PORTING.md](PORTING.md) is the

@@ -22,14 +22,6 @@ desktop, the web and native, it is exactly the layer you want.
 
 ## Install
 
-Kite3D is not on Maven Central yet. Build and install it locally:
-
-```bash
-./gradlew publishToMavenLocal -PRELEASE_SIGNING_ENABLED=false
-```
-
-Then add `mavenLocal()` to your repositories and:
-
 ```kotlin
 kotlin {
     sourceSets {
