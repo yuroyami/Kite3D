@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/src/math/Vector3.tests.js (MIT).
  */
 package io.github.yuroyami.kite3d.math
@@ -718,7 +718,8 @@ class Vector3Test {
         assertEquals(-z, b.z)
     }
 
-    // project/unproject need core Camera — deferred (see port-ledger.yaml); test skipped.
+    // project/unproject need a core Camera type, which this module does not
+    // define. Test skipped.
 
     @Test
     fun lengthLengthSq() {

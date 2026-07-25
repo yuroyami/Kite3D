@@ -31,13 +31,13 @@ public val DEFAULT_ORDER: EulerOrder = EulerOrder.XYZ
  * various axes in specified amounts per axis, and a specified axis [order].
  *
  * Iterating through an instance yields its components `(x, y, z, order)` in that
- * order — three [Double]s followed by an [EulerOrder].
+ * order: three [Double]s followed by an [EulerOrder].
  *
  * Instances are **mutable** and **not thread-safe**; confine an instance (and any
  * object graph holding it) to a single thread, exactly as in three.js.
  *
- * Reading `x`/`y`/`z`/`order` has no side effect. Writing any of them — or calling
- * a mutating method — fires the registered [onChange] callback (see that method).
+ * Reading `x`/`y`/`z`/`order` has no side effect. Writing any of them, or calling
+ * a mutating method, fires the registered [onChange] callback (see that method).
  */
 public class Euler(
     x: Double = 0.0,

@@ -15,16 +15,16 @@ package io.github.yuroyami.kite3d.math
  * Instances are **mutable** and **not thread-safe**; confine an instance to a single
  * thread, exactly as in three.js.
  *
- * The `isSphericalHarmonics3` duck-typing flag is intentionally dropped
- * (dialect rule 10); use `is SphericalHarmonics3` instead.
+ * The `isSphericalHarmonics3` duck-typing flag is intentionally dropped. Use
+ * `is SphericalHarmonics3` instead.
  */
 public class SphericalHarmonics3 {
 
     /**
      * An array holding the (9) SH coefficients.
      *
-     * Exposed as a `val` (dialect rule 12): three.js never reassigns the array,
-     * only mutates the [Vector3] entries.
+     * Exposed as a `val`: three.js never reassigns the array, only mutates the
+     * [Vector3] entries.
      */
     public val coefficients: Array<Vector3> = Array(9) { Vector3() }
 
@@ -238,8 +238,8 @@ public class SphericalHarmonics3 {
      * Structural equality: `true` when [other] is a [SphericalHarmonics3] whose nine
      * coefficients are all equal (via [Vector3.equals], so `NaN != NaN`).
      *
-     * Mirrors three.js's `SphericalHarmonics3.equals`, but as the [equals] override
-     * (dialect rule 11) it also tolerates a non-[SphericalHarmonics3] / null argument.
+     * Matches three.js's `SphericalHarmonics3.equals`, but as the [equals] override
+     * it also accepts a non-[SphericalHarmonics3] or null argument.
      */
     override fun equals(other: Any?): Boolean {
         if (other !is SphericalHarmonics3) return false

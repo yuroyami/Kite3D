@@ -22,8 +22,8 @@ import kotlin.math.sqrt
  * Instances are **mutable** and **not thread-safe**; confine an instance (and any
  * object graph holding it) to a single thread, exactly as in three.js.
  *
- * Reading `x`/`y`/`z`/`w` has no side effect. Writing any of them — or calling a
- * mutating method — fires the registered [onChange] callback (see that method).
+ * Reading `x`/`y`/`z`/`w` has no side effect. Writing any of them, or calling a
+ * mutating method, fires the registered [onChange] callback (see that method).
  */
 public class Quaternion(
     x: Double = 0.0,
@@ -351,7 +351,7 @@ public class Quaternion(
     public fun invert(): Quaternion = conjugate()
 
     /**
-     * Returns the rotational conjugate of this quaternion — the same rotation in
+     * Returns the rotational conjugate of this quaternion: the same rotation in
      * the opposite direction about the rotational axis.
      *
      * @return A reference to this quaternion.
@@ -391,7 +391,7 @@ public class Quaternion(
         sqrt(_x * _x + _y * _y + _z * _z + _w * _w)
 
     /**
-     * Normalizes this quaternion — computes the quaternion that performs the same
+     * Normalizes this quaternion. It computes the quaternion that performs the same
      * rotation but has length `1`. A zero-length quaternion becomes the identity.
      *
      * @return A reference to this quaternion.

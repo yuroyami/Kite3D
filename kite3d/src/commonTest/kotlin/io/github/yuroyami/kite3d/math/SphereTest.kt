@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/src/math/Sphere.tests.js (MIT).
  */
 package io.github.yuroyami.kite3d.math
@@ -80,8 +80,8 @@ class SphereTest {
         assertTrue(b.radius == 1.0)
 
         // ensure that it is a true copy.
-        // Upstream reassigns a.center (fresh object); here center is `val` (dialect
-        // rule 12), so we mutate a's contents in place instead — same intent:
+        // Upstream reassigns a.center (fresh object); here center is `val`, so we
+        // mutate a's contents in place instead. The intent is the same:
         // b must be unaffected by later changes to a.
         a.center.set(0.0, 0.0, 0.0)
         a.radius = 0.0

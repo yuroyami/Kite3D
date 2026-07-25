@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/src/math/Plane.tests.js (MIT).
  */
 package io.github.yuroyami.kite3d.math

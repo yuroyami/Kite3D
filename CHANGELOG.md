@@ -5,10 +5,10 @@ All notable changes to Kite3D are recorded here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Kite3D is a port, so every entry names the three.js revision it tracks. The
-per-file record — including every intentional deviation from upstream — lives in
-[port-ledger.yaml](port-ledger.yaml).
+per-file record lives in [port-ledger.yaml](port-ledger.yaml). It includes every
+intentional deviation from upstream.
 
-## [0.1.0] — unreleased
+## [0.1.0] - unreleased
 
 The first release. Nothing has been published to Maven Central yet, so there is
 no earlier version to compare against and this entry has no Changed or Fixed
@@ -32,7 +32,7 @@ baseline.
 
 Departures from upstream worth naming here:
 
-- `Matrix4.determinantAffine()` — the upper-left 3x3 determinant, matching
+- `Matrix4.determinantAffine()`: the upper-left 3x3 determinant, matching
   three.js r184. `extractBasis`, `extractRotation` and `decompose` guard on it
   instead of the full 4x4 `determinant()`. The two results agree for affine
   matrices but not for projective ones, so guarding on the 4x4 took the wrong
@@ -40,9 +40,9 @@ Departures from upstream worth naming here:
 - `Sphere.toJSON()` / `Sphere.fromJSON()` are flattened to `DoubleArray`, in the
   same shape as `Box3`'s. Round-trip tests cover both.
 - `Interpolant.copySampleValue_` is `open`. Kotlin members are final by default,
-  which made the glTF cubic-spline subclass shape — the one upstream's own test
-  demonstrates — impossible to express. `CustomInterpolantTest` ports that suite
-  and pins the extension seam.
+  which made the glTF cubic-spline subclass shape impossible to express.
+  Upstream's own test demonstrates that shape. `CustomInterpolantTest` ports
+  that suite and pins the extension seam.
 - Methods that reach into layers above math are omitted rather than stubbed:
   `Vector3.project`/`unproject`, `Box3.setFromObject`/`expandByObject`,
   `Frustum.intersectsObject`/`intersectsSprite`, every intersection method on
@@ -60,5 +60,5 @@ Build and release setup:
 - Tag-triggered Maven Central release workflow.
 - The root Gradle project is named `kite3d-root`. It was `kite3d`, the same as
   the included module, so `TYPESAFE_PROJECT_ACCESSORS` generated `getKite3d()`
-  twice and every Gradle invocation — including `./gradlew help` — died with
+  twice and every Gradle invocation, including `./gradlew help`, died with
   "method getKite3d() is already defined".

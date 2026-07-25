@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/src/math/Matrix4.tests.js (MIT).
  */
 package io.github.yuroyami.kite3d.math
@@ -25,7 +25,7 @@ internal fun matrixEquals4(a: Matrix4, b: Matrix4, tolerance: Double = 0.0001): 
 
 class Matrix4Test {
 
-    // from Euler.js — mirrors the JS `eulerEquals` helper.
+    // from Euler.js: the same logic as the JS `eulerEquals` helper.
     private fun eulerEquals(a: Euler, b: Euler, tolerance: Double = 0.0001): Boolean {
         val diff = abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z)
         return diff < tolerance

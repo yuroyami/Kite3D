@@ -52,7 +52,7 @@ private fun hue2rgb(p: Double, q: Double, t0: Double): Double {
  * and `getStyle` (CSS-string output) are **deferred**: they require a large color
  * name table and regex-based CSS parsing that add no value to the pure math layer
  * yet. The numeric constructors ([Color] with `r,g,b` or a hex `Int`), [setHex],
- * [setRGB] and [setHSL] cover the algebraic paths. See port-ledger.yaml.
+ * [setRGB] and [setHSL] cover the algebraic paths.
  */
 public class Color : Iterable<Double> {
 
@@ -71,7 +71,7 @@ public class Color : Iterable<Double> {
      * (three.js's polymorphic `Color(r, g, b)` constructor also accepts a hex
      * `Int`, a CSS string or another [Color]. The Kotlin port splits those into
      * distinct constructors/overloads: [Color] with three [Double]s, with a hex
-     * [Int], or via [copy]. The CSS-string path is deferred — see the class doc.)
+     * [Int], or via [copy]. The CSS-string path is deferred. See the class doc.)
      */
     public constructor()
 
@@ -294,7 +294,7 @@ public class Color : Iterable<Double> {
         val c = Color().copy(this)
         ColorManagement.workingToColorSpace(c, colorSpace)
 
-        // three.js: Math.round(...) — half toward +inf (MathUtils.jsRound), not
+        // three.js: Math.round(...) rounds half toward +inf (MathUtils.jsRound), not
         // Kotlin's half-to-even round. `* 65536`/`* 256` widened via Int arithmetic.
         return MathUtils.jsRound(MathUtils.clamp(c.r * 255, 0.0, 255.0)).toInt() * 65536 +
             MathUtils.jsRound(MathUtils.clamp(c.g * 255, 0.0, 255.0)).toInt() * 256 +

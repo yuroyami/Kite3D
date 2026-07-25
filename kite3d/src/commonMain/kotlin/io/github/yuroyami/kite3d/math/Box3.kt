@@ -15,8 +15,8 @@ import kotlin.math.abs
  * methods mutate `this` and return it for chaining.
  *
  * The constructor stores the given vectors **by reference** (it does not copy
- * them). Passing the same vector as both bounds — or sharing a vector with another
- * object — means later mutations are visible through every alias; use [set] or
+ * them). Passing the same vector as both bounds, or sharing a vector with another
+ * object, means later mutations are visible through every alias. Use [set] or
  * [clone] when you need independent storage.
  */
 public class Box3(
@@ -46,8 +46,8 @@ public class Box3(
     public fun setFromArray(array: DoubleArray): Box3 {
         makeEmpty()
 
-        // Local scratch vector (three.js reuses a module-level _vector) — allocate
-        // locally so the box carries no shared mutable state (dialect rule 13).
+        // Local scratch vector (three.js reuses a module-level _vector). Allocate it
+        // locally so the box carries no shared mutable state.
         val vector = Vector3()
         var i = 0
         val il = array.size
@@ -63,9 +63,8 @@ public class Box3(
      * Expands this box to enclose the first [count] 3D positions in [attribute].
      *
      * three.js reads `attribute.count`; the [AttributeLike] seam does not expose a
-     * count, so the vertex count is passed explicitly as [count] (see PORTING.md
-     * "Cross-layer forward dependencies"). The real `BufferAttribute` supplies its
-     * own `.count` at the call site once the core layer is ported.
+     * count, so the vertex count is passed explicitly as [count]. A `BufferAttribute`
+     * type can supply its own `.count` at the call site.
      *
      * @return A reference to this box.
      */
@@ -154,7 +153,7 @@ public class Box3(
 
     /**
      * Returns `true` if this box encloses no volume. A box with equal lower and
-     * upper bounds is **not** empty — it still contains the single shared point.
+     * upper bounds is **not** empty. It still contains the single shared point.
      *
      * @return Whether this box is empty or not.
      */

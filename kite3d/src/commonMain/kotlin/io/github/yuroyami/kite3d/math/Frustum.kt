@@ -7,7 +7,7 @@ package io.github.yuroyami.kite3d.math
 
 /**
  * Frustums are used to determine what is inside the camera's field of view.
- * They help speed up the rendering process — objects which lie outside a camera's
+ * They help speed up the rendering process. Objects which lie outside a camera's
  * frustum can safely be excluded from rendering.
  *
  * This class is mainly intended for use internally by a renderer.
@@ -36,8 +36,8 @@ public class Frustum(
     /**
      * This array holds the planes that enclose the frustum.
      *
-     * Exposed as a `val` (dialect rule 12): three.js never reassigns the array,
-     * only mutates its contents.
+     * Exposed as a `val`: three.js never reassigns the array, only mutates its
+     * contents.
      */
     public val planes: Array<Plane> = arrayOf(p0, p1, p2, p3, p4, p5)
 

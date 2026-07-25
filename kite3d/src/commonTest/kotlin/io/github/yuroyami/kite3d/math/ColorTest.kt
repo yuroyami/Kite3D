@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/src/math/Color.tests.js (MIT).
  */
 package io.github.yuroyami.kite3d.math
@@ -59,8 +59,8 @@ class ColorTest {
         a.set(0xFF0000)
         assertTrue(a == c, "Set with number")
 
-        // Upstream also checks `a.set('rgb(0,255,0)')` — the CSS-string path is
-        // deferred in the Kotlin port, so that sub-assertion is skipped.
+        // Upstream also checks `a.set('rgb(0,255,0)')`. The CSS-string path is
+        // deferred, so that sub-assertion is skipped.
 
         a.set(0.5, 0.5, 0.5)
         assertTrue(a == e, "Set with r,g,b components")
@@ -172,7 +172,7 @@ class ColorTest {
         val c2 = Color()
         c2.setRGB(0.09, 0.25, 0.81)
         c.copyLinearToSRGB(c2)
-        // numEqual tolerance (0.1), as upstream — the accurate transfer differs from the
+        // numEqual tolerance (0.1), as upstream. The accurate transfer differs from the
         // coarse expected values by up to ~0.03.
         assertTrue(abs(c.r - 0.3) < 0.1, "Red c: ${c.r} Red c2: ${c2.r}")
         assertTrue(abs(c.g - 0.5) < 0.1, "Green c: ${c.g} Green c2: ${c2.g}")

@@ -287,8 +287,8 @@ public class Sphere(
 
     // --- JSON round-trip ------------------------------------------------------
     // three.js returns/consumes a plain JS object; common Kotlin has no such JSON
-    // value type at this layer, so these are exposed as array round-trips — same
-    // shape as Box3.toJSON/fromJSON.
+    // value type at this layer, so these are exposed as array round-trips. They use
+    // the same shape as Box3.toJSON/fromJSON.
 
     /**
      * Writes this sphere as `[centerX, centerY, centerZ, radius]`.

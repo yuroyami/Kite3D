@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Kite3D-only invariants that three.js does not test but the Kotlin port must
  * hold (audit §7.1). These guard the decisions that diverge from three.js:
  * the clamp-not-coerceIn empty-box behavior, and the equals/hashCode contract.

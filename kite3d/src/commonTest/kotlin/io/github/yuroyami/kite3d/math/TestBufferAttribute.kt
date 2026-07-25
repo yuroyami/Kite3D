@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Test double for the AttributeLike seam, standing in for three.js's
  * core/BufferAttribute in the math unit tests (mirrors its getX/Y/Z/W(index)).
  */

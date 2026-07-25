@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/src/math/Box3.tests.js (MIT).
  */
 package io.github.yuroyami.kite3d.math
@@ -132,9 +132,9 @@ class Box3Test {
     }
 
     // setFromObject/BufferGeometry, setFromObject/Precise and expandByObject are
-    // SKIPPED: Box3.setFromObject/expandByObject are deferred (they need core
-    // Object3D/Mesh/geometry types — updateWorldMatrix, geometry, getVertexPosition,
-    // matrixWorld). They will be covered once the object-aware module lands.
+    // SKIPPED: Box3.setFromObject/expandByObject need core Object3D, Mesh and
+    // geometry types (updateWorldMatrix, geometry, getVertexPosition, matrixWorld),
+    // which this module does not define.
 
     @Test
     fun clone() {

@@ -26,10 +26,10 @@ public enum class ColorSpace {
     /** sRGB-linear color space (three.js `'srgb-linear'`); the default working space. */
     LinearSRGB,
 
-    /** Display-P3 color space (three.js `'display-p3'`). Not yet registered — reserved. */
+    /** Display-P3 color space (three.js `'display-p3'`). Reserved: not registered yet. */
     DisplayP3,
 
-    /** Linear Display-P3 color space (three.js `'display-p3-linear'`). Not yet registered — reserved. */
+    /** Linear Display-P3 color space (three.js `'display-p3-linear'`). Reserved: not registered yet. */
     LinearDisplayP3,
 }
 

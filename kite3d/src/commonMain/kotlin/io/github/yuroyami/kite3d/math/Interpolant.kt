@@ -8,10 +8,10 @@ package io.github.yuroyami.kite3d.math
 /**
  * The ending mode of a [CubicInterpolant] at a curve boundary.
  *
- * Mirrors the `ZeroCurvatureEnding` / `ZeroSlopeEnding` / `WrapAroundEnding`
- * integer constants from three.js `src/constants.js` (2400 / 2401 / 2402). The
- * numeric values are irrelevant to the port — only the identity matters — so
- * they are modeled as enum members rather than magic ints.
+ * These match the `ZeroCurvatureEnding` / `ZeroSlopeEnding` / `WrapAroundEnding`
+ * integer constants from three.js `src/constants.js` (2400 / 2401 / 2402). Only the
+ * identity matters here, not the numeric value, so they are modeled as enum members
+ * rather than magic ints.
  */
 public enum class InterpolantEnding {
     /** `f''(t) = 0`, a.k.a. Natural Spline. The three.js default (`ZeroCurvatureEnding`). */
@@ -34,9 +34,9 @@ public enum class InterpolantEnding {
  *   pairs per keyframe per component; `null` ⇒ linear fallback).
  *
  * Modeled as a small holder so the base [Interpolant.getSettings_] contract
- * (`settings || DefaultSettings_`) ports faithfully. The tangent arrays are
+ * (`settings || DefaultSettings_`) still works. The tangent arrays are
  * `DoubleArray?` here (three.js uses `Float32Array`) to keep the seam entirely
- * within `math` — no core type is pulled in.
+ * within `math`. It needs no type from the core module.
  *
  * @param endingStart The ending mode applied at the start of the curve.
  * @param endingEnd The ending mode applied at the end of the curve.
@@ -102,9 +102,9 @@ public abstract class Interpolant(
 
     /**
      * Reads `parameterPositions[i]`, returning `null` for an out-of-bounds
-     * index. Models the JS `pp[i] === undefined` boundary tests faithfully: in
-     * JS an out-of-range typed-array access yields `undefined`, whereas a Kotlin
-     * `DoubleArray` access throws — so every boundary read in [evaluate] goes
+     * index. It models the JS `pp[i] === undefined` boundary tests: in JS an
+     * out-of-range typed-array access yields `undefined`, whereas a Kotlin
+     * `DoubleArray` access throws. Every boundary read in [evaluate] therefore goes
      * through this helper.
      */
     private fun ppGet(i: Int): Double? {
@@ -175,7 +175,7 @@ public abstract class Interpolant(
                 forwardFellThrough = true
             }
 
-            // if ( ! ( t >= t0 ) )   (forwardFellThrough forces entry — see note above)
+            // if ( ! ( t >= t0 ) )   (forwardFellThrough forces entry, see note above)
             if (forwardFellThrough || !(t0 != null && t >= t0)) {
                 // looping?
                 val t1global = ppGet(1)
@@ -267,7 +267,7 @@ public abstract class Interpolant(
      * Overridable: derived classes whose keyframe layout is not a flat run of
      * `valueSize` components per sample must translate [index] themselves. The
      * canonical case is a CUBICSPLINE track, whose layout is
-     * `[ inTangent, splineVertex, outTangent, … ]` — three blocks per keyframe —
+     * `[ inTangent, splineVertex, outTangent, … ]` (three blocks per keyframe),
      * so the sample lives at `index * valueSize * 3 + valueSize`.
      *
      * @param index An index into the sample value buffer.

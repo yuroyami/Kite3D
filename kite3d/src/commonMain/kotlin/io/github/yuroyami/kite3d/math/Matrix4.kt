@@ -27,13 +27,14 @@ public enum class CoordinateSystem {
  * Represents a 4x4 matrix.
  *
  * The most common use of a 4x4 matrix in 3D computer graphics is as a
- * transformation matrix — translation, rotation, shear, scale, reflection,
- * orthographic or perspective projection — applied to a vector by multiplication.
+ * transformation matrix: translation, rotation, shear, scale, reflection, or an
+ * orthographic or perspective projection. You apply it to a vector by
+ * multiplication.
  *
- * A note on row-major and column-major ordering: the [set] method (and the
- * `Matrix4(...)` element constructor, exposed as an `ext/` convenience) take
- * arguments in **row-major** order, while internally the values are stored in the
- * [elements] array in **column-major** order. This matches three.js exactly.
+ * Row-major and column-major ordering: [set] takes its arguments in row-major
+ * order, so a literal in source reads the way you would write the matrix on
+ * paper. The values are stored in [elements] in column-major order. There is no
+ * element constructor; use `Matrix4().set(...)`.
  *
  * Matrices are **mutable** and **not thread-safe**; confine an instance (and any
  * object graph holding it) to a single thread, exactly as in three.js. Most
@@ -556,9 +557,9 @@ public class Matrix4 {
      *
      * Only the upper-left 3x3 block participates; the bottom row is assumed to be
      * `[0, 0, 0, 1]`. For affine matrices (an object's world matrix, say) the
-     * result equals [determinant] but is cheaper. For projective matrices — a
-     * perspective projection, whose bottom row is not `[0, 0, 0, 1]` — the two
-     * generally differ.
+     * result equals [determinant] but is cheaper. The two values generally
+     * differ for projective matrices, such as a perspective projection, whose
+     * bottom row is not `[0, 0, 0, 1]`.
      *
      * @return The determinant of the upper-left 3x3 block.
      */
@@ -1112,7 +1113,7 @@ public class Matrix4 {
 
     // three.js's `equals(matrix)` (exact, element-wise) is expressed by the
     // `equals(Any?)` override below, so `==` and `.equals` stay in sync (dialect
-    // rule 11 — no bare same-type overload). Tests use `a == b`.
+    // rule 11: no bare same-type overload). Tests use `a == b`.
 
     /**
      * Sets the elements of the matrix from the given [array] (column-major order).

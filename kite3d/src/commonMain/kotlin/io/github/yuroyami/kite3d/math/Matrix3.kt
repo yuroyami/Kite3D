@@ -11,10 +11,10 @@ import kotlin.math.sin
 /**
  * Represents a 3x3 matrix.
  *
- * A note on row-major and column-major ordering: the [set] method (and the
- * `Matrix3(...)` element constructor, exposed as an `ext/` convenience) take
- * arguments in **row-major** order, while internally the values are stored in the
- * [elements] array in **column-major** order. This matches three.js exactly.
+ * Row-major and column-major ordering: [set] takes its arguments in row-major
+ * order, so a literal in source reads the way you would write the matrix on
+ * paper. The values are stored in [elements] in column-major order. There is no
+ * element constructor; use `Matrix3().set(...)`.
  *
  * Matrices are **mutable** and **not thread-safe**; confine an instance (and any
  * object graph holding it) to a single thread, exactly as in three.js. Most
@@ -437,7 +437,7 @@ public class Matrix3 {
 
     // three.js's `equals(matrix)` (exact, element-wise) is expressed by the
     // `equals(Any?)` override below, so `==` and `.equals` stay in sync (dialect
-    // rule 11 — no bare same-type overload). Tests use `a == b`.
+    // rule 11: no bare same-type overload). Tests use `a == b`.
 
     /**
      * Sets the elements of the matrix from the given [array] (column-major order).

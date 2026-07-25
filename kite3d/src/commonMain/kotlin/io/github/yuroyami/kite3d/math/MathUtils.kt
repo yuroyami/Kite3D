@@ -57,7 +57,7 @@ public object MathUtils {
     /** Multiply by this to convert radians to degrees. */
     public const val RAD2DEG: Double = 180.0 / PI
 
-    // 256 two-digit lowercase hex strings — the UUID nibble lookup table.
+    // 256 two-digit lowercase hex strings: the UUID nibble lookup table.
     private val lut: Array<String> = Array(256) { it.toString(16).padStart(2, '0') }
 
     private var seed: Int = 1234567
@@ -94,8 +94,8 @@ public object MathUtils {
     /**
      * Clamps [value] between [minVal] and [maxVal].
      *
-     * Uses `max(min, min(max, value))` — never [Double.coerceIn], which throws when
-     * `min > max` (a normal state for empty boxes: min=+inf, max=-inf).
+     * Uses `max(min, min(max, value))`. It never uses [Double.coerceIn], which throws
+     * when `min > max` (a normal state for empty boxes: min=+inf, max=-inf).
      *
      * @return The clamped value.
      */
@@ -364,7 +364,7 @@ public object MathUtils {
 
     /**
      * The difference between `1.0` and the next representable [Double]
-     * (`2^-52`) — the Kotlin equivalent of JS `Number.EPSILON`. Shared by the
+     * (`2^-52`). This is the Kotlin equivalent of JS `Number.EPSILON`. Shared by the
      * math layer (e.g. `Quaternion.slerp`, `Matrix4.decompose`).
      */
     internal const val EPSILON: Double = 2.220446049250313E-16

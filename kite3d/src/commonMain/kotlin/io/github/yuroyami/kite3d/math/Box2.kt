@@ -14,8 +14,8 @@ import kotlin.math.sqrt
  * thread, as in three.js.
  *
  * The constructor stores the given vectors **by reference** (it does not copy
- * them). Passing the same vector as both bounds — or sharing a vector with another
- * object — means later mutations are visible through every alias; use [set] or
+ * them). Passing the same vector as both bounds, or sharing a vector with another
+ * object, means later mutations are visible through every alias. Use [set] or
  * [clone] when you need independent storage.
  */
 public class Box2(
@@ -92,7 +92,7 @@ public class Box2(
 
     /**
      * Returns `true` if this box encloses no volume. A box with equal lower and
-     * upper bounds is **not** empty — it still contains the single shared point.
+     * upper bounds is **not** empty. It still contains the single shared point.
      *
      * @return Whether this box is empty or not.
      */
@@ -210,7 +210,7 @@ public class Box2(
      * @return The euclidean distance.
      */
     public fun distanceToPoint(point: Vector2): Double {
-        // Inlined clampPoint(point).distanceTo(point) — no shared scratch vector.
+        // Inlined clampPoint(point).distanceTo(point): no shared scratch vector.
         val clampedX = MathUtils.clamp(point.x, min.x, max.x)
         val clampedY = MathUtils.clamp(point.y, min.y, max.y)
         val dx = clampedX - point.x

@@ -15,11 +15,10 @@ package io.github.yuroyami.kite3d.math
  * Note: every intersection method of this class drives a [Frustum] from an
  * `ArrayCamera` (reading each camera's `projectionMatrix`, `matrixWorldInverse`,
  * `coordinateSystem` and `reversedDepth`), and further delegates to
- * `Frustum.intersectsObject` / `intersectsSprite`. Those core camera/object types
- * are not part of the math layer, so the intersection methods are DEFERRED (see
- * port-ledger.yaml) and will be reintroduced in the owning layer once core lands.
- * FrustumArray has no upstream test file, so nothing is skipped test-side. Only the
- * [coordinateSystem] field and [clone] are portable today.
+ * `Frustum.intersectsObject` / `intersectsSprite`. Those core camera and object
+ * types are not part of the math layer, so this class does not provide the
+ * intersection methods. Only the [coordinateSystem] field and [clone] are
+ * available here.
  */
 public class FrustumArray {
 

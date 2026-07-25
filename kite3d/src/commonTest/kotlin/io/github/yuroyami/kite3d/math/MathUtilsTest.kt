@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/src/math/MathUtils.tests.js (MIT).
  */
 package io.github.yuroyami.kite3d.math
@@ -62,7 +62,7 @@ class MathUtilsTest {
     @Test
     fun damp() {
         assertEquals(1.0, MathUtils.damp(1.0, 2.0, 0.0, 0.016), 0.0, "Lower boundary")
-        // exp() is not bit-identical across V8/JVM/Native libm — assert with tolerance.
+        // exp() is not bit-identical across V8/JVM/Native libm. Assert with a tolerance.
         assertEquals(1.1478562110337887, MathUtils.damp(1.0, 2.0, 10.0, 0.016), 1e-12, "Within range")
     }
 

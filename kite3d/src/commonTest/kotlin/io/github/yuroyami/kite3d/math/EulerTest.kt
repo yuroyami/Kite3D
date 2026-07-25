@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/src/math/Euler.tests.js (MIT).
  */
 package io.github.yuroyami.kite3d.math
@@ -12,8 +12,8 @@ import kotlin.test.assertTrue
 
 class EulerTest {
 
-    // Fresh instances per access (some tests mutate these, e.g. reorder) — avoids
-    // cross-test bleed, mirroring the TestConstants.kt convention.
+    // Fresh instances per access (some tests mutate these, e.g. reorder). This stops
+    // one test from affecting another, following the TestConstants.kt convention.
     private val eulerZero get() = Euler(0.0, 0.0, 0.0, EulerOrder.XYZ)
     private val eulerAxyz get() = Euler(1.0, 0.0, 0.0, EulerOrder.XYZ)
     private val eulerAzyx get() = Euler(0.0, 1.0, 0.0, EulerOrder.ZYX)

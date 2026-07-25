@@ -368,7 +368,8 @@ public class Vector3(
         return this
     }
 
-    // project(camera)/unproject(camera) need core Camera — deferred (see port-ledger.yaml).
+    // project(camera)/unproject(camera) need a core Camera type. This module does
+    // not define one.
 
     /**
      * Transforms the direction of this vector by the upper-left 3x3 of the 4x4

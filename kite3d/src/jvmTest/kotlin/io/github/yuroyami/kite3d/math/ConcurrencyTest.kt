@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * JVM-only regression guard for audit §3.1: the port removed all file-level mutable
  * scratch, so math methods that three.js backed with shared module temps must now be
  * safe to run concurrently on distinct instances. If shared mutable state is ever
@@ -48,7 +48,7 @@ class ConcurrencyTest {
                 baseline[i],
                 results[i]!!,
                 0.0,
-                "worker $i diverged under contention — a shared mutable temp was reintroduced",
+                "worker $i diverged under contention, so a shared mutable temp was reintroduced",
             )
         }
     }

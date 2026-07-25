@@ -8,7 +8,7 @@ turning a three.js source file into common Kotlin.
 
 Porting means reading the upstream file side by side with its Kotlin counterpart,
 so you need a local checkout of three.js at the pinned revision. It lives at
-`three.js-ref/` and is **git-ignored** — it is not part of Kite3D and is never
+`three.js-ref/` and is **git-ignored**. It is not part of Kite3D and is never
 committed:
 
 ```bash
@@ -20,9 +20,10 @@ The sources you will want are `three.js-ref/src/math/…` and their suites in
 
 ## Before you port a file
 
-Read **[PORTING.md](PORTING.md)** — the binding dialect. It covers structure,
-the JS→Kotlin language mapping, cross-layer seams, and the trap catalogue (the
-subtle `clamp`/`Math.round`/int32/`-0.0` differences that silently corrupt a port).
+Read **[PORTING.md](PORTING.md)** first. It is the binding dialect, and it
+covers structure, the JS→Kotlin language mapping, cross-layer seams, and the
+trap catalogue. The catalogue lists the subtle `clamp`, `Math.round`, int32 and
+`-0.0` differences that silently corrupt a port.
 
 Then check **[port-ledger.yaml](port-ledger.yaml)** for the file's status and
 dependency order. Port in dependency order; a class and its upstream test suite
@@ -43,9 +44,9 @@ land in the same commit.
 ```
 
 A port is "done" only when its ported test suite is green on **jvm, one native
-target, and js** — the three engines have different `libm` implementations, so a
-tolerance that passes on the JVM can still fail on native (see PORTING.md, the
-transcendental-tolerance rule).
+target, and js**. The three engines have different `libm` implementations, so a
+tolerance that passes on the JVM can still fail on native. See the
+transcendental-tolerance rule in PORTING.md.
 
 ## Public API changes
 
@@ -62,8 +63,8 @@ If the change is intended, regenerate and commit the dump in the same PR:
 ./gradlew :kite3d:updateKotlinAbi
 ```
 
-Regenerate on macOS when you can — it is the only host that builds every target in
-the matrix, so a dump produced anywhere else covers fewer klibs.
+Regenerate on macOS when you can. It is the only host that builds every target
+in the matrix, so a dump produced anywhere else covers fewer klibs.
 
 Toolchain: JDK 21 builds the project (`jvmToolchain(21)`), but the JVM bytecode
 target is 11, so consumers on JDK 11+ and Android are supported.
@@ -79,6 +80,6 @@ the signing key. For a local `publishToMavenLocal`, override it:
 
 ## Style
 
-`explicitApi()` is strict — give every public declaration an explicit visibility
-and return type. Match the surrounding code; the already-ported `Vector2.kt` /
-`Box2.kt` / `MathUtils.kt` are the canonical examples.
+`explicitApi()` is strict. Give every public declaration an explicit visibility
+and return type. Match the surrounding code. The already-ported `Vector2.kt`,
+`Box2.kt` and `MathUtils.kt` are the canonical examples.

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/src/math/Line3.tests.js (MIT).
  */
 package io.github.yuroyami.kite3d.math
@@ -40,8 +40,8 @@ class Line3Test {
         assertTrue(b.end == one3)
 
         // ensure that it is a true copy.
-        // Upstream reassigns a.start/a.end (fresh objects); here start/end are `val`
-        // (dialect rule 12), so we mutate a's contents in place instead — same intent:
+        // Upstream reassigns a.start/a.end (fresh objects); here start/end are `val`,
+        // so we mutate a's contents in place instead. The intent is the same:
         // b must be unaffected by later changes to a.
         a.start.set(0.0, 0.0, 0.0)
         a.end.set(1.0, 1.0, 1.0)
@@ -104,7 +104,7 @@ class Line3Test {
         val c = Line3(one3.clone().negate(), one3)
         val d = Line3(two3.clone().multiplyScalar(-2.0), two3.clone().negate())
 
-        // distance() goes through sqrt (libm) — tolerance, matching upstream's numEqual.
+        // distance() goes through sqrt (libm): use a tolerance, matching upstream's numEqual.
         assertEquals(0.0, a.distance(), eps, "Check distance for zero-length line")
         assertEquals(sqrt(3.0), b.distance(), eps, "Check distance for simple line")
         assertEquals(sqrt(12.0), c.distance(), eps, "Check distance for negative to positive endpoints")
@@ -213,7 +213,7 @@ class Line3Test {
         line2.start.set(1.0, 10.0, 0.0)
         line2.end.set(1.0, -2.0, 0.0)
 
-        // distanceSqToLine3 result comes through non-exact divisions — tolerance,
+        // distanceSqToLine3 result comes through non-exact divisions: use a tolerance,
         // matching upstream's numEqual.
         assertEquals(0.0, line1.distanceSqToLine3(line2), eps)
 

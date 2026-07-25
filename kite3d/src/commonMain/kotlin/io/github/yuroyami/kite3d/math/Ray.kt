@@ -10,7 +10,7 @@ import kotlin.math.sqrt
 
 /**
  * A ray that emits from an origin in a certain direction. The class is used by
- * `Raycaster` to assist with raycasting (e.g. mouse picking — working out which
+ * `Raycaster` to assist with raycasting (e.g. mouse picking, finding which
  * objects in 3D space the pointer is over).
  *
  * The ray is **mutable** and **not thread-safe**; confine an instance (and any

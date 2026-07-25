@@ -12,8 +12,8 @@ package io.github.yuroyami.kite3d.math
  * object graph holding it) to a single thread, exactly as in three.js.
  *
  * The constructor stores the given vectors **by reference** (it does not copy
- * them). Passing the same vector as both endpoints — or sharing a vector with
- * another object — means later mutations are visible through every alias; use
+ * them). Passing the same vector as both endpoints, or sharing a vector with
+ * another object, means later mutations are visible through every alias. Use
  * [set] or [clone] when you need independent storage.
  */
 public class Line3(

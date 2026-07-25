@@ -1,5 +1,5 @@
 /*
- * Copyright © 2026 yuroyami — MIT.
+ * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/src/math/ColorManagement.tests.js (MIT).
  */
 package io.github.yuroyami.kite3d.math
@@ -35,7 +35,7 @@ class ColorManagementTest {
         for (v in listOf(0.0, 0.001, 0.05, 0.25, 0.5, 0.73, 0.9, 1.0)) {
             val roundTrip = SRGBToLinear(LinearToSRGB(v))
             // three.js uses the truncated exponent 0.41666 (not 1/2.4) in LinearToSRGB, so
-            // the transfer pair is not an exact inverse — round-trip error is ~2e-6.
+            // the transfer pair is not an exact inverse. The round-trip error is ~2e-6.
             assertTrue(abs(roundTrip - v) <= 1e-4, "sRGB round-trip for $v (got $roundTrip)")
         }
     }

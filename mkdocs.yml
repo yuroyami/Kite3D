@@ -1,6 +1,6 @@
 site_name: Kite3D
 site_url: https://yuroyami.github.io/Kite3D/
-site_description: Vectors, matrices, quaternions, bounding volumes and colour for Kotlin Multiplatform — the math layer of three.js, ported to common Kotlin.
+site_description: "Vectors, matrices, quaternions, bounding volumes and colour for Kotlin Multiplatform. The maths layer only: no scene graph, no geometry, no renderer."
 site_author: yuroyami
 copyright: MIT
 
