@@ -9,20 +9,22 @@ plugins {
 }
 
 /*
- * :kite3d is the pure-Kotlin core — a from-scratch port of three.js (MIT) into
- * common Kotlin: math, scene graph, geometry, animation and the TSL shader
- * graph. NO external runtime deps; only kotlin-stdlib is on the classpath.
- * Tests use kotlin-test.
+ * :kite3d is the published library — a file-for-file port of three.js r184's
+ * src/math (MIT) into common Kotlin. It ships the math layer and nothing else:
+ * io.github.yuroyami.kite3d.math plus its interpolants sub-package. There is no
+ * scene graph, geometry, animation, shader graph or renderer here; those layers
+ * are not written yet, and GPU submission would live in separate backend
+ * modules that do not exist yet.
  *
- * The core is 100% common Kotlin (no expect/actual, no cinterop, no JNI), so it
- * compiles for every target Kotlin supports. GPU submission lives in separate
- * backend modules (e.g. :kite3d-backend-wgpu) added later — they are the only
- * place platform/native code appears.
+ * NO external runtime deps; only kotlin-stdlib is on the classpath. Tests use
+ * kotlin-test. The source is 100% common Kotlin (no expect/actual, no cinterop,
+ * no JNI), so it compiles for every target Kotlin supports.
  *
  * NOTE: the Android target (com.android.kotlin.multiplatform.library) is
- * intentionally omitted for now — it requires a configured Android SDK. The
- * code is target-agnostic and the JVM bytecode target is 11, so adding android
- * later is purely a build-file change.
+ * intentionally omitted for now — it requires a configured Android SDK. No
+ * -android artifact is published, so Android consumers resolve the jvm variant
+ * instead. The code is target-agnostic and the JVM bytecode target is 11, so
+ * adding android later is purely a build-file change.
  */
 kotlin {
     jvmToolchain(21)
