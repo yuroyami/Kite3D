@@ -30,8 +30,8 @@ The library ships as one artifact of pure `commonMain` Kotlin. It uses no
 ```kotlin
 import io.github.yuroyami.kite3d.math.*
 
-// Is this box inside a camera's view? Build the projection matrix yourself.
-// Kite3D has no camera type.
+// Is this box inside a camera's view? Build the projection matrix yourself,
+// or take it from a Camera (see "Project a point to the screen").
 val projection = Matrix4().makePerspective(-1.0, 1.0, 1.0, -1.0, 1.0, 100.0)
 val frustum = Frustum().setFromProjectionMatrix(projection)
 
@@ -190,6 +190,28 @@ offset.setFromSpherical(s)
 `Cylindrical` works the same way. It has `radius`, `theta` and `y`, and pairs
 with `Vector3.setFromCylindrical`.
 
+### Project a point to the screen
+
+```kotlin
+val camera = Camera()
+    .setPerspectiveFov(fovDegrees = 50.0, aspect = 16.0 / 9.0, near = 0.1, far = 100.0)
+    .lookAt(eye = Vector3(0.0, 2.0, 8.0), target = Vector3(), up = Vector3(0.0, 1.0, 0.0))
+    .updateMatrices()
+
+val out = Vector3()
+camera.project(Vector3(1.0, 0.0, 0.0), out)   // normalised device coordinates, minus one to one
+val screenX = (out.x + 1.0) * 0.5 * widthPx
+val screenY = (1.0 - out.y) * 0.5 * heightPx
+
+// Drawing in floats? The same projection, no allocation:
+val xyz = FloatArray(3)
+camera.project(1f, 0f, 0f, xyz)
+```
+
+`Camera` holds a projection and a view and multiplies them once in `updateMatrices()`. Call it
+again after moving the camera or changing the projection. It is not an `Object3D`: there is no
+scene graph, and nothing renders.
+
 ### Blend colours
 
 ```kotlin
@@ -260,7 +282,7 @@ Some methods are missing, because they need types that Kite3D does not have:
 
 | Missing | Use instead |
 | --- | --- |
-| `Vector3.project`, `Vector3.unproject` | Apply the view and projection matrices yourself with `Vector3.applyMatrix4`. |
+| `Vector3.unproject` | Invert `Camera.viewProjectionMatrix` yourself and apply it with `Vector3.applyMatrix4`. |
 | `Box3.setFromObject`, `Box3.expandByObject` | Collect the points or boxes yourself, then call `setFromPoints`, `expandByPoint` or `union`. |
 | `Frustum.intersectsObject`, `Frustum.intersectsSprite` | Read the object's bounding box or sphere yourself, then call `Frustum.intersectsBox` or `Frustum.intersectsSphere`. |
 

@@ -8,6 +8,14 @@ Kite3D is a port, so every entry names the three.js revision it tracks. The
 per-file record lives in [port-ledger.yaml](port-ledger.yaml). It includes every
 intentional deviation from upstream.
 
+## [0.2.0] - unreleased
+
+### Added
+
+`Camera`: a perspective or orthographic projection with a view matrix, `updateMatrices()`, and
+`project` in two forms, one on `Vector3` and one on floats writing into a `FloatArray`. Kite3D
+addition, not part of three.js `src/math`.
+
 ## [0.1.0] - unreleased
 
 The first release. Nothing has been published to Maven Central yet, so there is

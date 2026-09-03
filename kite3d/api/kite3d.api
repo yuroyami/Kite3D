@@ -78,6 +78,24 @@ public final class io/github/yuroyami/kite3d/math/Box3 {
 	public final fun union (Lio/github/yuroyami/kite3d/math/Box3;)Lio/github/yuroyami/kite3d/math/Box3;
 }
 
+public final class io/github/yuroyami/kite3d/math/Camera {
+	public fun <init> ()V
+	public final fun getPosition ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getProjectionMatrix ()Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun getTarget ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getUp ()Lio/github/yuroyami/kite3d/math/Vector3;
+	public final fun getViewMatrix ()Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun getViewProjectionMatrix ()Lio/github/yuroyami/kite3d/math/Matrix4;
+	public final fun lookAt (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Camera;
+	public final fun project (FFF[FI)V
+	public final fun project (Lio/github/yuroyami/kite3d/math/Vector3;Lio/github/yuroyami/kite3d/math/Vector3;)Lio/github/yuroyami/kite3d/math/Vector3;
+	public static synthetic fun project$default (Lio/github/yuroyami/kite3d/math/Camera;FFF[FIILjava/lang/Object;)V
+	public final fun setOrthographic (DDDDDD)Lio/github/yuroyami/kite3d/math/Camera;
+	public final fun setPerspective (DDDDDD)Lio/github/yuroyami/kite3d/math/Camera;
+	public final fun setPerspectiveFov (DDDD)Lio/github/yuroyami/kite3d/math/Camera;
+	public final fun updateMatrices ()Lio/github/yuroyami/kite3d/math/Camera;
+}
+
 public final class io/github/yuroyami/kite3d/math/Color : java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
 	public fun <init> ()V
 	public fun <init> (DDD)V

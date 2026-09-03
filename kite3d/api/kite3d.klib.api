@@ -232,6 +232,31 @@ final class io.github.yuroyami.kite3d.math/Box3 { // io.github.yuroyami.kite3d.m
     final fun union(io.github.yuroyami.kite3d.math/Box3): io.github.yuroyami.kite3d.math/Box3 // io.github.yuroyami.kite3d.math/Box3.union|union(io.github.yuroyami.kite3d.math.Box3){}[0]
 }
 
+final class io.github.yuroyami.kite3d.math/Camera { // io.github.yuroyami.kite3d.math/Camera|null[0]
+    constructor <init>() // io.github.yuroyami.kite3d.math/Camera.<init>|<init>(){}[0]
+
+    final val position // io.github.yuroyami.kite3d.math/Camera.position|{}position[0]
+        final fun <get-position>(): io.github.yuroyami.kite3d.math/Vector3 // io.github.yuroyami.kite3d.math/Camera.position.<get-position>|<get-position>(){}[0]
+    final val projectionMatrix // io.github.yuroyami.kite3d.math/Camera.projectionMatrix|{}projectionMatrix[0]
+        final fun <get-projectionMatrix>(): io.github.yuroyami.kite3d.math/Matrix4 // io.github.yuroyami.kite3d.math/Camera.projectionMatrix.<get-projectionMatrix>|<get-projectionMatrix>(){}[0]
+    final val target // io.github.yuroyami.kite3d.math/Camera.target|{}target[0]
+        final fun <get-target>(): io.github.yuroyami.kite3d.math/Vector3 // io.github.yuroyami.kite3d.math/Camera.target.<get-target>|<get-target>(){}[0]
+    final val up // io.github.yuroyami.kite3d.math/Camera.up|{}up[0]
+        final fun <get-up>(): io.github.yuroyami.kite3d.math/Vector3 // io.github.yuroyami.kite3d.math/Camera.up.<get-up>|<get-up>(){}[0]
+    final val viewMatrix // io.github.yuroyami.kite3d.math/Camera.viewMatrix|{}viewMatrix[0]
+        final fun <get-viewMatrix>(): io.github.yuroyami.kite3d.math/Matrix4 // io.github.yuroyami.kite3d.math/Camera.viewMatrix.<get-viewMatrix>|<get-viewMatrix>(){}[0]
+    final val viewProjectionMatrix // io.github.yuroyami.kite3d.math/Camera.viewProjectionMatrix|{}viewProjectionMatrix[0]
+        final fun <get-viewProjectionMatrix>(): io.github.yuroyami.kite3d.math/Matrix4 // io.github.yuroyami.kite3d.math/Camera.viewProjectionMatrix.<get-viewProjectionMatrix>|<get-viewProjectionMatrix>(){}[0]
+
+    final fun lookAt(io.github.yuroyami.kite3d.math/Vector3, io.github.yuroyami.kite3d.math/Vector3, io.github.yuroyami.kite3d.math/Vector3): io.github.yuroyami.kite3d.math/Camera // io.github.yuroyami.kite3d.math/Camera.lookAt|lookAt(io.github.yuroyami.kite3d.math.Vector3;io.github.yuroyami.kite3d.math.Vector3;io.github.yuroyami.kite3d.math.Vector3){}[0]
+    final fun project(io.github.yuroyami.kite3d.math/Vector3, io.github.yuroyami.kite3d.math/Vector3): io.github.yuroyami.kite3d.math/Vector3 // io.github.yuroyami.kite3d.math/Camera.project|project(io.github.yuroyami.kite3d.math.Vector3;io.github.yuroyami.kite3d.math.Vector3){}[0]
+    final fun project(kotlin/Float, kotlin/Float, kotlin/Float, kotlin/FloatArray, kotlin/Int = ...) // io.github.yuroyami.kite3d.math/Camera.project|project(kotlin.Float;kotlin.Float;kotlin.Float;kotlin.FloatArray;kotlin.Int){}[0]
+    final fun setOrthographic(kotlin/Double, kotlin/Double, kotlin/Double, kotlin/Double, kotlin/Double, kotlin/Double): io.github.yuroyami.kite3d.math/Camera // io.github.yuroyami.kite3d.math/Camera.setOrthographic|setOrthographic(kotlin.Double;kotlin.Double;kotlin.Double;kotlin.Double;kotlin.Double;kotlin.Double){}[0]
+    final fun setPerspective(kotlin/Double, kotlin/Double, kotlin/Double, kotlin/Double, kotlin/Double, kotlin/Double): io.github.yuroyami.kite3d.math/Camera // io.github.yuroyami.kite3d.math/Camera.setPerspective|setPerspective(kotlin.Double;kotlin.Double;kotlin.Double;kotlin.Double;kotlin.Double;kotlin.Double){}[0]
+    final fun setPerspectiveFov(kotlin/Double, kotlin/Double, kotlin/Double, kotlin/Double): io.github.yuroyami.kite3d.math/Camera // io.github.yuroyami.kite3d.math/Camera.setPerspectiveFov|setPerspectiveFov(kotlin.Double;kotlin.Double;kotlin.Double;kotlin.Double){}[0]
+    final fun updateMatrices(): io.github.yuroyami.kite3d.math/Camera // io.github.yuroyami.kite3d.math/Camera.updateMatrices|updateMatrices(){}[0]
+}
+
 final class io.github.yuroyami.kite3d.math/Color : kotlin.collections/Iterable<kotlin/Double> { // io.github.yuroyami.kite3d.math/Color|null[0]
     constructor <init>() // io.github.yuroyami.kite3d.math/Color.<init>|<init>(){}[0]
     constructor <init>(io.github.yuroyami.kite3d.math/Color) // io.github.yuroyami.kite3d.math/Color.<init>|<init>(io.github.yuroyami.kite3d.math.Color){}[0]
