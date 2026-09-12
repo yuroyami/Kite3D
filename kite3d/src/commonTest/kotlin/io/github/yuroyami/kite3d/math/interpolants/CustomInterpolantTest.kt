@@ -14,8 +14,8 @@ import kotlin.test.assertTrue
  * `GLTFLoader`. The keyframe layout for CUBICSPLINE animations is:
  * `[ inTangent_1, splineVertex_1, outTangent_1, inTangent_2, splineVertex_2, … ]`
  *
- * This exists to prove the [Interpolant] extension seam: a derived class must be
- * able to override [Interpolant.copySampleValue_] as well as `interpolate_`.
+ * It checks that a subclass can override [Interpolant.copySampleValue_] as well as
+ * `interpolate_`.
  */
 private class CubicSplineInterpolant(
     parameterPositions: DoubleArray,

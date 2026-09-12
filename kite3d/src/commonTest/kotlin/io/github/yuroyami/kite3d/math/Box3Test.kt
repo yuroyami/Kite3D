@@ -32,8 +32,7 @@ class Box3Test {
         assertTrue(a.max == one3)
     }
 
-    // three.js's `isBox3` duck-typing flag is intentionally dropped (dialect rule
-    // 11): type identity is expressed with Kotlin's `is Box3`, which needs no test.
+    // No isBox3 test: Kotlin checks the type with `is Box3`.
 
     @Test
     fun set() {
@@ -55,10 +54,8 @@ class Box3Test {
 
     @Test
     fun setFromBufferAttribute() {
-        // three.js passes a BufferAttribute and reads attribute.count; the
-        // AttributeLike seam has no count, so the vertex count is passed explicitly
-        // (see Box3.setFromBufferAttribute KDoc). Float32Array in JS holds these
-        // exact values, so the DoubleArray-backed test double reproduces them.
+        // AttributeLike has no count, so the vertex count is passed in. These values are
+        // exact in Float32 too, so the results match three.js.
         val a = Box3(zero3, one3)
         val bigger = TestBufferAttribute(
             doubleArrayOf(-2.0, -2.0, -2.0, 2.0, 2.0, 2.0, 1.5, 1.5, 1.5, 0.0, 0.0, 0.0),
@@ -131,10 +128,8 @@ class Box3Test {
         assertFalse(a == b, "Resize: no longer equal to old values")
     }
 
-    // setFromObject/BufferGeometry, setFromObject/Precise and expandByObject are
-    // SKIPPED: Box3.setFromObject/expandByObject need core Object3D, Mesh and
-    // geometry types (updateWorldMatrix, geometry, getVertexPosition, matrixWorld),
-    // which this module does not define.
+    // No setFromObject or expandByObject tests: those methods need Object3D, Mesh and
+    // geometry types, which Kite3D does not have.
 
     @Test
     fun clone() {
@@ -517,8 +512,7 @@ class Box3Test {
         assertFalse(a == b)
     }
 
-    // Upstream Box3.tests.js has no toJSON/fromJSON case; this one is written
-    // fresh to cover the flattened DoubleArray round-trip the port exposes.
+    // Not in three.js's Box3 tests. Checks the DoubleArray round trip of toJSON/fromJSON.
     @Test
     fun toJSONFromJSON() {
         val a = Box3(Vector3(-1.0, -2.0, -3.0), Vector3(4.0, 5.0, 6.0))

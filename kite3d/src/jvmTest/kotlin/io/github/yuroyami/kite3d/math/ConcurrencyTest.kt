@@ -1,10 +1,8 @@
 /*
  * Copyright © 2026 yuroyami. MIT.
- * JVM-only regression guard for audit §3.1: the port removed all file-level mutable
- * scratch, so math methods that three.js backed with shared module temps must now be
- * safe to run concurrently on distinct instances. If shared mutable state is ever
- * reintroduced, threads corrupt each other and this diverges from the single-thread
- * baseline. (Common code can't portably spawn threads, so this lives in jvmTest.)
+ * The maths methods keep no shared scratch state, so threads can use separate instances
+ * at the same time. If shared state comes back, threads corrupt each other and this
+ * fails. JVM only, because common code cannot start threads.
  */
 package io.github.yuroyami.kite3d.math
 
@@ -14,9 +12,9 @@ import kotlin.test.assertEquals
 
 class ConcurrencyTest {
 
-    // Exercises the exact methods three.js backed with module-level temps:
-    // Box2.setFromCenterAndSize / distanceToPoint, Matrix4.compose (position/quat/scale
-    // temps), Quaternion.setFromEuler. Each call uses only locals + its own instances.
+    // Runs Box2.setFromCenterAndSize, Box2.distanceToPoint, Matrix4.compose and
+    // Quaternion.setFromEuler. three.js runs the two Box2 methods with a shared scratch
+    // vector; here every call uses only locals and its own instances.
     private fun compute(seed: Int): Double {
         val s = seed.toDouble()
         val box = Box2().setFromCenterAndSize(Vector2(s, s), Vector2(2.0, 4.0))

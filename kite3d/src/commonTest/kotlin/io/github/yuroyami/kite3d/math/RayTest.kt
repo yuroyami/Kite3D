@@ -155,7 +155,7 @@ class RayTest {
 
         assertTrue(ptOnSegment.distanceTo(v0) < 0.0001)
         assertTrue(ptOnLine.distanceTo(Vector3(1.0, 1.0, 50.0)) < 0.0001)
-        // ((3-1) * (3-1) + (5-1) * (5-1) = 4 + 16 = 20
+        // (3-1) * (3-1) + (5-1) * (5-1) = 4 + 16 = 20
         assertTrue(abs(distSqr - 20) < 0.0001)
 
         // segment behind the ray
@@ -165,7 +165,7 @@ class RayTest {
 
         assertTrue(ptOnSegment.distanceTo(v1) < 0.0001)
         assertTrue(ptOnLine.distanceTo(one3) < 0.0001)
-        // ((-3-1) * (-3-1) + (-5-1) * (-5-1) + (-4-1) + (-4-1) = 16 + 36 + 25 = 77
+        // (-3-1) * (-3-1) + (-5-1) * (-5-1) + (-4-1) * (-4-1) = 16 + 36 + 25 = 77
         assertTrue(abs(distSqr - 77) < 0.0001)
 
         // exact intersection between the ray and the segment
@@ -225,23 +225,20 @@ class RayTest {
 
         // following tests are for situations where the ray origin is inside the sphere
 
-        // sphere (radius of 1) center located at ray a0 origin / sphere surrounds the ray origin, so the first intersect point 0, 0, 1,
-        // is behind ray a0.  Therefore, second exit point on back of sphere will be returned: 0, 0, -1
-        // thus keeping the intersection point always in front of the ray.
+        // sphere (radius 1) around the ray origin: the hit at 0, 0, 1 is behind the ray,
+        // so the exit point 0, 0, -1 is returned.
         b = Sphere(zero3, 1.0)
         a0.intersectSphere(b, point)
         assertTrue(point.distanceTo(Vector3(0.0, 0.0, -1.0)) < tol)
 
-        // sphere (radius of 4) center located behind ray a0 origin / sphere surrounds the ray origin, so the first intersect point 0, 0, 5,
-        // is behind ray a0.  Therefore, second exit point on back of sphere will be returned: 0, 0, -3
-        // thus keeping the intersection point always in front of the ray.
+        // sphere (radius 4) with its center behind the ray origin: the hit at 0, 0, 5 is
+        // behind the ray, so the exit point 0, 0, -3 is returned.
         b = Sphere(Vector3(0.0, 0.0, 1.0), 4.0)
         a0.intersectSphere(b, point)
         assertTrue(point.distanceTo(Vector3(0.0, 0.0, -3.0)) < tol)
 
-        // sphere (radius of 4) center located in front of ray a0 origin / sphere surrounds the ray origin, so the first intersect point 0, 0, 3,
-        // is behind ray a0.  Therefore, second exit point on back of sphere will be returned: 0, 0, -5
-        // thus keeping the intersection point always in front of the ray.
+        // sphere (radius 4) with its center in front of the ray origin: the hit at 0, 0, 3
+        // is behind the ray, so the exit point 0, 0, -5 is returned.
         b = Sphere(Vector3(0.0, 0.0, -1.0), 4.0)
         a0.intersectSphere(b, point)
         assertTrue(point.distanceTo(Vector3(0.0, 0.0, -5.0)) < tol)

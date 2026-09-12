@@ -15,13 +15,11 @@ dokka {
     moduleName.set("Kite3D")
 }
 
-// Shared Kite theme. Sources live in ../_kite-docs; ./_kite-docs/sync.sh copies
-// them here, so this repo still builds standalone from a fresh clone.
+// Shared Kite theme. The source is in ../_kite-docs, and its sync.sh copies it here,
+// so this repo builds on its own from a fresh clone.
 //
-// This has to be applied to every project that has Dokka, not just the root:
-// under aggregation the root only renders the "all modules" landing page, and
-// each module renders its own pages from its own configuration. Configuring
-// only the root leaves every actual API page on the stock theme.
+// Apply it to every project with Dokka, not only the root. The root renders only the
+// "all modules" page; each module renders its own API pages with its own settings.
 allprojects {
     plugins.withId("org.jetbrains.dokka") {
         extensions.configure<org.jetbrains.dokka.gradle.DokkaExtension> {

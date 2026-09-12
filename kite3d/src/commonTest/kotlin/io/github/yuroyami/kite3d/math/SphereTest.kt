@@ -24,8 +24,7 @@ class SphereTest {
         assertTrue(a.radius == 1.0)
     }
 
-    // three.js's `isSphere` duck-typing flag is intentionally dropped (dialect rule
-    // 10/11): type identity is expressed with Kotlin's `is Sphere`, which needs no test.
+    // No isSphere test: Kotlin checks the type with `is Sphere`.
 
     @Test
     fun set() {
@@ -80,9 +79,7 @@ class SphereTest {
         assertTrue(b.radius == 1.0)
 
         // ensure that it is a true copy.
-        // Upstream reassigns a.center (fresh object); here center is `val`, so we
-        // mutate a's contents in place instead. The intent is the same:
-        // b must be unaffected by later changes to a.
+        // center is a `val` here, so change a in place. b must not change.
         a.center.set(0.0, 0.0, 0.0)
         a.radius = 0.0
         assertTrue(b.center == one3)
@@ -277,8 +274,7 @@ class SphereTest {
         assertEquals(true, a == b, "a equals b after copy()")
     }
 
-    // Upstream Sphere.tests.js has no toJSON/fromJSON case; this one is written
-    // fresh to cover the flattened DoubleArray round-trip the port exposes.
+    // Not in three.js's Sphere tests. Checks the DoubleArray round trip of toJSON/fromJSON.
     @Test
     fun toJSONFromJSON() {
         val a = Sphere(Vector3(1.0, -2.0, 3.0), 4.0)

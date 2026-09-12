@@ -9,22 +9,15 @@ plugins {
 }
 
 /*
- * :kite3d is the published library — a file-for-file port of three.js r184's
- * src/math (MIT) into common Kotlin. It ships the math layer and nothing else:
- * io.github.yuroyami.kite3d.math plus its interpolants sub-package. There is no
- * scene graph, geometry, animation, shader graph or renderer here; those layers
- * are not written yet, and GPU submission would live in separate backend
- * modules that do not exist yet.
+ * :kite3d is the published library: three.js r184's src/math (MIT) in common Kotlin,
+ * plus Kite3D's own Camera. Packages: io.github.yuroyami.kite3d.math and its
+ * interpolants sub-package. No scene graph, geometry, animation or renderer.
  *
- * NO external runtime deps; only kotlin-stdlib is on the classpath. Tests use
- * kotlin-test. The source is 100% common Kotlin (no expect/actual, no cinterop,
- * no JNI), so it compiles for every target Kotlin supports.
+ * The only runtime dependency is kotlin-stdlib. Tests use kotlin-test. All source is
+ * common Kotlin (no expect/actual, no cinterop, no JNI).
  *
- * NOTE: the Android target (com.android.kotlin.multiplatform.library) is
- * intentionally omitted for now — it requires a configured Android SDK. No
- * -android artifact is published, so Android consumers resolve the jvm variant
- * instead. The code is target-agnostic and the JVM bytecode target is 11, so
- * adding android later is purely a build-file change.
+ * There is no Android library target, because it needs an Android SDK to build.
+ * Android apps get the jvm artifact, which targets JVM 11.
  */
 kotlin {
     jvmToolchain(21)
@@ -33,17 +26,13 @@ kotlin {
     // public API. Strict explicit-API forces an intentional visibility on each.
     explicitApi()
 
-    // Checked-in ABI dumps under kite3d/api/. `checkKotlinAbi` fails the build when
-    // the public API drifts from the dump, so a breaking change can never land
-    // silently; `updateKotlinAbi` regenerates it when the change is intended.
-    // Calling the block is what enables validation; klib dumps (native/js/wasm)
-    // are produced alongside the JVM one automatically.
+    // ABI dumps live in kite3d/api/. `checkKotlinAbi` fails the build when the public API
+    // differs from them, and `updateKotlinAbi` rewrites them. The empty block turns this on.
     @OptIn(ExperimentalAbiValidation::class)
     abiValidation {}
 
     jvm {
-        // Build with JDK 21 (toolchain) but emit bytecode that JDK 11 runtimes
-        // and Android's D8 can consume. See audit §8.2 B2.
+        // Build with JDK 21, but emit JDK 11 bytecode for JDK 11 runtimes and Android's D8.
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }

@@ -6,8 +6,7 @@ build/
 # Kotlin
 .kotlin/
 
-# Kotlin/JS — the yarn lockfile SHOULD be committed for reproducible JS builds,
-# so it is deliberately NOT ignored here (see kotlin.js.yarn in gradle.properties).
+# Kotlin/JS: kotlin-js-store/yarn.lock is committed on purpose, so JS builds are reproducible.
 
 # Local / IDE
 local.properties

@@ -137,9 +137,7 @@ class EulerTest {
         assertTrue(a.order == EulerOrder.ZXY, "Passed!")
     }
 
-    // The upstream `isEuler` test checks a duck-type flag on Euler and its absence
-    // on Vector3; dialect rule 10 drops these flags (`is Euler` is used instead),
-    // so the test has no Kotlin equivalent and is omitted.
+    // No isEuler test: Kotlin checks the type with `is Euler`.
 
     @Test
     fun cloneCopyEquals() {
@@ -210,7 +208,7 @@ class EulerTest {
         assertEquals(3.0, a.z, 0.0, "get: check z")
         assertEquals(EulerOrder.ZYX, a.order, "get: check order")
 
-        // Upstream asserts onChange fired once per setter (4 total).
+        // onChange fires once per setter, so four times.
         assertEquals(4, callbacks, "onChange called four times")
     }
 
@@ -291,10 +289,8 @@ class EulerTest {
 
     @Test
     fun onChangeTest() {
-        // Upstream `_onChange` stores and later checks the callback identity via the
-        // internal `_onChangeCallback` field. That field is private here; the Kotlin
-        // API surface is `onChange(cb)`, so we verify the callback actually fires
-        // instead of poking the private field.
+        // three.js reads the `_onChangeCallback` field. It is private here, so this checks
+        // that the callback set with onChange(cb) actually runs.
         var fired = false
         val a = Euler(11.0, 12.0, 13.0, EulerOrder.XYZ)
         a.onChange { fired = true }
@@ -302,10 +298,8 @@ class EulerTest {
         assertTrue(fired, "registered callback fires on change")
     }
 
-    // Upstream `_onChangeCallback` directly reassigns and invokes the private
-    // callback field and asserts `this === a` binding. Kotlin lambdas have no
-    // `this` receiver to check and the field is private; the onChange firing is
-    // covered by onChangeTest above, so this JS-internal test is omitted.
+    // No `_onChangeCallback` test: it reads a private field and checks the JS `this`.
+    // onChangeTest above already covers the callback.
 
     @Test
     fun iterable() {

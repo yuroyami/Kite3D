@@ -1,4 +1,4 @@
-# Kite3D — shared editor settings. Kotlin follows the official style
+# Kite3D editor settings. Kotlin follows the official style
 # (kotlin.code.style=official in gradle.properties).
 root = true
 
@@ -14,7 +14,7 @@ indent_size = 4
 max_line_length = 120
 ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
-# Ported files mirror the three.js import order; keep imports plain and unsorted-by-tool.
+# Never merge imports into a star import.
 ij_kotlin_name_count_to_use_star_import = 2147483647
 ij_kotlin_name_count_to_use_star_import_for_members = 2147483647
 

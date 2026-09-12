@@ -11,12 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Linux runner: everything whose test host is Linux, JS, or Wasm.
-  #
-  # NOTE: this job does NOT prove the whole target matrix compiles — Kotlin/Native
-  # cannot build the Apple targets without Xcode, so `assemble` here silently skips
-  # them. The apple job below is what covers those; between the two, every declared
-  # target is compiled somewhere.
+  # Linux runner: tests for JVM, JS, Wasm and linuxX64. `assemble` here skips the Apple
+  # targets, because they need Xcode. The apple job builds those.
   linux:
     name: jvm/js/wasm/linux tests
     runs-on: ubuntu-latest
@@ -55,8 +51,8 @@ jobs:
         run: ./gradlew :kite3d:checkKotlinAbi --stacktrace
       - name: Assemble Apple targets
         run: ./gradlew assemble --stacktrace
-      # macos-latest is arm64: the x64 and 32-bit simulator variants have no host
-      # to run on, so they are compile-only (covered by `assemble` above).
+      # macos-latest is arm64, so the x64 and device targets cannot run tests here.
+      # `assemble` above compiles them.
       - name: Test (macosArm64, iosSimulatorArm64, tvosSimulatorArm64, watchosSimulatorArm64)
         run: ./gradlew macosArm64Test iosSimulatorArm64Test tvosSimulatorArm64Test watchosSimulatorArm64Test --stacktrace
       - name: Upload test reports
@@ -86,8 +82,7 @@ jobs:
           name: test-reports-windows
           path: kite3d/build/reports/tests/
 
-  # Docs build. Not a gate on correctness, but a broken Dokka run should not first
-  # surface during a release.
+  # Docs build. It tests no code, but a broken Dokka run should fail here, not in a release.
   docs:
     name: dokka
     runs-on: ubuntu-latest
@@ -101,11 +96,8 @@ jobs:
       - name: Generate API reference
         run: ./gradlew dokkaGenerate --stacktrace
 
-# Targets deliberately not exercised here, and why:
-#   linuxArm64, iosArm64/X64, tvosArm64, watchosArm32/Arm64/DeviceArm64,
-#   macosX64, androidNative*  — no GitHub-hosted runner can execute their tests;
-#                               they are compile-checked by `assemble`.
-#   jsBrowserTest, wasmJsBrowserTest — the browser bundles are the same compiled
-#                               output the Node tasks already run, and the core is
-#                               pure common Kotlin with no DOM surface, so a Karma
-#                               job would add flake without adding coverage.
+# Targets whose tests CI does not run:
+#   linuxArm64, iosArm64/X64, tvosArm64, watchosArm32/Arm64/DeviceArm64, macosX64,
+#   androidNative*: compiled by `assemble` only.
+#   jsBrowserTest, wasmJsBrowserTest: the Node tasks already run the same compiled code,
+#   and the library has no DOM code, so a browser job adds nothing.

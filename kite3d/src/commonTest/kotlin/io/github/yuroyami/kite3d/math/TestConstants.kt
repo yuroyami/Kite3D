@@ -2,12 +2,9 @@
  * Copyright © 2026 yuroyami. MIT.
  * Ported to Kotlin for Kite3D from three.js r184 test/unit/utils/math-constants.js (MIT).
  *
- * Shared constants for the math unit tests. Mirrors three.js's math-constants.js.
- *
- * Unlike three.js (whose constants are shared mutable singletons that tests must
- * clone before mutating), each vector constant here is a `get()` property that
- * returns a fresh instance on every access, so tests can mutate them freely
- * without affecting each other. Do NOT convert these to `val` singletons.
+ * Shared constants for the maths tests. Each vector constant is a `get()` property that
+ * returns a new instance on every read, so a test can change it without affecting other
+ * tests. Do not turn these into `val`s.
  */
 package io.github.yuroyami.kite3d.math
 

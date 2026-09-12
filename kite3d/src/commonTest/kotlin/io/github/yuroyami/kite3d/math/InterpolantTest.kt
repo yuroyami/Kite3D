@@ -10,13 +10,8 @@ import kotlin.test.assertTrue
 
 class InterpolantTest {
 
-    // Since this is an abstract base class, we have to make it concrete in order
-    // to test its functionality...
-    //
-    // The JS test tacks `intervalChanged_`/`interpolate_` onto Mock.prototype and
-    // uses a static `Mock.calls` array as a capture facility. Here Mock captures
-    // into an instance list; a `null` list means "don't record" (mirrors the JS
-    // `Mock.calls !== null` guard).
+    // Interpolant is abstract, so Mock makes it concrete. Mock records calls into a list;
+    // a null list records nothing, like the JS `Mock.calls !== null` check.
     private class Call(val func: String, val args: List<Double>)
 
     private class Mock(
@@ -41,8 +36,7 @@ class InterpolantTest {
     // INSTANCING
     @Test
     fun instancing() {
-        // JS passes `null` parameterPositions; the pinned Kotlin ctor is
-        // non-nullable, so pass an empty array (construction never reads it here).
+        // three.js passes null here. The Kotlin constructor needs an array; this test never reads it.
         val interpolant = Mock(DoubleArray(0), doubleArrayOf(1.0, 11.0, 2.0, 22.0, 3.0, 33.0), 2, DoubleArray(0))
         // JS: assert interpolant instanceof Interpolant === true
         assertTrue(interpolant is Interpolant, "Mock extends from Interpolant")

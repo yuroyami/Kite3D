@@ -41,8 +41,7 @@ class PlaneTest {
         assertTrue(a.constant == 1.0)
     }
 
-    // three.js's `isPlane` duck-typing flag is intentionally dropped (dialect rule
-    // 10/11): type identity is expressed with Kotlin's `is Plane`, which needs no test.
+    // No isPlane test: Kotlin checks the type with `is Plane`.
 
     @Test
     fun set() {

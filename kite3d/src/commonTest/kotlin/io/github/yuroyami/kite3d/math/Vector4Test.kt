@@ -30,7 +30,7 @@ class Vector4Test {
         assertEquals(w, a.w)
     }
 
-    // isVector4: the duck-type flag is dropped in the Kotlin port (use `is Vector4`).
+    // No isVector4 test: Kotlin checks the type with `is Vector4`.
 
     @Test
     fun set() {

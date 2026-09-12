@@ -53,9 +53,8 @@ class Matrix3Test {
         val a = Matrix3()
         assertTrue(a.determinant() == 1.0, "Passed!")
 
-        // three.js also tests the row-major element constructor `new Matrix3(...)`;
-        // that convenience lives in ext/ (dialect rule 3), so here we exercise
-        // set(...) which the constructor delegates to.
+        // three.js also tests the row-major constructor `new Matrix3(...)`. Kite3D has no
+        // such constructor, so this tests set(...).
         val b = Matrix3().set(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0)
         assertTrue(b.elements[0] == 0.0)
         assertTrue(b.elements[1] == 3.0)
@@ -70,8 +69,7 @@ class Matrix3Test {
         assertFalse(matrixEquals3(a, b), "Passed!")
     }
 
-    // three.js's `isMatrix3` duck-typing flag is intentionally dropped (dialect rule
-    // 11): type identity is expressed with Kotlin's `is Matrix3`, which needs no test.
+    // No isMatrix3 test: Kotlin checks the type with `is Matrix3`.
 
     @Test
     fun set() {

@@ -11,8 +11,8 @@ import kotlin.test.assertTrue
 
 class LinearInterpolantTest {
 
-    // JS passes `null` for parameterPositions; the pinned Kotlin ctor is
-    // non-nullable, so pass an empty array (never read by these ctor-only tests).
+    // three.js passes null for parameterPositions. The Kotlin constructor needs an array,
+    // and these tests never read it.
 
     // INHERITANCE
     @Test

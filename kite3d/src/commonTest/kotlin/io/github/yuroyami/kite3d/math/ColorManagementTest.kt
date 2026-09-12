@@ -20,9 +20,8 @@ class ColorManagementTest {
         assertTrue(ColorManagement.enabled, "ColorManagement.enabled is true by default.")
     }
 
-    // The remaining assertions below have no direct upstream counterpart (the
-    // upstream test file only checks `enabled`); they lock the ported transfer
-    // functions and working-space defaults.
+    // three.js only tests `enabled`. The tests below also check the transfer functions
+    // and the working-space defaults.
 
     @Test
     fun workingColorSpaceDefault() {

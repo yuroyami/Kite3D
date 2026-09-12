@@ -1,6 +1,5 @@
 /*
- * Copyright © 2026 yuroyami. MIT.
- * Kite3D addition, not a three.js port: a camera that only does maths.
+ * Copyright (c) 2026 yuroyami - MIT.
  */
 package io.github.yuroyami.kite3d.math
 

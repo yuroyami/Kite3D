@@ -29,7 +29,7 @@ class Vector3Test {
         assertEquals(z, a.z)
     }
 
-    // isVector3: the duck-type flag is dropped in the Kotlin port (use `is Vector3`).
+    // No isVector3 test: Kotlin checks the type with `is Vector3`.
 
     @Test
     fun set() {
@@ -470,10 +470,8 @@ class Vector3Test {
 
     @Test
     fun setFromColor() {
-        // Upstream Vector3.tests.js has no `setFromColor` case; this mirrors the
-        // method (reads c.r/c.g/c.b into x/y/z). Color(x,y,z) stores components in
-        // the working color space, which equals the default LinearSRGB input space,
-        // so no conversion occurs and r/g/b are exactly x/y/z.
+        // Not in three.js's tests. Color(x, y, z) is already in the working space (linear sRGB),
+        // so r, g and b equal x, y and z exactly.
         val a = Vector3()
         val c = Color(x, y, z)
 
@@ -718,8 +716,7 @@ class Vector3Test {
         assertEquals(-z, b.z)
     }
 
-    // project/unproject need a core Camera type, which this module does not
-    // define. Test skipped.
+    // No project or unproject test: Vector3 has neither. Camera.project covers projection.
 
     @Test
     fun lengthLengthSq() {

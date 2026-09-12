@@ -278,8 +278,7 @@ class QuaternionTest {
         assertTrue(a.w == 14.0, "Passed!")
     }
 
-    // The upstream `isQuaternion` test checks a duck-type flag; dialect rule 10
-    // drops these flags (`is Quaternion` is used instead), so it is omitted.
+    // No isQuaternion test: Kotlin checks the type with `is Quaternion`.
 
     @Test
     fun set() {
@@ -380,8 +379,7 @@ class QuaternionTest {
 
     @Test
     fun setFromRotationMatrix() {
-        // contrived examples purely to please the god of code coverage...
-        // match conditions in various 'else [if]' blocks
+        // made-up inputs that reach each 'else [if]' branch
 
         val a = Quaternion()
         var q = Quaternion(-9.0, -2.0, 3.0, -4.0).normalize()
@@ -699,10 +697,8 @@ class QuaternionTest {
 
     @Test
     fun onChangeTest() {
-        // Upstream `_onChange` / `_onChangeCallback` store, reassign and invoke the
-        // private callback field and assert `this === a` binding. The field is
-        // private here and Kotlin lambdas have no `this` receiver to check, so we
-        // verify the registered callback actually fires via the public onChange API.
+        // three.js reads the private callback field and checks the JS `this`. Kotlin cannot,
+        // so this checks that the callback set with onChange actually runs.
         var fired = false
         val a = Quaternion(11.0, 12.0, 13.0, 1.0)
         a.onChange { fired = true }

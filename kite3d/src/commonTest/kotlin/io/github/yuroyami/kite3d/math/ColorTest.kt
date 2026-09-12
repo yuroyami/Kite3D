@@ -13,10 +13,8 @@ import kotlin.test.assertTrue
 
 class ColorTest {
 
-    // three.js restores ColorManagement.enabled after each test via QUnit.testDone;
-    // ColorManagement is a global object, so each test sets `enabled` explicitly to
-    // the value it needs, and this restores the default (true) afterwards to avoid
-    // cross-test bleed regardless of run order.
+    // ColorManagement is global. Each test sets `enabled` itself, and this sets it back
+    // to the default (true) after each test, so tests cannot affect each other.
     @AfterTest
     fun restore() {
         ColorManagement.enabled = true
@@ -25,7 +23,7 @@ class ColorTest {
     // INSTANCING
     @Test
     fun instancing() {
-        ColorManagement.enabled = false // matches upstream TODO note
+        ColorManagement.enabled = false // three.js turns it off here too
 
         // default ctor
         var c = Color()
@@ -40,9 +38,9 @@ class ColorTest {
         assertTrue(c.b == 1.0, "Passed")
     }
 
-    // Color.NAMES: the X11 named-color table is deferred in the Kotlin port; test skipped.
+    // No Color.NAMES test: Kite3D has no named-color table.
 
-    // isColor: the duck-type flag is dropped in the Kotlin port (use `is Color`); test skipped.
+    // No isColor test: Kotlin checks the type with `is Color`.
 
     @Test
     fun set() {
@@ -59,8 +57,7 @@ class ColorTest {
         a.set(0xFF0000)
         assertTrue(a == c, "Set with number")
 
-        // Upstream also checks `a.set('rgb(0,255,0)')`. The CSS-string path is
-        // deferred, so that sub-assertion is skipped.
+        // three.js also checks `a.set('rgb(0,255,0)')`. Kite3D does not parse CSS strings.
 
         a.set(0.5, 0.5, 0.5)
         assertTrue(a == e, "Set with r,g,b components")
@@ -123,14 +120,12 @@ class ColorTest {
         assertTrue(hsl.l == 0.25, "lightness: ${hsl.l}")
     }
 
-    // setStyle / setColorName and all setStyle* variants: CSS-string parsing and
-    // X11 named-color lookup are deferred in the Kotlin port; those tests are skipped.
+    // No setStyle or setColorName tests: Kite3D does not parse CSS strings or color names.
 
     @Test
     fun clone() {
         ColorManagement.enabled = false
-        // Upstream uses Color('teal'); the CSS/name path is deferred, so the hex
-        // equivalent (teal = 0x008080) is used instead.
+        // three.js uses Color('teal'). Kite3D has no color names, so this uses 0x008080.
         val c = Color(0x008080)
         val c2 = c.clone()
         assertTrue(c2.getHex() == 0x008080, "Hex c2: ${c2.getHex()}")
@@ -140,7 +135,7 @@ class ColorTest {
     fun copy() {
         ColorManagement.enabled = false
 
-        // Upstream uses Color('teal'); adapted to hex 0x008080 (name path deferred).
+        // three.js uses Color('teal'); this uses its hex value, 0x008080.
         val a = Color(0x008080)
         val b = Color()
         b.copy(a)
@@ -157,8 +152,8 @@ class ColorTest {
         val c2 = Color()
         c2.setRGB(0.3, 0.5, 0.9)
         c.copySRGBToLinear(c2)
-        // Upstream asserts coarse ~x^2 values via QUnit numEqual (tolerance 0.1); the
-        // accurate sRGB transfer differs from x^2 by up to ~0.03, so match that tolerance.
+        // three.js checks rough x^2 values with a tolerance of 0.1. The exact sRGB curve
+        // differs from x^2 by up to about 0.03, so the same tolerance works here.
         assertTrue(abs(c.r - 0.09) < 0.1, "Red c: ${c.r} Red c2: ${c2.r}")
         assertTrue(abs(c.g - 0.25) < 0.1, "Green c: ${c.g} Green c2: ${c2.g}")
         assertTrue(abs(c.b - 0.81) < 0.1, "Blue c: ${c.b} Blue c2: ${c2.b}")
@@ -172,8 +167,8 @@ class ColorTest {
         val c2 = Color()
         c2.setRGB(0.09, 0.25, 0.81)
         c.copyLinearToSRGB(c2)
-        // numEqual tolerance (0.1), as upstream. The accurate transfer differs from the
-        // coarse expected values by up to ~0.03.
+        // Tolerance 0.1, as in three.js. The exact curve differs from these rough values
+        // by up to about 0.03.
         assertTrue(abs(c.r - 0.3) < 0.1, "Red c: ${c.r} Red c2: ${c2.r}")
         assertTrue(abs(c.g - 0.5) < 0.1, "Green c: ${c.g} Green c2: ${c2.g}")
         assertTrue(abs(c.b - 0.9) < 0.1, "Blue c: ${c.b} Blue c2: ${c2.b}")
@@ -186,7 +181,7 @@ class ColorTest {
         val c = Color()
         c.setRGB(0.3, 0.5, 0.9)
         c.convertSRGBToLinear()
-        // numEqual tolerance (0.1), as upstream.
+        // Tolerance 0.1, as in three.js.
         assertTrue(abs(c.r - 0.09) < 0.1, "Red: ${c.r}")
         assertTrue(abs(c.g - 0.25) < 0.1, "Green: ${c.g}")
         assertTrue(abs(c.b - 0.81) < 0.1, "Blue: ${c.b}")
@@ -199,7 +194,7 @@ class ColorTest {
         val c = Color()
         c.setRGB(4.0, 9.0, 16.0)
         c.convertLinearToSRGB()
-        // numEqual tolerance (0.1), as upstream.
+        // Tolerance 0.1, as in three.js.
         assertTrue(abs(c.r - 1.82) < 0.1, "Red: ${c.r}")
         assertTrue(abs(c.g - 2.58) < 0.1, "Green: ${c.g}")
         assertTrue(abs(c.b - 3.29) < 0.1, "Blue: ${c.b}")
@@ -209,7 +204,7 @@ class ColorTest {
     fun getHex() {
         ColorManagement.enabled = false
 
-        // Upstream uses Color('red'); adapted to hex 0xFF0000 (name path deferred).
+        // three.js uses Color('red'); this uses its hex value, 0xFF0000.
         val c = Color(0xFF0000)
         val res = c.getHex()
         assertTrue(res == 0xFF0000, "Hex: $res")
@@ -219,7 +214,7 @@ class ColorTest {
     fun getHexString() {
         ColorManagement.enabled = false
 
-        // Upstream uses Color('tomato'); adapted to hex 0xFF6347 (name path deferred).
+        // three.js uses Color('tomato'); this uses its hex value, 0xFF6347.
         val c = Color(0xFF6347)
         val res = c.getHexString()
         assertTrue(res == "ff6347", "Hex: $res")
@@ -242,7 +237,7 @@ class ColorTest {
     fun getRGB() {
         ColorManagement.enabled = true
 
-        // Upstream uses Color('plum'); adapted to hex 0xDDA0DD (plum; name path deferred).
+        // three.js uses Color('plum'); this uses its hex value, 0xDDA0DD.
         val c = Color(0xDDA0DD)
         val t = Color(0.0, 0.0, 0.0)
 
@@ -259,14 +254,13 @@ class ColorTest {
         assertTrue(abs(t.b - 221.0 / 255.0) <= 1e-3, "b (srgb): ${t.b}")
     }
 
-    // getStyle: CSS-string output is deferred in the Kotlin port; test skipped.
+    // No getStyle test: Kite3D does not output CSS strings.
 
     @Test
     fun offsetHSL() {
         ColorManagement.enabled = false
 
-        // Upstream uses Color('hsl(120,50%,50%)'); the CSS path is deferred, so the
-        // color is built via setHSL(120/360, 0.5, 0.5) instead.
+        // three.js uses Color('hsl(120,50%,50%)'). Kite3D has no CSS parsing, so this uses setHSL.
         val a = Color().setHSL(120.0 / 360.0, 0.5, 0.5)
         val b = Color(0.36, 0.84, 0.648)
 
@@ -464,7 +458,7 @@ class ColorTest {
         assertTrue(c.getHex() == c2.getHex(), "Hex c: ${c.getHex()} Hex c2: ${c2.getHex()}")
     }
 
-    // copyColorString: relies on the deferred CSS/name path (Color('ivory')); test skipped.
+    // No copyColorString test: it needs Color('ivory'), and Kite3D has no color names.
 
     @Test
     fun setWithNum() {
@@ -477,8 +471,7 @@ class ColorTest {
         assertTrue(c.b == 0.0, "Blue: ${c.b}")
     }
 
-    // setWithString and all setStyle*/setStyleHex*/setStyleColorName tests rely on
-    // the deferred CSS-string / named-color paths; those tests are skipped.
+    // No setWithString or setStyle tests: Kite3D does not parse CSS strings or color names.
 
     @Test
     fun iterable() {

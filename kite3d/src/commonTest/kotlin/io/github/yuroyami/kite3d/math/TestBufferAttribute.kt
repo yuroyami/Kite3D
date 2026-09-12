@@ -1,7 +1,6 @@
 /*
  * Copyright © 2026 yuroyami. MIT.
- * Test double for the AttributeLike seam, standing in for three.js's
- * core/BufferAttribute in the math unit tests (mirrors its getX/Y/Z/W(index)).
+ * Test version of three.js's BufferAttribute: an AttributeLike backed by a DoubleArray.
  */
 package io.github.yuroyami.kite3d.math
 

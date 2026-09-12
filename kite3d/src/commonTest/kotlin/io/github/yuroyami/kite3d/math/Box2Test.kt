@@ -27,8 +27,7 @@ class Box2Test {
         assertTrue(a.max == one2)
     }
 
-    // three.js's `isBox2` duck-typing flag is intentionally dropped (dialect rule
-    // 11): type identity is expressed with Kotlin's `is Box2`, which needs no test.
+    // No isBox2 test: Kotlin checks the type with `is Box2`.
 
     @Test
     fun set() {

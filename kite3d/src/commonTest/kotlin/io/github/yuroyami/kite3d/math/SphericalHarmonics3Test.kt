@@ -20,7 +20,5 @@ class SphericalHarmonics3Test {
         }
     }
 
-    // three.js's `isSphericalHarmonics3` test is intentionally omitted: the
-    // duck-typing flag is dropped (dialect rule 10); type identity uses
-    // `is SphericalHarmonics3`, which needs no test.
+    // No isSphericalHarmonics3 test: Kotlin checks the type with `is SphericalHarmonics3`.
 }

@@ -1,8 +1,7 @@
 /*
  * Copyright © 2026 yuroyami. MIT.
- * Kite3D-only invariants that three.js does not test but the Kotlin port must
- * hold (audit §7.1). These guard the decisions that diverge from three.js:
- * the clamp-not-coerceIn empty-box behavior, and the equals/hashCode contract.
+ * Rules that three.js does not test but Kite3D must keep: how an empty box clamps,
+ * and the equals/hashCode contract.
  */
 package io.github.yuroyami.kite3d.math
 
@@ -13,7 +12,7 @@ import kotlin.test.assertTrue
 
 class MathContractTest {
 
-    // --- empty-box clamp canary (audit §3.5 / §6.1) --------------------------------
+    // --- empty-box clamp ---
 
     @Test
     fun emptyBox2DistanceToPointIsInfinite() {
@@ -23,7 +22,7 @@ class MathContractTest {
         assertEquals(Double.POSITIVE_INFINITY, d, "empty box distance must be +Infinity, not a throw")
     }
 
-    // --- equals/hashCode contract (audit §3.2) -------------------------------------
+    // --- equals/hashCode contract ---
 
     @Test
     fun negativeZeroHashesConsistentlyWithEquals() {
@@ -46,8 +45,8 @@ class MathContractTest {
 
     @Test
     fun equalsOperatorAgreesWithEqualsMethod() {
-        // The whole reason equals(Any?) is overridden instead of a bare equals(Vector2)
-        // overload: `==` and `.equals(...)` must never disagree (audit §3.2).
+        // This is why equals(Any?) is overridden instead of adding equals(Vector2):
+        // `==` and `.equals(...)` must always agree.
         val a = Vector2(1.0, 2.0)
         val b = Vector2(1.0, 2.0)
         val c = Vector2(1.0, 9.0)

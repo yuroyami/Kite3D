@@ -174,9 +174,8 @@ class FrustumTest {
         assertTrue(a.intersectsSphere(Sphere(Vector3(0.0, 0.0, -101.0), 1.1)))
     }
 
-    // intersectsObject and intersectsSprite tests are SKIPPED: Frustum.intersectsObject
-    // / intersectsSprite are DEFERRED (need core Mesh / Sprite / BoxGeometry /
-    // Object3D). See Frustum.kt and port-ledger.yaml.
+    // No intersectsObject or intersectsSprite tests: those methods need Mesh, Sprite and
+    // Object3D, which Kite3D does not have.
 
     @Test
     fun intersectsBox() {
