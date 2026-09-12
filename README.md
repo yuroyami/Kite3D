@@ -13,15 +13,16 @@ program, plus the generated API reference.
 
 ## What you get
 
-29 maths types in common Kotlin: `Vector2`/`3`/`4`, `Matrix2`/`3`/`4`,
+30 maths types in common Kotlin: `Vector2`/`3`/`4`, `Matrix2`/`3`/`4`,
 `Quaternion`, `Euler`, `Box2`/`Box3`, `Sphere`, `Plane`, `Ray`, `Line3`,
 `Triangle`, `Frustum`, `FrustumArray`, `Spherical`, `Cylindrical`,
-`SphericalHarmonics3`, `Color`, `ColorManagement`, `MathUtils`, and
-`Interpolant` with its five keyframe subclasses.
+`SphericalHarmonics3`, `Color`, `ColorManagement`, `MathUtils`, `Interpolant`
+with its five keyframe subclasses, and `Camera`.
 
 Kite3D draws nothing. It has no `Object3D`, no scene graph, no
-`BufferGeometry`, no camera, material, light, shader graph or GPU backend. Use
-it for the maths. It is not an engine.
+`BufferGeometry`, no material, light, shader graph or GPU backend. `Camera` is
+maths too: a view and a projection, with nothing to render. Use Kite3D for the
+maths. It is not an engine.
 
 The library ships as one artifact of pure `commonMain` Kotlin. It uses no
 `expect`/`actual`, no cinterop and no JNI. Its only dependency is
@@ -48,7 +49,7 @@ frustum.intersectsBox(box)                          // true: the box now crosses
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("io.github.yuroyami:kite3d:0.1.0")
+            implementation("io.github.yuroyami:kite3d:0.2.0")
         }
     }
 }
@@ -282,7 +283,7 @@ Some methods are missing, because they need types that Kite3D does not have:
 
 | Missing | Use instead |
 | --- | --- |
-| `Vector3.unproject` | Invert `Camera.viewProjectionMatrix` yourself and apply it with `Vector3.applyMatrix4`. |
+| `Vector3.project`, `Vector3.unproject` | Use `Camera.project`. To unproject, invert `Camera.viewProjectionMatrix` and apply it with `Vector3.applyMatrix4`. |
 | `Box3.setFromObject`, `Box3.expandByObject` | Collect the points or boxes yourself, then call `setFromPoints`, `expandByPoint` or `union`. |
 | `Frustum.intersectsObject`, `Frustum.intersectsSprite` | Read the object's bounding box or sphere yourself, then call `Frustum.intersectsBox` or `Frustum.intersectsSphere`. |
 
@@ -306,13 +307,13 @@ The rest of the current limits:
   because it holds the global `enabled` and `workingColorSpace` values. Separate
   instances are safe to use at the same time on different threads. A JVM
   concurrency test checks that.
-- Explicit API mode and a committed ABI dump under `kite3d/api/` lock the public
-  API, so a signature change fails the build. That guard starts at 0.1.0. It
-  does not make 0.1.0 a stable API.
+- The API can still change before 1.0. Explicit API mode and a committed ABI
+  dump under `kite3d/api/` make every change visible: a signature change fails
+  the build until the dump is updated.
 
 ## Testing
 
-452 tests cover the maths in common code. One more test runs on the JVM only. It
+459 tests cover the maths in common code. One more test runs on the JVM only. It
 puts 32 threads through the shared types and compares the results against a
 single-threaded baseline. CI runs the common suite on ten hosts: JVM, JS (Node),
 Wasm (Node), Wasm (WASI), `linuxX64`, `macosArm64`, `iosSimulatorArm64`,
@@ -333,6 +334,5 @@ the public surface.
 MIT. Kotlin port © 2026 yuroyami; original three.js © 2010-2026 three.js authors.
 See [LICENSE](LICENSE) and [CHANGELOG.md](CHANGELOG.md).
 
-Part of the Kite family: [KiteCore](https://github.com/yuroyami/KiteCore),
-[KitePDF](https://github.com/yuroyami/KitePDF),
-[KiteQR](https://github.com/yuroyami/KiteQR).
+Part of the Kite family, with [KitePDF](https://github.com/yuroyami/KitePDF)
+and [KitePlayer](https://github.com/yuroyami/KitePlayer).

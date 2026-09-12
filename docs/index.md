@@ -27,7 +27,7 @@ targets.
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("io.github.yuroyami:kite3d:0.1.0")
+            implementation("io.github.yuroyami:kite3d:0.2.0")
         }
     }
 }
@@ -90,8 +90,9 @@ construct what you need.
 
 The [API reference](api/) is generated from the source and covers every type.
 The [README](https://github.com/yuroyami/Kite3D#readme) has task-shaped examples
-for transforms, ray casting, orbiting a point, colour blending and keyframe
-interpolation. It also lists every target and every current limit.
+for transforms, ray casting, orbiting a point, projecting to the screen, colour
+blending and keyframe interpolation. It also lists every target and every
+current limit.
 
 ## Coordinate systems
 
@@ -103,7 +104,7 @@ cause of geometry that culls at the wrong distance.
 
 ## Testing
 
-452 tests cover the library in common code. They run on JVM, JS (Node), macOS
+459 tests cover the library in common code. They run on JVM, JS (Node), macOS
 native, Wasm/JS and Wasm/WASI. One more test runs on the JVM only. It puts 32
-threads through the shared types and checks that no file-level mutable scratch
-state exists.
+threads through the shared types and compares the results with a
+single-threaded run.

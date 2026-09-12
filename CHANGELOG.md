@@ -4,69 +4,42 @@ All notable changes to Kite3D are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Kite3D is a port, so every entry names the three.js revision it tracks. The
-per-file record lives in [port-ledger.yaml](port-ledger.yaml). It includes every
-intentional deviation from upstream.
-
-## [0.2.0] - unreleased
+## [0.2.0] - 2026-09-12
 
 ### Added
 
-`Camera`: a perspective or orthographic projection with a view matrix, `updateMatrices()`, and
-`project` in two forms, one on `Vector3` and one on floats writing into a `FloatArray`. Kite3D
-addition, not part of three.js `src/math`.
+- `Camera`: a perspective or orthographic projection and a view matrix. Place it
+  with `lookAt`, call `updateMatrices()`, then `project` maps a point to
+  normalised device coordinates. One `project` takes a `Vector3`. The other
+  takes three floats and writes into a `FloatArray`, with no allocation.
 
-## [0.1.0] - unreleased
+## [0.1.0] - 2026-07-25
 
-The first release. Nothing has been published to Maven Central yet, so there is
-no earlier version to compare against and this entry has no Changed or Fixed
-counterpart.
+The first release.
 
 ### Added
 
-All 29 files of three.js r184's `src/math`, ported to common Kotlin: `Vector2`,
-`Vector3`, `Vector4`, `Matrix2`, `Matrix3`, `Matrix4`, `Quaternion`, `Euler`,
-`Box2`, `Box3`, `Sphere`, `Plane`, `Ray`, `Line3`, `Triangle`, `Frustum`,
-`FrustumArray`, `Spherical`, `Cylindrical`, `SphericalHarmonics3`, `Color`,
-`ColorManagement`, `MathUtils`, `Interpolant` and the five keyframe
-interpolants. `AttributeLike` is added on top as a Kite3D-only interface that a
-later `BufferAttribute` will implement.
+- The three.js maths types, from release r184, in common Kotlin: `Vector2`,
+  `Vector3`, `Vector4`, `Matrix2`, `Matrix3`, `Matrix4`, `Quaternion`, `Euler`,
+  `Box2`, `Box3`, `Sphere`, `Plane`, `Ray`, `Line3`, `Triangle`, `Frustum`,
+  `FrustumArray`, `Spherical`, `Cylindrical`, `SphericalHarmonics3`, `Color`,
+  `ColorManagement`, `MathUtils`, and `Interpolant` with its five keyframe
+  subclasses.
+- `AttributeLike`, a small interface for vertex data, read by methods such as
+  `fromBufferAttribute`.
+- 452 tests in common code, run on the JVM, JavaScript, Wasm and native
+  targets, and one JVM test that runs the shared types on 32 threads.
+- A committed ABI dump for the JVM and all 21 klib targets. The build fails when
+  the public API changes and the dump does not.
 
-The upstream unit suites are translated to `kotlin-test`: 452 tests in common
-code, green on JVM, JS (Node), Wasm (Node and WASI) and native, plus one
-JVM-only test that runs the methods three.js backed with module-level scratch
-variables on 32 threads and compares the results against a single-threaded
-baseline.
+Differences from three.js:
 
-Departures from upstream worth naming here:
-
-- `Matrix4.determinantAffine()`: the upper-left 3x3 determinant, matching
-  three.js r184. `extractBasis`, `extractRotation` and `decompose` guard on it
-  instead of the full 4x4 `determinant()`. The two results agree for affine
-  matrices but not for projective ones, so guarding on the 4x4 took the wrong
-  branch on a projection matrix. Both upstream tests are ported.
-- `Sphere.toJSON()` / `Sphere.fromJSON()` are flattened to `DoubleArray`, in the
-  same shape as `Box3`'s. Round-trip tests cover both.
-- `Interpolant.copySampleValue_` is `open`. Kotlin members are final by default,
-  which made the glTF cubic-spline subclass shape impossible to express.
-  Upstream's own test demonstrates that shape. `CustomInterpolantTest` ports
-  that suite and pins the extension seam.
-- Methods that reach into layers above math are omitted rather than stubbed:
-  `Vector3.project`/`unproject`, `Box3.setFromObject`/`expandByObject`,
-  `Frustum.intersectsObject`/`intersectsSprite`, every intersection method on
-  `FrustumArray`, and `Color`'s CSS-string path (`setStyle`, `setColorName`,
-  `getStyle`, `Color.NAMES`). Each is listed under `deferred` in
-  [port-ledger.yaml](port-ledger.yaml) with what it is waiting on.
-
-Build and release setup:
-
-- Checked-in public-ABI dumps under `kite3d/api/`, covering the JVM and all 21
-  klib targets. `./gradlew :kite3d:checkKotlinAbi` gates the build on them.
-- CI runs every test task a GitHub-hosted runner can actually execute, including
-  `wasmWasiNodeTest` and the tvOS/watchOS simulators, and states which targets
-  are compile-only and why.
-- Tag-triggered Maven Central release workflow.
-- The root Gradle project is named `kite3d-root`. It was `kite3d`, the same as
-  the included module, so `TYPESAFE_PROJECT_ACCESSORS` generated `getKite3d()`
-  twice and every Gradle invocation, including `./gradlew help`, died with
-  "method getKite3d() is already defined".
+- `Sphere.toJSON()` and `Sphere.fromJSON()` use a `DoubleArray`, in the same
+  shape as `Box3`'s.
+- `Interpolant.copySampleValue_` is `open`, so a subclass such as a glTF
+  cubic-spline interpolant can override it.
+- Some methods are missing, because they need scene types that Kite3D does not
+  have: `Vector3.project` and `unproject`, `Box3.setFromObject` and
+  `expandByObject`, `Frustum.intersectsObject` and `intersectsSprite`, the
+  intersection methods of `FrustumArray`, and the CSS-string methods of `Color`
+  (`setStyle`, `setColorName`, `getStyle`, `Color.NAMES`).
