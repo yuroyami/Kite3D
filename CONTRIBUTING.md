@@ -1,78 +1,65 @@
 # Contributing to Kite3D
 
-Kite3D is a from-scratch port of [three.js](https://github.com/mrdoob/three.js)
-(`r184`) to Kotlin Multiplatform. Almost all contributions right now are **ports**:
-turning a three.js source file into common Kotlin.
+Kite3D follows the three.js maths API, release `r184`. A change either fixes
+something or brings more of three.js's maths over to Kotlin. Every change lands
+with its tests.
 
-## Getting the three.js reference
-
-Porting means reading the upstream file side by side with its Kotlin counterpart,
-so you need a local checkout of three.js at the pinned revision. It lives at
-`three.js-ref/` and is **git-ignored**. It is not part of Kite3D and is never
-committed:
+## Build and test
 
 ```bash
-git clone --depth 1 --branch r184 https://github.com/mrdoob/three.js.git three.js-ref
+./gradlew :kite3d:compileKotlinJvm   # fast compile check
+./gradlew :kite3d:jvmTest            # JVM
+./gradlew :kite3d:jsNodeTest         # JavaScript (Node)
+./gradlew :kite3d:macosArm64Test     # native, on Apple silicon
+./gradlew :kite3d:wasmJsNodeTest     # Wasm (Node)
+./gradlew :kite3d:wasmWasiNodeTest   # Wasm (WASI)
 ```
 
-The sources you will want are `three.js-ref/src/math/…` and their suites in
-`three.js-ref/test/unit/src/math/…`.
+Before you open a pull request, run the tests on the JVM, one native target and
+JavaScript. Each one computes `sin`, `cos` and `exp` slightly differently, so a
+tolerance that passes on the JVM can still fail on native.
 
-## Before you port a file
-
-Read **[PORTING.md](PORTING.md)** first. It is the binding dialect, and it
-covers structure, the JS→Kotlin language mapping, cross-layer seams, and the
-trap catalogue. The catalogue lists the subtle `clamp`, `Math.round`, int32 and
-`-0.0` differences that silently corrupt a port.
-
-Then check **[port-ledger.yaml](port-ledger.yaml)** for the file's status and
-dependency order. Port in dependency order; a class and its upstream test suite
-land in the same commit.
-
-## Building and testing
-
-```bash
-# Compile the common core for the JVM (fast inner loop)
-./gradlew :kite3d:compileKotlinJvm
-
-# Run the tests on a given engine
-./gradlew :kite3d:jvmTest          # JVM
-./gradlew :kite3d:jsNodeTest       # JS (Node)
-./gradlew :kite3d:macosArm64Test   # native (on Apple silicon)
-./gradlew :kite3d:wasmJsNodeTest   # Wasm (Node)
-./gradlew :kite3d:wasmWasiNodeTest # Wasm (WASI)
-```
-
-A port is "done" only when its ported test suite is green on **jvm, one native
-target, and js**. The three engines have different `libm` implementations, so a
-tolerance that passes on the JVM can still fail on native. See the
-transcendental-tolerance rule in PORTING.md.
+JDK 21 builds the project. The JVM bytecode level is 11, so the library runs on
+JDK 11 and on Android.
 
 ## Public API changes
 
-The public ABI is dumped to `kite3d/api/` and checked in. CI fails when the code
-drifts from the dump:
+The public API is recorded in `kite3d/api/`. CI fails when the code no longer
+matches that record:
 
 ```bash
 ./gradlew :kite3d:checkKotlinAbi
 ```
 
-If the change is intended, regenerate and commit the dump in the same PR:
+When you change the public API on purpose, update the record and commit it with
+the change:
 
 ```bash
 ./gradlew :kite3d:updateKotlinAbi
 ```
 
-Regenerate on macOS when you can. It is the only host that builds every target
-in the matrix, so a dump produced anywhere else covers fewer klibs.
+Run it on macOS if you can. Only macOS builds every target, so a record made on
+another host covers fewer of them.
 
-Toolchain: JDK 21 builds the project (`jvmToolchain(21)`), but the JVM bytecode
-target is 11, so consumers on JDK 11+ and Android are supported.
+## Adding code from three.js
+
+Read [PORTING.md](PORTING.md) first. It has the rules for turning three.js
+JavaScript into Kotlin, and the language differences that change results
+without an error.
+
+Keep a copy of three.js beside your work. The `three.js-ref/` folder is ignored
+by git:
+
+```bash
+git clone --depth 1 --branch r184 https://github.com/mrdoob/three.js.git three.js-ref
+```
+
+The maths sources are in `three.js-ref/src/math/`, and their tests are in
+`three.js-ref/test/unit/src/math/`. Bring the tests over with the code.
 
 ## Local publishing
 
-`RELEASE_SIGNING_ENABLED=true` in `gradle.properties` is meant for CI, which has
-the signing key. For a local `publishToMavenLocal`, override it:
+Release builds are signed. For a local `publishToMavenLocal`, turn signing off:
 
 ```bash
 ./gradlew publishToMavenLocal -PRELEASE_SIGNING_ENABLED=false
@@ -80,6 +67,6 @@ the signing key. For a local `publishToMavenLocal`, override it:
 
 ## Style
 
-`explicitApi()` is strict. Give every public declaration an explicit visibility
-and return type. Match the surrounding code. The already-ported `Vector2.kt`,
-`Box2.kt` and `MathUtils.kt` are the canonical examples.
+`explicitApi()` is on. Give every public declaration an explicit visibility and
+return type, and match the code around it. `Vector2.kt`, `Box2.kt` and
+`MathUtils.kt` are good examples.
