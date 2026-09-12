@@ -18,13 +18,14 @@ import kotlin.math.truncate
 /**
  * A 3D vector: an ordered triplet of numbers (`x`, `y`, `z`).
  *
- * A 3D vector can represent a point in 3D space, a direction and length in 3D
- * space (the length being the Euclidean distance from `(0, 0, 0)` to
- * `(x, y, z)`), or any arbitrary ordered triplet of numbers.
+ * A 3D vector can hold a point, a direction with a length, or any three numbers.
+ * Its length is the distance from `(0, 0, 0)` to `(x, y, z)`.
  *
- * Vectors are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js. Most
- * methods mutate `this` and return it for chaining.
+ * Vectors are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only. Most methods change `this` and return it for chaining.
+ *
+ * There is no `project` or `unproject`. Use [Camera.project], or invert
+ * [Camera.viewProjectionMatrix] and pass it to [applyMatrix4].
  *
  * Iterating a vector yields its components `(x, y, z)` in order.
  */
@@ -39,9 +40,6 @@ public class Vector3(
 
     /**
      * Sets the vector components.
-     *
-     * (Upstream also has a `z === undefined` guard for `sprite.scale.set(x, y)`;
-     * in Kotlin `set` takes three required [Double]s, so that guard is dropped.)
      *
      * @param x The value of the x component.
      * @param y The value of the y component.
@@ -368,9 +366,6 @@ public class Vector3(
         return this
     }
 
-    // project(camera)/unproject(camera) need a core Camera type. This module does
-    // not define one.
-
     /**
      * Transforms the direction of this vector by the upper-left 3x3 of the 4x4
      * matrix [m], then normalizes the result.
@@ -445,7 +440,6 @@ public class Vector3(
      * @return A reference to this vector.
      */
     public fun clamp(min: Vector3, max: Vector3): Vector3 {
-        // assumes min < max, componentwise
         x = MathUtils.clamp(x, min.x, max.x)
         y = MathUtils.clamp(y, min.y, max.y)
         z = MathUtils.clamp(z, min.z, max.z)
@@ -655,10 +649,7 @@ public class Vector3(
      * @return A reference to this vector.
      */
     public fun projectOnPlane(planeNormal: Vector3): Vector3 {
-        // three.js copies `this` into a scratch vector and projectOnVector()s it;
-        // inlined here as component math (no module temp). The projection is
-        // planeNormal * (planeNormal.dot(this) / planeNormal.lengthSq()); a zero
-        // denominator leaves `this` unchanged (the projection is the zero vector).
+        // Subtract this vector's projection onto the normal.
         val denominator = planeNormal.lengthSq()
 
         if (denominator == 0.0) return this
@@ -678,8 +669,7 @@ public class Vector3(
      * @return A reference to this vector.
      */
     public fun reflect(normal: Vector3): Vector3 {
-        // three.js: this - normal * (2 * this.dot(normal)); inlined as component
-        // math (no module temp).
+        // this - normal * (2 * this.dot(normal))
         val scalar = 2 * dot(normal)
 
         x -= normal.x * scalar

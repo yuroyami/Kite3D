@@ -1,6 +1,5 @@
 /*
- * Copyright © 2026 yuroyami. MIT.
- * Kite3D addition, not a three.js port. Holds what three.js spreads over Object3D and Camera.
+ * Copyright (c) 2026 yuroyami - MIT.
  */
 package io.github.yuroyami.kite3d.math
 
@@ -8,10 +7,11 @@ import kotlin.math.PI
 import kotlin.math.tan
 
 /**
- * A view and a projection, and the divide by w that turns a point into screen space.
+ * A view matrix and a projection matrix, used to project world points to the screen.
  *
  * Set the projection with one of the `set` functions, place the camera with [lookAt], then call
- * [updateMatrices] once. After that [project] is allocation free: it reads the combined matrix.
+ * [updateMatrices]. Call it again after any change. [project] allocates nothing, because it only
+ * reads the combined matrix.
  * Results are normalised device coordinates, minus one to one on each axis, with y up. The
  * camera looks down its own negative z, the three.js convention, so a point in front of a camera
  * at z = 10 has a smaller z than 10.

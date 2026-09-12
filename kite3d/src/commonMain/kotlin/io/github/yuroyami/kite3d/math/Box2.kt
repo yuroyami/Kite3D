@@ -10,8 +10,8 @@ import kotlin.math.sqrt
 /**
  * An axis-aligned bounding box (AABB) in 2D space.
  *
- * The box is **mutable** and **not thread-safe**; confine an instance to a single
- * thread, as in three.js.
+ * The box is **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
  * The constructor stores the given vectors **by reference** (it does not copy
  * them). Passing the same vector as both bounds, or sharing a vector with another
@@ -37,8 +37,8 @@ public class Box2(
     }
 
     /**
-     * Expands this box to enclose all the given [points]. An empty sequence leaves
-     * the box empty.
+     * Sets this box to enclose all the given [points]. An empty sequence makes the
+     * box empty.
      *
      * @return A reference to this box.
      */
@@ -97,7 +97,7 @@ public class Box2(
      * @return Whether this box is empty or not.
      */
     public fun isEmpty(): Boolean {
-        // More robust than (volume <= 0), which can go positive with two negative axes.
+        // A volume <= 0 check would fail: two inverted axes give a positive volume.
         return max.x < min.x || max.y < min.y
     }
 
@@ -227,7 +227,7 @@ public class Box2(
     public fun intersect(box: Box2): Box2 {
         min.max(box.min)
         max.min(box.max)
-        // Canonicalize a non-overlapping result to the standard empty box.
+        // With no overlap, reset to the standard empty box.
         if (isEmpty()) makeEmpty()
         return this
     }

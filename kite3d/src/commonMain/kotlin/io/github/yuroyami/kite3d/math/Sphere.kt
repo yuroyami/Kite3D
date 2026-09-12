@@ -12,8 +12,8 @@ import kotlin.math.sqrt
  * An analytical 3D sphere defined by a center and radius. This class is mainly
  * used as a Bounding Sphere for 3D objects.
  *
- * The sphere is **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js.
+ * The sphere is **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
  * The constructor stores the given [center] **by reference** (it does not copy
  * it). Sharing that vector with another object means later mutations are visible
@@ -44,9 +44,11 @@ public class Sphere(
     }
 
     /**
-     * Computes the minimum bounding sphere for a list of [points]. If the optional
-     * [optionalCenter] is given, it is used as the sphere's center. Otherwise, the
-     * center of the axis-aligned bounding box encompassing the points is calculated.
+     * Computes a bounding sphere for [points]. The center is [optionalCenter] when
+     * given, otherwise the center of the points' bounding box. The radius reaches the
+     * farthest point, so this is not always the smallest possible sphere.
+     *
+     * An empty list gives a radius of `0`, which is not an empty sphere.
      *
      * @param points A list of points in 3D space.
      * @param optionalCenter The center of the sphere.
@@ -58,7 +60,6 @@ public class Sphere(
         if (optionalCenter != null) {
             center.copy(optionalCenter)
         } else {
-            // three.js uses a module-level _box scratch Box3; allocated locally.
             Box3().setFromPoints(points).getCenter(center)
         }
 
@@ -228,7 +229,6 @@ public class Sphere(
             return this
         }
 
-        // three.js uses a module-level _v1 scratch vector; allocated locally.
         val v1 = Vector3().subVectors(point, center)
 
         val lengthSq = v1.lengthSq()
@@ -267,7 +267,6 @@ public class Sphere(
         if (center.equals(sphere.center)) {
             radius = maxOf(radius, sphere.radius)
         } else {
-            // three.js uses module-level _v1/_v2 scratch vectors; allocated locally.
             val v2 = Vector3().subVectors(sphere.center, center).setLength(sphere.radius)
 
             expandByPoint(Vector3().copy(sphere.center).add(v2))
@@ -285,20 +284,11 @@ public class Sphere(
      */
     public fun clone(): Sphere = Sphere().copy(this)
 
-    // --- JSON round-trip ------------------------------------------------------
-    // three.js returns/consumes a plain JS object; common Kotlin has no such JSON
-    // value type at this layer, so these are exposed as array round-trips. They use
-    // the same shape as Box3.toJSON/fromJSON.
-
     /**
-     * Writes this sphere as `[centerX, centerY, centerZ, radius]`.
+     * Returns this sphere as `[centerX, centerY, centerZ, radius]`. three.js returns
+     * an object with `center` and `radius` fields instead.
      *
-     * Mirrors three.js `toJSON()` (which produces `{ radius, center:
-     * center.toArray() }`); flattened here since the math layer has no JS object
-     * type. Center first, so the leading three components are exactly what
-     * [Vector3.toArray] would write.
-     *
-     * @return Serialized structure with fields representing the object state.
+     * @return A new array of four values.
      */
     public fun toJSON(): DoubleArray = doubleArrayOf(center.x, center.y, center.z, radius)
 

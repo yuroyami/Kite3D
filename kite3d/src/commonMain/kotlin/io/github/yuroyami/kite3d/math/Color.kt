@@ -21,7 +21,7 @@ public class HSL(
     public var l: Double = 0.0,
 )
 
-// hue2rgb helper (three.js module-level function).
+// One RGB channel from a hue position, used by Color.setHSL.
 private fun hue2rgb(p: Double, q: Double, t0: Double): Double {
     var t = t0
     if (t < 0) t += 1
@@ -39,20 +39,16 @@ private fun hue2rgb(p: Double, q: Double, t0: Double): Double {
  * space automatically. If [ColorManagement.enabled] is `false`, no conversions
  * occur.
  *
- * Colors are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js. Most
- * methods mutate `this` and return it for chaining.
+ * Colors are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only. Most methods change `this` and return it for chaining.
  *
  * Iterating a color yields its components `(r, g, b)` in order.
  *
- * ## Deferred CSS-string / named-color paths
+ * ## CSS strings and color names
  *
- * three.js's `setStyle` (CSS-string parsing: `rgb()`, `hsl()`, `#hex`), the X11
- * `setColorName` lookup with its 140-entry `_colorKeywords` table, `Color.NAMES`,
- * and `getStyle` (CSS-string output) are **deferred**: they require a large color
- * name table and regex-based CSS parsing that add no value to the pure math layer
- * yet. The numeric constructors ([Color] with `r,g,b` or a hex `Int`), [setHex],
- * [setRGB] and [setHSL] cover the algebraic paths.
+ * There is no `setStyle`, `setColorName`, `getStyle` or `Color.NAMES`, so CSS
+ * strings such as `"#ff8800"` and names such as `"skyblue"` are not accepted. Use
+ * the [Color] constructors, [setHex], [setRGB] or [setHSL] instead.
  */
 public class Color : Iterable<Double> {
 
@@ -65,14 +61,7 @@ public class Color : Iterable<Double> {
     /** The blue component. */
     public var b: Double = 1.0
 
-    /**
-     * Constructs a white color (`r = g = b = 1`).
-     *
-     * (three.js's polymorphic `Color(r, g, b)` constructor also accepts a hex
-     * `Int`, a CSS string or another [Color]. The Kotlin port splits those into
-     * distinct constructors/overloads: [Color] with three [Double]s, with a hex
-     * [Int], or via [copy]. The CSS-string path is deferred. See the class doc.)
-     */
+    /** Constructs a white color (`r = g = b = 1`). */
     public constructor()
 
     /**
@@ -107,8 +96,7 @@ public class Color : Iterable<Double> {
     public fun set(r: Double, g: Double, b: Double): Color = setRGB(r, g, b)
 
     /**
-     * Sets this color from the hexadecimal value [hex] (interpreted in
-     * [colorSpace]). Kotlin equivalent of three.js's `set(number)` path.
+     * Sets this color from the hexadecimal value [hex], read as sRGB. Kotlin equivalent of three.js's `set(number)` path.
      *
      * @return A reference to this color.
      */
@@ -142,7 +130,6 @@ public class Color : Iterable<Double> {
      * @return A reference to this color.
      */
     public fun setHex(hex: Int, colorSpace: ColorSpace = ColorSpace.SRGB): Color {
-        // three.js does `Math.floor(hex)`; hex is already an Int here.
         r = (hex shr 16 and 255) / 255.0
         g = (hex shr 8 and 255) / 255.0
         b = (hex and 255) / 255.0
@@ -205,12 +192,6 @@ public class Color : Iterable<Double> {
 
         return this
     }
-
-    // setStyle(style, colorSpace): CSS-string parsing (rgb()/hsl()/#hex) deferred
-    // (needs regex parsing + falls through to setColorName). See class doc / port-ledger.yaml.
-
-    // setColorName(style, colorSpace): X11 named-color lookup deferred (needs the
-    // 140-entry _colorKeywords table). See class doc / port-ledger.yaml.
 
     /**
      * Returns a new color with copied values from this instance.
@@ -289,13 +270,11 @@ public class Color : Iterable<Double> {
      * @return The hexadecimal value.
      */
     public fun getHex(colorSpace: ColorSpace = ColorSpace.SRGB): Int {
-        // three.js uses a module-level `_color` scratch; a local matches the
-        // dialect (no file-level mutable scratch) at no fidelity cost.
         val c = Color().copy(this)
         ColorManagement.workingToColorSpace(c, colorSpace)
 
-        // three.js: Math.round(...) rounds half toward +inf (MathUtils.jsRound), not
-        // Kotlin's half-to-even round. `* 65536`/`* 256` widened via Int arithmetic.
+        // jsRound rounds halves up, as JavaScript does. Kotlin's round() would round
+        // them to the nearest even number.
         return MathUtils.jsRound(MathUtils.clamp(c.r * 255, 0.0, 255.0)).toInt() * 65536 +
             MathUtils.jsRound(MathUtils.clamp(c.g * 255, 0.0, 255.0)).toInt() * 256 +
             MathUtils.jsRound(MathUtils.clamp(c.b * 255, 0.0, 255.0)).toInt()
@@ -321,7 +300,6 @@ public class Color : Iterable<Double> {
     public fun getHSL(target: HSL, colorSpace: ColorSpace = ColorManagement.workingColorSpace): HSL {
         // h,s,l ranges are in 0.0 - 1.0
 
-        // three.js uses a module-level `_color` scratch; a local matches the dialect.
         val c = Color().copy(this)
         ColorManagement.workingToColorSpace(c, colorSpace)
 
@@ -368,7 +346,6 @@ public class Color : Iterable<Double> {
      * @return The [target] color.
      */
     public fun getRGB(target: Color, colorSpace: ColorSpace = ColorManagement.workingColorSpace): Color {
-        // three.js uses a module-level `_color` scratch; a local matches the dialect.
         val c = Color().copy(this)
         ColorManagement.workingToColorSpace(c, colorSpace)
 
@@ -378,9 +355,6 @@ public class Color : Iterable<Double> {
 
         return target
     }
-
-    // getStyle(colorSpace): CSS-string output deferred (needs CSS Color Module
-    // Level 4 formatting for non-sRGB spaces). See class doc / port-ledger.yaml.
 
     /**
      * Adds the given HSL values to this color's values (via a round-trip through
@@ -392,7 +366,6 @@ public class Color : Iterable<Double> {
      * @return A reference to this color.
      */
     public fun offsetHSL(h: Double, s: Double, l: Double): Color {
-        // three.js uses a module-level `_hslA` scratch; a local matches the dialect.
         val hsl = HSL()
         getHSL(hsl)
 
@@ -513,7 +486,6 @@ public class Color : Iterable<Double> {
      * @return A reference to this color.
      */
     public fun lerpHSL(color: Color, alpha: Double): Color {
-        // three.js uses module-level `_hslA`/`_hslB` scratch; locals match the dialect.
         val hslA = HSL()
         val hslB = HSL()
         getHSL(hslA)

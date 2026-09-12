@@ -8,8 +8,8 @@ package io.github.yuroyami.kite3d.math
 /**
  * An analytical line segment in 3D space represented by a start and end point.
  *
- * The segment is **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js.
+ * The segment is **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
  * The constructor stores the given vectors **by reference** (it does not copy
  * them). Passing the same vector as both endpoints, or sharing a vector with
@@ -100,8 +100,6 @@ public class Line3(
      * @return The point parameter.
      */
     public fun closestPointToPointParameter(point: Vector3, clampToLine: Boolean): Double {
-        // three.js uses module-level _startP/_startEnd scratch vectors; allocated
-        // locally here (no file-level mutable state).
         val startP = Vector3().subVectors(point, start)
         val startEnd = Vector3().subVectors(end, start)
 
@@ -147,14 +145,12 @@ public class Line3(
     public fun distanceSqToLine3(line: Line3, c1: Vector3 = Vector3(), c2: Vector3 = Vector3()): Double {
         // from Real-Time Collision Detection by Christer Ericson, chapter 5.1.9
 
-        // Computes closest points C1 and C2 of S1(s)=P1+s*(Q1-P1) and
-        // S2(t)=P2+t*(Q2-P2), returning s and t. Function result is squared
-        // distance between between S1(s) and S2(t)
+        // Finds the closest points C1 = S1(s) and C2 = S2(t) of S1(s) = P1 + s*(Q1 - P1)
+        // and S2(t) = P2 + t*(Q2 - P2), and returns their squared distance.
 
         val epsilon = 1e-8 * 1e-8 // must be squared since we compare squared length
         val s: Double
         val t: Double
-        // three.js uses module-level _d1/_d2/_r scratch vectors; allocated locally.
         val d1 = Vector3()
         val d2 = Vector3()
         val r = Vector3()

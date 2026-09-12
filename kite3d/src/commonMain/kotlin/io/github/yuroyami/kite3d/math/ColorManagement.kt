@@ -8,13 +8,8 @@ package io.github.yuroyami.kite3d.math
 import kotlin.math.pow
 
 /**
- * A color space identifier.
- *
- * In three.js color spaces are plain strings defined in `constants.js`
- * (`NoColorSpace = ''`, `SRGBColorSpace = 'srgb'`, `LinearSRGBColorSpace =
- * 'srgb-linear'`, plus Display-P3 variants). The Kotlin port models them as an
- * enum so the type system enforces valid values; only the members actually used
- * by the ported math layer are defined here.
+ * A color space identifier. three.js uses plain strings for these, such as
+ * `'srgb'`. Each member below names its string.
  */
 public enum class ColorSpace {
     /** No color space (three.js `''`). Treated as a linear transfer, no conversion. */
@@ -26,10 +21,16 @@ public enum class ColorSpace {
     /** sRGB-linear color space (three.js `'srgb-linear'`); the default working space. */
     LinearSRGB,
 
-    /** Display-P3 color space (three.js `'display-p3'`). Reserved: not registered yet. */
+    /**
+     * Display-P3 color space (three.js `'display-p3'`). Not registered, so converting
+     * with it throws until you add it with [ColorManagement.define].
+     */
     DisplayP3,
 
-    /** Linear Display-P3 color space (three.js `'display-p3-linear'`). Reserved: not registered yet. */
+    /**
+     * Linear Display-P3 color space (three.js `'display-p3-linear'`). Not registered, so converting
+     * with it throws until you add it with [ColorManagement.define].
+     */
     LinearDisplayP3,
 }
 
@@ -71,16 +72,11 @@ public class ColorSpaceDefinition(
 /**
  * Manages the working color space and conversions between color spaces.
  *
- * Ported from three.js `ColorManagement` (created via `createColorManagement()`).
- * Modelled as a Kotlin `object` so that ported three.js code keeps calling
- * `ColorManagement.convert(...)` etc. verbatim. Like three.js, this holds mutable
- * global state ([enabled], [workingColorSpace]) and is **not thread-safe**.
+ * Like three.js, this holds mutable global state ([enabled], [workingColorSpace],
+ * [spaces]) and is **not thread-safe**.
  *
- * The renderer-facing helpers (`getToneMappingMode`, `_getDrawingBufferColorSpace`,
- * `_getUnpackColorSpace`, `define`, Display-P3 spaces) are omitted from the math
- * port because the color-space definitions here do not carry the optional
- * `outputColorSpaceConfig`/`workingColorSpaceConfig`; they belong to the (not yet
- * ported) renderer layer.
+ * Only sRGB and linear sRGB are registered. three.js's renderer helpers, such as
+ * `getToneMappingMode`, are not included.
  */
 public object ColorManagement {
 
@@ -123,9 +119,8 @@ public object ColorManagement {
 
         }
 
-        // three.js compares `primaries` by object identity; here the same
-        // DoubleArray instance is shared by spaces with equal primaries, so
-        // referential inequality still holds only when the primaries truly differ.
+        // Identity check, as in three.js: spaces that share one primaries array
+        // skip the XYZ step.
         if (source.primaries !== target.primaries) {
 
             color.applyMatrix3(source.toXYZ)
@@ -249,8 +244,7 @@ public object ColorManagement {
 
     // -- sRGB definitions -------------------------------------------------------
 
-    // Shared across LinearSRGB and SRGB spaces (same primaries => identity in
-    // `convert`'s referential primaries check, matching three.js).
+    // Both sRGB spaces share these arrays, so convert() skips the XYZ step between them.
     private val REC709_PRIMARIES = doubleArrayOf(0.640, 0.330, 0.300, 0.600, 0.150, 0.060)
     private val REC709_LUMINANCE_COEFFICIENTS = doubleArrayOf(0.2126, 0.7152, 0.0722)
     private val D65 = doubleArrayOf(0.3127, 0.3290)

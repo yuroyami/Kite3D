@@ -18,7 +18,7 @@ import io.github.yuroyami.kite3d.math.InterpolantSettings
  *
  * @param parameterPositions The parameter positions holding the interpolation factors.
  * @param sampleValues The sample values.
- * @param sampleSize The sample size (a.k.a. the value size / stride).
+ * @param sampleSize The number of values in one sample (the stride).
  * @param resultBuffer The result buffer; defaults to a fresh `DoubleArray(sampleSize)`.
  */
 public class CubicInterpolant(
@@ -38,10 +38,7 @@ public class CubicInterpolant(
         endingEnd = InterpolantEnding.ZeroCurvature,
     )
 
-    /**
-     * Reads `parameterPositions[i]`, returning `null` for an out-of-bounds index
-     * (mirrors JS `pp[i] === undefined`).
-     */
+    /** Returns `parameterPositions[i]`, or `null` when [i] is out of bounds. */
     private fun ppGet(i: Int): Double? {
         val pp = parameterPositions
         return if (i < 0 || i >= pp.size) null else pp[i]
@@ -102,8 +99,8 @@ public class CubicInterpolant(
         val halfDt = (t1 - t0) * 0.5
         val stride = valueSize
 
-        _weightPrev = halfDt / (t0 - tPrev!!)
-        _weightNext = halfDt / (tNext!! - t1)
+        _weightPrev = halfDt / (t0 - tPrev)
+        _weightNext = halfDt / (tNext - t1)
         _offsetPrev = iPrev * stride
         _offsetNext = iNext * stride
     }

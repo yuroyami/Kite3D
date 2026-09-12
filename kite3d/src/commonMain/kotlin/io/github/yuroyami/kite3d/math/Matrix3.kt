@@ -16,18 +16,14 @@ import kotlin.math.sin
  * paper. The values are stored in [elements] in column-major order. There is no
  * element constructor; use `Matrix3().set(...)`.
  *
- * Matrices are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js. Most
- * methods mutate `this` and return it for chaining.
+ * Matrices are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only. Most methods change `this` and return it for chaining.
  */
 public class Matrix3 {
 
     /**
      * A column-major list of matrix values. Initialized to the 3x3 identity.
-     *
-     * Exposed as a `val` (dialect rule 12): three.js never reassigns the array,
-     * only mutates its contents, so the reference is fixed while the values stay
-     * mutable.
+     * You can change the values, but not replace the array.
      */
     public val elements: DoubleArray = doubleArrayOf(
         1.0, 0.0, 0.0,
@@ -332,8 +328,6 @@ public class Matrix3 {
      * @return A reference to this matrix.
      */
     public fun scale(sx: Double, sy: Double): Matrix3 {
-        // three.js uses a module-level `_m3` scratch; a local matches the dialect
-        // (no file-level mutable scratch) at no fidelity cost.
         premultiply(Matrix3().makeScale(sx, sy))
 
         return this
@@ -435,10 +429,6 @@ public class Matrix3 {
         return this
     }
 
-    // three.js's `equals(matrix)` (exact, element-wise) is expressed by the
-    // `equals(Any?)` override below, so `==` and `.equals` stay in sync (dialect
-    // rule 11: no bare same-type overload). Tests use `a == b`.
-
     /**
      * Sets the elements of the matrix from the given [array] (column-major order).
      *
@@ -488,8 +478,9 @@ public class Matrix3 {
     public fun clone(): Matrix3 = Matrix3().fromArray(elements)
 
     /**
-     * Structural equality: `true` when [other] is a [Matrix3] whose [elements] are
-     * element-wise equal (via [DoubleArray.contentEquals], so `NaN != NaN`).
+     * Structural equality: `true` when [other] is a [Matrix3] with equal [elements].
+     * [DoubleArray.contentEquals] compares them, so `NaN` equals `NaN` and `-0.0`
+     * does not equal `0.0`.
      */
     override fun equals(other: Any?): Boolean =
         other is Matrix3 && other.elements.contentEquals(elements)

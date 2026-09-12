@@ -9,12 +9,11 @@ import kotlin.math.abs
 import kotlin.math.sqrt
 
 /**
- * A ray that emits from an origin in a certain direction. The class is used by
- * `Raycaster` to assist with raycasting (e.g. mouse picking, finding which
- * objects in 3D space the pointer is over).
+ * A ray that starts at an origin and goes in one direction. Use it for picking,
+ * for example to find which objects are under the mouse pointer.
  *
- * The ray is **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js.
+ * The ray is **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
  * The constructor stores the given vectors **by reference** (it does not copy
  * them); sharing a vector with another object means later mutations are visible
@@ -145,13 +144,7 @@ public class Ray(
         optionalPointOnSegment: Vector3? = null,
     ): Double {
         // from https://github.com/pmjoniak/GeometricTools/blob/master/GTEngine/Include/Mathematics/GteDistRaySegment.h
-        // It returns the min distance between the ray and the segment
-        // defined by v0 and v1
-        // It can also set two optional targets :
-        // - The closest point on the ray
-        // - The closest point on the segment
 
-        // Local scratch (three.js reuses module-level _segCenter/_segDir/_diff).
         val segCenter = Vector3()
         val segDir = Vector3()
         val diff = Vector3()
@@ -268,9 +261,7 @@ public class Ray(
         // test to see if t1 is behind the ray - if so, return null
         if (t1 < 0) return null
 
-        // test to see if t0 is behind the ray:
-        // if it is, the ray is inside the sphere, so return the second exit point scaled by t1,
-        // in order to always return an intersect point that is in front of the ray.
+        // t0 behind the ray means the origin is inside the sphere: return the exit point.
         if (t0 < 0) return at(t1, target)
 
         // else t0 is in front of the ray, so return the first collision point scaled by t0
@@ -283,7 +274,7 @@ public class Ray(
      * @return Whether this ray intersects with the given sphere or not.
      */
     public fun intersectsSphere(sphere: Sphere): Boolean {
-        if (sphere.radius < 0) return false // handle empty spheres, see #31187
+        if (sphere.radius < 0) return false // an empty sphere never intersects
 
         return distanceSqToPoint(sphere.center) <= (sphere.radius * sphere.radius)
     }
@@ -292,18 +283,18 @@ public class Ray(
      * Returns the distance from this ray's origin to [plane], or `null` if the ray
      * does not intersect the plane.
      *
-     * @return Whether this ray intersects with the given sphere or not.
+     * @return The distance, or `null` if there is no intersection.
      */
     public fun distanceToPlane(plane: Plane): Double? {
         val denominator = plane.normal.dot(direction)
 
         if (denominator == 0.0) {
-            // line is coplanar, return origin
+            // The ray is parallel. If its origin lies in the plane, the distance is 0.
             if (plane.distanceToPoint(origin) == 0.0) {
                 return 0.0
             }
 
-            // Null is preferable to undefined since undefined means.... it is undefined
+            // Parallel and off the plane: no intersection.
 
             return null
         }
@@ -363,8 +354,6 @@ public class Ray(
      * @return [target] on a hit, or `null` if there is no intersection.
      */
     public fun intersectBox(box: Box3, target: Vector3): Vector3? {
-        // three.js declares tmin/tmax as reassigned (var) and the ty*/tz* pairs as
-        // single-assignment (val).
         var tMin: Double
         var tMax: Double
         val tymin: Double
@@ -452,7 +441,6 @@ public class Ray(
 
         // from https://github.com/pmjoniak/GeometricTools/blob/master/GTEngine/Include/Mathematics/GteIntrRay3Triangle3.h
 
-        // Local scratch (three.js reuses module-level _edge1/_edge2/_normal/_diff).
         val edge1 = Vector3()
         val edge2 = Vector3()
         val normal = Vector3()
@@ -462,8 +450,8 @@ public class Ray(
         edge2.subVectors(c, a)
         normal.crossVectors(edge1, edge2)
 
-        // Solve Q + t*D = b1*E1 + b2*E2 (Q = kDiff, D = ray direction,
-        // E1 = kEdge1, E2 = kEdge2, N = Cross(E1,E2)) by
+        // Solve Q + t*D = b1*E1 + b2*E2 (Q = diff, D = direction,
+        // E1 = edge1, E2 = edge2, N = normal) by
         //   |Dot(D,N)|*b1 = sign(Dot(D,N))*Dot(D,Cross(Q,E2))
         //   |Dot(D,N)|*b2 = sign(Dot(D,N))*Dot(D,Cross(E1,Q))
         //   |Dot(D,N)|*t = -sign(Dot(D,N))*Dot(Q,N)

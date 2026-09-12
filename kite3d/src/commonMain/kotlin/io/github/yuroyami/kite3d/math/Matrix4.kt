@@ -13,10 +13,8 @@ import kotlin.math.sqrt
 /**
  * The clip-space coordinate convention a projection matrix targets.
  *
- * three.js selects between these with the `WebGLCoordinateSystem` /
- * `WebGPUCoordinateSystem` integer constants from `constants.js`; this enum
- * replaces those constants for [Matrix4.makePerspective]/[Matrix4.makeOrthographic].
- * [WebGL] maps clip-space z to `[-1, 1]`; [WebGPU] maps it to `[0, 1]`.
+ * Used by [Matrix4.makePerspective] and [Matrix4.makeOrthographic]. [WebGL] maps
+ * clip-space z to `[-1, 1]`. [WebGPU] maps it to `[0, 1]`.
  */
 public enum class CoordinateSystem {
     WebGL,
@@ -36,18 +34,14 @@ public enum class CoordinateSystem {
  * paper. The values are stored in [elements] in column-major order. There is no
  * element constructor; use `Matrix4().set(...)`.
  *
- * Matrices are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js. Most
- * methods mutate `this` and return it for chaining.
+ * Matrices are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only. Most methods change `this` and return it for chaining.
  */
 public class Matrix4 {
 
     /**
      * A column-major list of matrix values. Initialized to the 4x4 identity.
-     *
-     * Exposed as a `val` (dialect rule 12): three.js never reassigns the array,
-     * only mutates its contents, so the reference is fixed while the values stay
-     * mutable.
+     * You can change the values, but not replace the array.
      */
     public val elements: DoubleArray = doubleArrayOf(
         1.0, 0.0, 0.0, 0.0,
@@ -229,8 +223,6 @@ public class Matrix4 {
         val te = elements
         val me = m.elements
 
-        // three.js reuses a module-level `_v1` scratch here; a local is race-free
-        // and equivalent.
         val v1 = Vector3()
         val scaleX = 1.0 / v1.setFromMatrixColumn(m, 0).length()
         val scaleY = 1.0 / v1.setFromMatrixColumn(m, 1).length()
@@ -394,7 +386,6 @@ public class Matrix4 {
      * @return A reference to this matrix.
      */
     public fun makeRotationFromQuaternion(q: Quaternion): Matrix4 {
-        // three.js passes module-level `_zero`/`_one` scratch; locals are equivalent.
         return compose(Vector3(0.0, 0.0, 0.0), q, Vector3(1.0, 1.0, 1.0))
     }
 
@@ -407,7 +398,6 @@ public class Matrix4 {
     public fun lookAt(eye: Vector3, target: Vector3, up: Vector3): Matrix4 {
         val te = elements
 
-        // three.js reuses module-level `_x`/`_y`/`_z` scratch; locals are race-free.
         val x = Vector3()
         val y = Vector3()
         val z = Vector3()
@@ -552,14 +542,11 @@ public class Matrix4 {
     }
 
     /**
-     * Computes and returns the determinant of this matrix assuming it is affine,
-     * saving some computations.
+     * Returns the determinant of the upper-left 3x3 block only.
      *
-     * Only the upper-left 3x3 block participates; the bottom row is assumed to be
-     * `[0, 0, 0, 1]`. For affine matrices (an object's world matrix, say) the
-     * result equals [determinant] but is cheaper. The two values generally
-     * differ for projective matrices, such as a perspective projection, whose
-     * bottom row is not `[0, 0, 0, 1]`.
+     * When the bottom row is `[0, 0, 0, 1]` (an affine matrix, such as a world
+     * matrix), the result equals [determinant] and costs less. For a projection
+     * matrix the two values usually differ.
      *
      * @return The determinant of the upper-left 3x3 block.
      */
@@ -615,9 +602,9 @@ public class Matrix4 {
      * Sets the position component of this matrix from the given components, without
      * affecting the rest of the matrix.
      *
-     * @param x The x component of the vector or alternatively the vector object.
-     * @param y The y component of the vector.
-     * @param z The z component of the vector.
+     * @param x The x component of the position.
+     * @param y The y component of the position.
+     * @param z The z component of the position.
      * @return A reference to this matrix.
      */
     public fun setPosition(x: Double, y: Double, z: Double): Matrix4 {
@@ -953,7 +940,6 @@ public class Matrix4 {
             return this
         }
 
-        // three.js reuses module-level `_v1`/`_m1` scratch; locals are race-free.
         val v1 = Vector3()
         var sx = v1.set(te[0], te[1], te[2]).length()
         val sy = v1.set(te[4], te[5], te[6]).length()
@@ -992,8 +978,7 @@ public class Matrix4 {
     }
 
     /**
-     * Creates a perspective projection matrix. Used internally by
-     * `PerspectiveCamera.updateProjectionMatrix`.
+     * Sets this matrix to a perspective projection.
      *
      * @param left Left boundary of the viewing frustum at the near plane.
      * @param right Right boundary of the viewing frustum at the near plane.
@@ -1052,8 +1037,7 @@ public class Matrix4 {
     }
 
     /**
-     * Creates an orthographic projection matrix. Used internally by
-     * `OrthographicCamera.updateProjectionMatrix`.
+     * Sets this matrix to an orthographic projection.
      *
      * @param left Left boundary of the viewing frustum at the near plane.
      * @param right Right boundary of the viewing frustum at the near plane.
@@ -1111,10 +1095,6 @@ public class Matrix4 {
         return this
     }
 
-    // three.js's `equals(matrix)` (exact, element-wise) is expressed by the
-    // `equals(Any?)` override below, so `==` and `.equals` stay in sync (dialect
-    // rule 11: no bare same-type overload). Tests use `a == b`.
-
     /**
      * Sets the elements of the matrix from the given [array] (column-major order).
      *
@@ -1165,8 +1145,9 @@ public class Matrix4 {
     }
 
     /**
-     * Structural equality: `true` when [other] is a [Matrix4] whose [elements] are
-     * element-wise equal (via [DoubleArray.contentEquals], so `NaN != NaN`).
+     * Structural equality: `true` when [other] is a [Matrix4] with equal [elements].
+     * [DoubleArray.contentEquals] compares them, so `NaN` equals `NaN` and `-0.0`
+     * does not equal `0.0`.
      */
     override fun equals(other: Any?): Boolean =
         other is Matrix4 && other.elements.contentEquals(elements)

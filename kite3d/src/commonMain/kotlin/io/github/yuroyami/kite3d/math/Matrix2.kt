@@ -8,21 +8,13 @@ package io.github.yuroyami.kite3d.math
 /**
  * Represents a 2x2 matrix.
  *
- * A note on row-major and column-major ordering: the constructor and [set]
- * take arguments in
- * [row-major](https://en.wikipedia.org/wiki/Row-_and_column-major_order#Column-major_order)
- * order, while internally they are stored in the [elements] array in
- * column-major order. This means that
- * ```
- * val m = Matrix2()
- * m.set(11.0, 12.0,
- *       21.0, 22.0)
- * ```
- * results in the elements array containing `[ 11, 21, 12, 22 ]`, and internally
- * all calculations are performed using column-major ordering.
+ * [set] takes its arguments in row-major order, so a call reads the way you
+ * write the matrix on paper. [elements] stores them in column-major order:
+ * `Matrix2().set(11.0, 12.0, 21.0, 22.0)` stores `[11, 21, 12, 22]`. There is
+ * no constructor that takes the elements.
  *
- * Matrices are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js.
+ * Matrices are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  */
 public class Matrix2 {
 

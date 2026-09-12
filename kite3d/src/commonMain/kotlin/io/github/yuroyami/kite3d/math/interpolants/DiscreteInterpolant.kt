@@ -13,7 +13,7 @@ import io.github.yuroyami.kite3d.math.Interpolant
  *
  * @param parameterPositions The parameter positions holding the interpolation factors.
  * @param sampleValues The sample values.
- * @param sampleSize The sample size (a.k.a. the value size / stride).
+ * @param sampleSize The number of values in one sample (the stride).
  * @param resultBuffer The result buffer; defaults to a fresh `DoubleArray(sampleSize)`.
  */
 public class DiscreteInterpolant(

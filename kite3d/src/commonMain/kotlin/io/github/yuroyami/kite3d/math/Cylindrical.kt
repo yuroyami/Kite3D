@@ -12,8 +12,8 @@ import kotlin.math.sqrt
  * Represents points in 3D space as
  * [cylindrical coordinates](https://en.wikipedia.org/wiki/Cylindrical_coordinate_system).
  *
- * Instances are **mutable** and **not thread-safe**; confine an instance to a
- * single thread, exactly as in three.js.
+ * Instances are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
  * @param radius The distance from the origin to a point in the x-z plane.
  * @param theta A counterclockwise angle in the x-z plane measured in radians from

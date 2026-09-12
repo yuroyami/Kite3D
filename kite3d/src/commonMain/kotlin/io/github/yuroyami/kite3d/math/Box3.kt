@@ -10,14 +10,17 @@ import kotlin.math.abs
 /**
  * An axis-aligned bounding box (AABB) in 3D space.
  *
- * The box is **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js. Most
- * methods mutate `this` and return it for chaining.
+ * The box is **mutable** and **not thread-safe**. Use each instance from one
+ * thread only. Most methods change `this` and return it for chaining.
  *
  * The constructor stores the given vectors **by reference** (it does not copy
  * them). Passing the same vector as both bounds, or sharing a vector with another
  * object, means later mutations are visible through every alias. Use [set] or
  * [clone] when you need independent storage.
+ *
+ * There is no `setFromObject` or `expandByObject`, because Kite3D has no scene
+ * objects. Pass the object's world-space vertices to [setFromPoints] or
+ * [setFromBufferAttribute] instead.
  */
 public class Box3(
     /** The lower (min) boundary of the box. */
@@ -38,16 +41,14 @@ public class Box3(
     }
 
     /**
-     * Expands this box to enclose the 3D position data packed in [array] (x, y, z
-     * triples). Fewer than three trailing entries are ignored.
+     * Sets this box to enclose the positions packed in [array] as x, y, z triples.
+     * The size of [array] must be a multiple of 3.
      *
      * @return A reference to this box.
      */
     public fun setFromArray(array: DoubleArray): Box3 {
         makeEmpty()
 
-        // Local scratch vector (three.js reuses a module-level _vector). Allocate it
-        // locally so the box carries no shared mutable state.
         val vector = Vector3()
         var i = 0
         val il = array.size
@@ -60,11 +61,8 @@ public class Box3(
     }
 
     /**
-     * Expands this box to enclose the first [count] 3D positions in [attribute].
-     *
-     * three.js reads `attribute.count`; the [AttributeLike] seam does not expose a
-     * count, so the vertex count is passed explicitly as [count]. A `BufferAttribute`
-     * type can supply its own `.count` at the call site.
+     * Sets this box to enclose the first [count] positions in [attribute].
+     * [AttributeLike] has no size, so you pass [count] yourself.
      *
      * @return A reference to this box.
      */
@@ -80,8 +78,8 @@ public class Box3(
     }
 
     /**
-     * Expands this box to enclose all the given [points]. An empty sequence leaves
-     * the box empty.
+     * Sets this box to enclose all the given [points]. An empty sequence makes the
+     * box empty.
      *
      * @return A reference to this box.
      */
@@ -101,7 +99,6 @@ public class Box3(
      * @return A reference to this box.
      */
     public fun setFromCenterAndSize(center: Vector3, size: Vector3): Box3 {
-        // Local scratch (three.js reuses the module-level _vector).
         val halfSize = Vector3().copy(size).multiplyScalar(0.5)
 
         min.copy(center).sub(halfSize)
@@ -109,13 +106,6 @@ public class Box3(
 
         return this
     }
-
-    // setFromObject / expandByObject need core `Object3D`/`Mesh`/geometry types
-    // (updateWorldMatrix, geometry.getAttribute, getVertexPosition, boundingBox,
-    // computeBoundingBox, matrixWorld). Those live above the math layer, so both
-    // methods are deferred to a later object-aware module (see port-ledger.yaml).
-    // Their tests (setFromObject/BufferGeometry, setFromObject/Precise,
-    // expandByObject) are skipped in Box3Test.kt with matching comments.
 
     /**
      * Returns a new box with copied bounds (independent storage).
@@ -158,7 +148,7 @@ public class Box3(
      * @return Whether this box is empty or not.
      */
     public fun isEmpty(): Boolean {
-        // More robust than (volume <= 0), which can go positive with two negative axes.
+        // A volume <= 0 check would fail: two inverted axes give a positive volume.
         return (max.x < min.x) || (max.y < min.y) || (max.z < min.z)
     }
 
@@ -248,8 +238,6 @@ public class Box3(
      * @return [target].
      */
     public fun getParameter(point: Vector3, target: Vector3): Vector3 =
-        // This can potentially have a divide by zero if the box has a size
-        // dimension of 0.
         target.set(
             (point.x - min.x) / (max.x - min.x),
             (point.y - min.y) / (max.y - min.y),
@@ -331,7 +319,6 @@ public class Box3(
             return false
         }
 
-        // Local scratch vectors (three.js reuses module-level temps).
         val center = Vector3()
         val extents = Vector3()
         val v0 = Vector3()
@@ -356,9 +343,8 @@ public class Box3(
         f1.subVectors(v2, v1)
         f2.subVectors(v0, v2)
 
-        // test against axes that are given by cross product combinations of the edges of the triangle and the edges of the aabb
-        // make an axis testing of each of the 3 sides of the aabb against each of the 3 sides of the triangle = 9 axis of separation
-        // axis_ij = u_i x f_j (u0, u1, u2 = face normals of aabb = x,y,z axes vectors since aabb is axis aligned)
+        // Test the 9 axes u_i x f_j: each box axis (x, y, z) crossed with each
+        // triangle edge.
         var axes = doubleArrayOf(
             0.0, -f0.z, f0.y, 0.0, -f1.z, f1.y, 0.0, -f2.z, f2.y,
             f0.z, 0.0, -f0.x, f1.z, 0.0, -f1.x, f2.z, 0.0, -f2.x,
@@ -430,7 +416,8 @@ public class Box3(
         min.max(box.min)
         max.min(box.max)
 
-        // ensure that if there is no overlap, the result is fully empty, not slightly empty with non-inf/+inf values that will cause subsequence intersects to erroneously return valid values.
+        // With no overlap, reset to the standard empty box. Leftover finite bounds
+        // could make later calls such as intersectsBox return true.
         if (isEmpty()) makeEmpty()
 
         return this
@@ -458,8 +445,7 @@ public class Box3(
         // transform of empty box is an empty box.
         if (isEmpty()) return this
 
-        // Local scratch corners (three.js reuses the module-level _points array).
-        // NOTE: I am using a binary pattern to specify all 2^3 combinations below
+        // The 8 corners. Each binary comment reads x, y, z, with 0 = min and 1 = max.
         val points = arrayOf(
             Vector3().set(min.x, min.y, min.z).applyMatrix4(matrix), // 000
             Vector3().set(min.x, min.y, max.z).applyMatrix4(matrix), // 001
@@ -488,17 +474,11 @@ public class Box3(
         return this
     }
 
-    // toJSON / fromJSON port faithfully: three.js serializes to { min: [...], max:
-    // [...] } via Vector3.toArray()/fromArray(). Kotlin has no JS plain-object /
-    // JSON value type at this layer, so these are exposed as array round-trips.
-
     /**
-     * Writes this box as `[minX, minY, minZ, maxX, maxY, maxZ]`.
+     * Returns this box as `[minX, minY, minZ, maxX, maxY, maxZ]`. three.js returns
+     * an object with `min` and `max` arrays instead.
      *
-     * Mirrors three.js `toJSON()` (which produces `{ min: min.toArray(), max:
-     * max.toArray() }`); flattened here since the math layer has no JS object type.
-     *
-     * @return Serialized structure with fields representing the object state.
+     * @return A new array of six values.
      */
     public fun toJSON(): DoubleArray = doubleArrayOf(min.x, min.y, min.z, max.x, max.y, max.z)
 
@@ -526,7 +506,6 @@ public class Box3(
 }
 
 private fun satForAxes(axes: DoubleArray, v0: Vector3, v1: Vector3, v2: Vector3, extents: Vector3): Boolean {
-    // Local scratch axis (three.js reuses the module-level _testAxis).
     val testAxis = Vector3()
 
     var i = 0
@@ -539,7 +518,7 @@ private fun satForAxes(axes: DoubleArray, v0: Vector3, v1: Vector3, v2: Vector3,
         val p0 = v0.dot(testAxis)
         val p1 = v1.dot(testAxis)
         val p2 = v2.dot(testAxis)
-        // actual test, basically see if either of the most extreme of the triangle points intersects r
+        // The axis separates them if the projected triangle lies fully outside [-r, r].
         if (maxOf(-maxOf(p0, p1, p2), minOf(p0, p1, p2)) > r) {
             // points of the projected triangle are outside the projected half-length of the aabb
             // the axis is separating and we can exit

@@ -13,14 +13,14 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
- * A quaternion, used in three.js to represent rotations.
+ * A quaternion, used to represent rotations.
  *
  * Iterating through an instance yields its components `(x, y, z, w)` in order.
  *
- * three.js expects quaternions to be normalized.
+ * Rotation methods expect a normalized (unit length) quaternion.
  *
- * Instances are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js.
+ * Instances are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
  * Reading `x`/`y`/`z`/`w` has no side effect. Writing any of them, or calling a
  * mutating method, fires the registered [onChange] callback (see that method).
@@ -139,8 +139,6 @@ public class Quaternion(
         val s2 = sin(y / 2)
         val s3 = sin(z / 2)
 
-        // Upstream's `default` branch only console.warns on an unknown string order;
-        // an exhaustive enum `when` makes it unreachable, so it is dropped.
         when (order) {
             EulerOrder.XYZ -> {
                 _x = s1 * c2 * c3 + c1 * s2 * s3
@@ -281,7 +279,7 @@ public class Quaternion(
 
         var r = vFrom.dot(vTo) + 1
 
-        if (r < 1e-8) { // the epsilon value has been discussed in #31286
+        if (r < 1e-8) { // The epsilon comes from three.js issue #31286.
             // vFrom and vTo point in opposite directions
 
             r = 0.0
@@ -298,7 +296,7 @@ public class Quaternion(
                 _w = r
             }
         } else {
-            // crossVectors( vFrom, vTo ); // inlined to avoid cyclic dependency on Vector3
+            // Cross product of vFrom and vTo.
 
             _x = vFrom.y * vTo.z - vFrom.z * vTo.y
             _y = vFrom.z * vTo.x - vFrom.x * vTo.z
@@ -351,8 +349,8 @@ public class Quaternion(
     public fun invert(): Quaternion = conjugate()
 
     /**
-     * Returns the rotational conjugate of this quaternion: the same rotation in
-     * the opposite direction about the rotational axis.
+     * Sets this quaternion to its conjugate: the same rotation in the opposite
+     * direction about the same axis.
      *
      * @return A reference to this quaternion.
      */
@@ -480,8 +478,6 @@ public class Quaternion(
             // slerp
 
             val theta = acos(dot)
-            // Upstream names this local `sin`; renamed to avoid shadowing the
-            // imported `sin` function used on the very next lines.
             val sinTheta = sin(theta)
 
             s = sin(s * theta) / sinTheta
@@ -541,10 +537,6 @@ public class Quaternion(
             r2 * cos(theta2),
         )
     }
-
-    // Upstream's public `equals(quaternion)` is dropped per dialect rule 11 (a bare
-    // same-type overload desyncs `==` from `.equals`); use `==` / the `equals`
-    // override below, which has identical component-wise semantics.
 
     /**
      * Sets this quaternion's components from [array] starting at [offset].
@@ -685,8 +677,6 @@ public class Quaternion(
                     // slerp
 
                     val theta = acos(dot)
-                    // Upstream names this local `sin`; renamed to avoid shadowing the
-                    // imported `sin` function used on the very next lines.
                     val sinTheta = sin(theta)
 
                     s = sin(s * theta) / sinTheta

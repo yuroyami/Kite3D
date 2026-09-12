@@ -14,8 +14,8 @@ import kotlin.math.sqrt
  * Represents points in 3D space as
  * [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system).
  *
- * Instances are **mutable** and **not thread-safe**; confine an instance to a
- * single thread, exactly as in three.js.
+ * Instances are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
  * @param radius The radius, or the Euclidean distance (straight-line distance)
  *   from the point to the origin.

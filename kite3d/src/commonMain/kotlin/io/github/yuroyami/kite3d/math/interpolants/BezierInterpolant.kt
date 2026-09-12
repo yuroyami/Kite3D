@@ -21,14 +21,14 @@ import kotlin.math.abs
  *
  * For a track with `N` keyframes and stride `S`:
  * - Each tangent array has `N * S * 2` values.
- * - Layout: `[k0_c0_time, k0_c0_value, k0_c1_time, k0_c1_value, ..., k0_cS_time,
- *   k0_cS_value, k1_c0_time, k1_c0_value, ...]`.
+ * - Layout: `[k0_c0_time, k0_c0_value, k0_c1_time, k0_c1_value, ..., k1_c0_time,
+ *   k1_c0_value, ...]`, where `k` is the keyframe and `c` the component.
  *
  * When no tangent data is present, this falls back to linear interpolation.
  *
  * @param parameterPositions The parameter positions holding the interpolation factors.
  * @param sampleValues The sample values.
- * @param sampleSize The sample size (a.k.a. the value size / stride).
+ * @param sampleSize The number of values in one sample (the stride).
  * @param resultBuffer The result buffer; defaults to a fresh `DoubleArray(sampleSize)`.
  */
 public class BezierInterpolant(

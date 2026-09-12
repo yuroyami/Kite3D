@@ -10,9 +10,8 @@ import kotlin.math.sqrt
 /**
  * A geometric triangle as defined by three vectors representing its three corners.
  *
- * Triangles are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js. Most methods
- * mutate `this` and return it for chaining.
+ * Triangles are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only. Most methods change `this` and return it for chaining.
  *
  * The constructor stores the given [Vector3] instances by reference, so
  * `Triangle(v, v, v)` shares `v` across all three corners.
@@ -38,7 +37,6 @@ public class Triangle(
          * @return The triangle's normal.
          */
         public fun getNormal(a: Vector3, b: Vector3, c: Vector3, target: Vector3): Vector3 {
-            // _v0 module temp inlined as a local (dialect rule 13).
             val v0 = Vector3()
 
             target.subVectors(c, b)
@@ -54,8 +52,8 @@ public class Triangle(
         }
 
         /**
-         * Computes a barycentric coordinates from the given vector.
-         * Returns `null` if the triangle is degenerate.
+         * Computes the barycentric coordinates of [point] in the triangle. Returns
+         * `null` (and sets [target] to zero) if the triangle is degenerate.
          *
          * @param point A point in 3D space.
          * @param a The first corner of the triangle.
@@ -145,8 +143,6 @@ public class Triangle(
             val bary = Vector3()
 
             if (getBarycoord(point, p1, p2, p3, bary) == null) {
-                // Upstream also zeros target.x/y and (when present) .z/.w. The
-                // Vector3-target variant ported here always has z (and no w).
                 target.x = 0.0
                 target.y = 0.0
                 target.z = 0.0
@@ -181,8 +177,6 @@ public class Triangle(
             barycoord: Vector3,
             target: Vector3,
         ): Vector3 {
-            // _v40/_v41/_v42 module temps inlined as locals. Upstream uses Vector4;
-            // only getX/Y/Z/W are read through the AttributeLike seam.
             val v40 = Vector4()
             val v41 = Vector4()
             val v42 = Vector4()
@@ -336,8 +330,8 @@ public class Triangle(
     public fun getPlane(target: Plane): Plane = target.setFromCoplanarPoints(a, b, c)
 
     /**
-     * Computes a barycentric coordinates from the given vector.
-     * Returns `null` if the triangle is degenerate.
+     * Computes the barycentric coordinates of [point] in this triangle. Returns
+     * `null` (and sets [target] to zero) if the triangle is degenerate.
      *
      * @param point A point in 3D space.
      * @param target The target vector that is used to store the method's result.
@@ -470,13 +464,8 @@ public class Triangle(
     }
 
     /**
-     * Returns `true` if this triangle is equal with the given one.
-     *
-     * Note: unlike the structural [equals] override, this mirrors three.js's
-     * `Triangle.equals(triangle)` (corner-by-corner value comparison, non-null arg).
-     *
-     * @param triangle The triangle to test for equality.
-     * @return Whether this triangle is equal with the given one.
+     * Structural equality: `true` when [other] is a [Triangle] with equal corners,
+     * each compared with [Vector3.equals], so `NaN != NaN`.
      */
     override fun equals(other: Any?): Boolean =
         other is Triangle && other.a == a && other.b == b && other.c == c

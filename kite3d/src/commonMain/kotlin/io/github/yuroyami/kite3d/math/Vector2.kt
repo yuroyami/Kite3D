@@ -19,9 +19,8 @@ import kotlin.math.truncate
 /**
  * A 2D vector: an ordered pair of numbers (`x`, `y`).
  *
- * Vectors are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js. Most
- * methods mutate `this` and return it for chaining.
+ * Vectors are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only. Most methods change `this` and return it for chaining.
  *
  * Iterating a vector yields its components `(x, y)` in order.
  */

@@ -12,20 +12,14 @@ package io.github.yuroyami.kite3d.math
  * - Primary reference: [https://graphics.stanford.edu/papers/envmap/envmap.pdf]
  * - Secondary reference: [https://www.ppsloan.org/publications/StupidSH36.pdf]
  *
- * Instances are **mutable** and **not thread-safe**; confine an instance to a single
- * thread, exactly as in three.js.
+ * Instances are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
- * The `isSphericalHarmonics3` duck-typing flag is intentionally dropped. Use
- * `is SphericalHarmonics3` instead.
+ * There is no `isSphericalHarmonics3` flag. Use `is SphericalHarmonics3` instead.
  */
 public class SphericalHarmonics3 {
 
-    /**
-     * An array holding the (9) SH coefficients.
-     *
-     * Exposed as a `val`: three.js never reassigns the array, only mutates the
-     * [Vector3] entries.
-     */
+    /** The nine spherical harmonics coefficients, one [Vector3] each. Change them in place. */
     public val coefficients: Array<Vector3> = Array(9) { Vector3() }
 
     /**
@@ -214,8 +208,8 @@ public class SphericalHarmonics3 {
     }
 
     /**
-     * Returns an array with the SH coefficients, or copies them into the provided
-     * array. The coefficients are represented as numbers.
+     * Writes the 27 coefficient values into [array], starting at [offset], and
+     * returns it.
      *
      * @param array The target array.
      * @param offset The array offset where to start copying.
@@ -237,9 +231,6 @@ public class SphericalHarmonics3 {
     /**
      * Structural equality: `true` when [other] is a [SphericalHarmonics3] whose nine
      * coefficients are all equal (via [Vector3.equals], so `NaN != NaN`).
-     *
-     * Matches three.js's `SphericalHarmonics3.equals`, but as the [equals] override
-     * it also accepts a non-[SphericalHarmonics3] or null argument.
      */
     override fun equals(other: Any?): Boolean {
         if (other !is SphericalHarmonics3) return false

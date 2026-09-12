@@ -11,10 +11,6 @@ import kotlin.math.atan2
 
 /**
  * The rotation order applied by an [Euler] instance.
- *
- * three.js uses string literals (`'XYZ'`, `'ZXY'`, …); this port uses this enum
- * everywhere an order is passed. Members are listed in the same order as the
- * cases in three.js's `switch` statements.
  */
 public enum class EulerOrder { XYZ, YXZ, ZXY, XZY, YZX, ZYX }
 
@@ -33,8 +29,8 @@ public val DEFAULT_ORDER: EulerOrder = EulerOrder.XYZ
  * Iterating through an instance yields its components `(x, y, z, order)` in that
  * order: three [Double]s followed by an [EulerOrder].
  *
- * Instances are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js.
+ * Instances are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
  * Reading `x`/`y`/`z`/`order` has no side effect. Writing any of them, or calling
  * a mutating method, fires the registered [onChange] callback (see that method).
@@ -143,8 +139,6 @@ public class Euler(
         val m21 = te[1]; val m22 = te[5]; val m23 = te[9]
         val m31 = te[2]; val m32 = te[6]; val m33 = te[10]
 
-        // Upstream's `default` branch only console.warns on an unknown string order;
-        // an exhaustive enum `when` makes it unreachable, so it is dropped.
         when (order) {
             EulerOrder.XYZ -> {
                 _y = asin(MathUtils.clamp(m13, -1.0, 1.0))
@@ -235,7 +229,6 @@ public class Euler(
      * @return A reference to this Euler instance.
      */
     public fun setFromQuaternion(q: Quaternion, order: EulerOrder = _order, update: Boolean = true): Euler {
-        // three.js uses a module-level _matrix scratch; a local avoids the data race.
         val matrix = Matrix4()
         matrix.makeRotationFromQuaternion(q)
 
@@ -253,26 +246,20 @@ public class Euler(
         set(v.x, v.y, v.z, order)
 
     /**
-     * Resets the euler angle with a new order by creating a quaternion from this
-     * euler angle and then setting this euler angle with the quaternion and the
-     * new order.
+     * Changes the rotation order and keeps the same rotation, by converting
+     * through a quaternion.
      *
-     * Warning: This discards revolution information.
+     * Warning: full turns are lost, so every angle comes back between -PI and PI.
      *
      * @param newOrder The new order in which the axis rotations are applied.
      * @return A reference to this Euler instance.
      */
     public fun reorder(newOrder: EulerOrder): Euler {
-        // three.js uses a module-level _quaternion scratch; a local avoids the data race.
         val quaternion = Quaternion()
         quaternion.setFromEuler(this)
 
         return setFromQuaternion(quaternion, newOrder)
     }
-
-    // Upstream's public `equals(euler)` is dropped per dialect rule 11 (a bare
-    // same-type overload desyncs `==` from `.equals`); use `==` / the `equals`
-    // override below, which has identical component-wise semantics.
 
     /**
      * Sets this Euler instance's components from [array]. The first three entries

@@ -10,8 +10,8 @@ package io.github.yuroyami.kite3d.math
  * in [Hessian normal form](http://mathworld.wolfram.com/HessianNormalForm.html)
  * by a unit length normal vector and a constant.
  *
- * The plane is **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js.
+ * The plane is **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
  * The constructor stores the given [normal] **by reference** (it does not copy
  * it). Sharing that vector with another object means later mutations are visible
@@ -76,11 +76,9 @@ public class Plane(
      * @return A reference to this plane.
      */
     public fun setFromCoplanarPoints(a: Vector3, b: Vector3, c: Vector3): Plane {
-        // three.js uses module-level _vector1/_vector2 scratch vectors; allocated
-        // locally here (no file-level mutable state).
         val normal = Vector3().subVectors(c, b).cross(Vector3().subVectors(a, b)).normalize()
 
-        // Q: should an error be thrown if normal is zero (e.g. degenerate plane)?
+        // Collinear points give a zero normal. No error is thrown.
 
         setFromNormalAndCoplanarPoint(normal, a)
 
@@ -161,18 +159,17 @@ public class Plane(
      * @return The intersection point, or `null` if no intersection is detected.
      */
     public fun intersectLine(line: Line3, target: Vector3, clampToLine: Boolean = true): Vector3? {
-        // three.js uses module-level _vector1 scratch; allocated locally.
         val direction = line.delta(Vector3())
 
         val denominator = normal.dot(direction)
 
         if (denominator == 0.0) {
-            // line is coplanar, return origin
+            // The line is parallel. If it lies in the plane, return its start.
             if (distanceToPoint(line.start) == 0.0) {
                 return target.copy(line.start)
             }
 
-            // Unsure if this is the correct method to handle this case.
+            // Parallel and off the plane: no intersection.
             return null
         }
 
@@ -218,8 +215,8 @@ public class Plane(
         sphere.intersectsPlane(this)
 
     /**
-     * Writes a coplanar vector to the plane into [target], by calculating the
-     * projection of the normal at the origin onto the plane.
+     * Writes the point on the plane closest to the origin into [target]. Assumes a
+     * unit-length normal.
      *
      * @return [target].
      */
@@ -240,7 +237,6 @@ public class Plane(
      * @return A reference to this plane.
      */
     public fun applyMatrix4(matrix: Matrix4, optionalNormalMatrix: Matrix3? = null): Plane {
-        // three.js uses module-level _normalMatrix/_vector1 scratch; allocated locally.
         val normalMatrix = optionalNormalMatrix ?: Matrix3().getNormalMatrix(matrix)
 
         val referencePoint = coplanarPoint(Vector3()).applyMatrix4(matrix)

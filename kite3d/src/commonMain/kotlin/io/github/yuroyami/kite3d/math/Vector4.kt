@@ -16,13 +16,11 @@ import kotlin.math.truncate
 /**
  * A 4D vector: an ordered quadruplet of numbers (`x`, `y`, `z`, `w`).
  *
- * A 4D vector can represent a point in 4D space, a direction and length in 4D
- * space (the length being the Euclidean distance from `(0, 0, 0, 0)` to
- * `(x, y, z, w)`), or any arbitrary ordered quadruplet of numbers.
+ * A 4D vector can hold a point, a direction with a length, or any four numbers.
+ * Its length is the distance from `(0, 0, 0, 0)` to `(x, y, z, w)`.
  *
- * Vectors are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js. Most
- * methods mutate `this` and return it for chaining.
+ * Vectors are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only. Most methods change `this` and return it for chaining.
  *
  * Iterating a vector yields its components `(x, y, z, w)` in order.
  *
@@ -172,8 +170,6 @@ public class Vector4(
         x = v.x
         y = v.y
         z = v.z
-        // Upstream guards `v.w` with `(v.w !== undefined) ? v.w : 1` to accept a
-        // Vector3; in Kotlin the parameter is a Vector4 whose w is always defined.
         w = v.w
         return this
     }
@@ -487,8 +483,8 @@ public class Vector4(
 
         if (abs(s) < 0.001) s = 1.0
 
-        // prevent divide by zero, should not happen if matrix is orthogonal and should be
-        // caught by singularity test above, but I've left it in just in case
+        // Guards against division by zero. For an orthogonal matrix the
+        // singularity test above already catches this case.
 
         this.x = (m32 - m23) / s
         this.y = (m13 - m31) / s
@@ -545,12 +541,11 @@ public class Vector4(
      * Clamps each component into the range `[min, max]` (assumed component-wise
      * `min <= max`).
      *
-     * @param min The minimum x, y and z values.
-     * @param max The maximum x, y and z values in the desired range.
+     * @param min The minimum x, y, z and w values.
+     * @param max The maximum x, y, z and w values.
      * @return A reference to this vector.
      */
     public fun clamp(min: Vector4, max: Vector4): Vector4 {
-        // assumes min < max, componentwise
         x = MathUtils.clamp(x, min.x, max.x)
         y = MathUtils.clamp(y, min.y, max.y)
         z = MathUtils.clamp(z, min.z, max.z)

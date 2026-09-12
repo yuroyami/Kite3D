@@ -20,9 +20,8 @@ import kotlin.random.Random
 
 /**
  * The storage type of a buffer component, used by [MathUtils.normalize] and
- * [MathUtils.denormalize]. In three.js the corresponding information is carried
- * by the JavaScript `TypedArray` constructor; common Kotlin has no equivalent, so
- * the type is passed explicitly.
+ * [MathUtils.denormalize]. three.js reads it from the typed array. Here you pass
+ * it in.
  */
 public enum class ComponentType {
     Float32,
@@ -45,9 +44,6 @@ public enum class ProperEulerOrder { XYX, XZX, YXY, YZY, ZXZ, ZYZ }
 
 /**
  * A collection of math utility functions.
- *
- * Ported from three.js `MathUtils`. Modelled as a Kotlin `object` so that ported
- * three.js code keeps calling `MathUtils.clamp(...)` etc. verbatim.
  */
 public object MathUtils {
 
@@ -57,7 +53,7 @@ public object MathUtils {
     /** Multiply by this to convert radians to degrees. */
     public const val RAD2DEG: Double = 180.0 / PI
 
-    // 256 two-digit lowercase hex strings: the UUID nibble lookup table.
+    // Byte-to-hex lookup table for UUIDs, "00" to "ff".
     private val lut: Array<String> = Array(256) { it.toString(16).padStart(2, '0') }
 
     private var seed: Int = 1234567
@@ -76,8 +72,7 @@ public object MathUtils {
     public fun generateUUID(): String {
 
         // http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
-        // The `.toLong().toInt()` narrowing reproduces JS `x | 0` (ToInt32): take
-        // the low 32 bits and reinterpret as a signed Int. `shr` matches JS `>>`.
+        // `.toLong().toInt()` keeps the low 32 bits as a signed Int, as JavaScript's `x | 0` does.
 
         val d0 = (Random.nextDouble() * 0xffffffff).toLong().toInt()
         val d1 = (Random.nextDouble() * 0xffffffff).toLong().toInt()
@@ -236,8 +231,7 @@ public object MathUtils {
 
         if (s != null) seed = s
 
-        // Mulberry32. Kotlin Int arithmetic wraps mod 2^32 (two's complement), so
-        // `+`/`*` match JS `Math.imul` and int32 accumulation; `ushr` is JS `>>>`.
+        // Mulberry32. It relies on Int arithmetic wrapping at 32 bits.
         seed += 0x6D2B79F5
         var t = seed
 
@@ -347,8 +341,6 @@ public object MathUtils {
         val c3_1 = cos((c - a) / 2)
         val s3_1 = sin((c - a) / 2)
 
-        // Upstream's default branch only console.warns on an unknown string order;
-        // with an exhaustive enum `when` that branch is unreachable, so it is dropped.
         when (order) {
             ProperEulerOrder.XYX -> q.set(c2 * s13, s2 * c1_3, s2 * s1_3, c2 * c13)
             ProperEulerOrder.YZY -> q.set(s2 * s1_3, c2 * s13, s2 * c1_3, c2 * c13)
@@ -360,19 +352,16 @@ public object MathUtils {
 
     }
 
-    // -- shared numeric constants used across the math layer --------------------
-
     /**
-     * The difference between `1.0` and the next representable [Double]
-     * (`2^-52`). This is the Kotlin equivalent of JS `Number.EPSILON`. Shared by the
-     * math layer (e.g. `Quaternion.slerp`, `Matrix4.decompose`).
+     * The difference between `1.0` and the next representable [Double] (`2^-52`),
+     * the same value as JavaScript's `Number.EPSILON`.
      */
     internal const val EPSILON: Double = 2.220446049250313E-16
 }
 
 /**
- * Replicates the JS idiom `x || 1`: returns `1.0` when the receiver is falsy as a
- * JS number (`0.0`, `-0.0` or `NaN`), otherwise the receiver. Used by vector
- * `normalize`/`clampLength`/`setLength` to avoid division by a zero length.
+ * Returns `1.0` when the receiver is `0.0`, `-0.0` or `NaN`, and the receiver
+ * otherwise. Vector `normalize` and `clampLength` use it to avoid dividing by a
+ * zero length.
  */
 internal fun Double.orOne(): Double = if (this == 0.0 || this.isNaN()) 1.0 else this

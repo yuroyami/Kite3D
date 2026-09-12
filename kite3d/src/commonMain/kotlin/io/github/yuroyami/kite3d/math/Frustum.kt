@@ -12,10 +12,13 @@ package io.github.yuroyami.kite3d.math
  *
  * This class is mainly intended for use internally by a renderer.
  *
- * Frustums are **mutable** and **not thread-safe**; confine an instance (and any
- * object graph holding it) to a single thread, exactly as in three.js.
+ * Frustums are **mutable** and **not thread-safe**. Use each instance from one
+ * thread only.
  *
  * The constructor stores the given [Plane] instances by reference.
+ *
+ * There is no `intersectsObject` or `intersectsSprite`. Test the object's bounding
+ * sphere or box with [intersectsSphere] or [intersectsBox] instead.
  *
  * @param p0 The first plane that encloses the frustum.
  * @param p1 The second plane that encloses the frustum.
@@ -33,12 +36,7 @@ public class Frustum(
     p5: Plane = Plane(),
 ) {
 
-    /**
-     * This array holds the planes that enclose the frustum.
-     *
-     * Exposed as a `val`: three.js never reassigns the array, only mutates its
-     * contents.
-     */
+    /** The six planes that enclose the frustum. Change them in place or with [set]. */
     public val planes: Array<Plane> = arrayOf(p0, p1, p2, p3, p4, p5)
 
     /**
@@ -123,13 +121,6 @@ public class Frustum(
         return this
     }
 
-    // intersectsObject(object) and intersectsSprite(sprite) are DEFERRED: they need
-    // the core Object3D / Sprite / BufferGeometry types (boundingSphere,
-    // computeBoundingSphere, matrixWorld) which are not part of the math layer.
-    // See port-ledger.yaml. They will be reintroduced (likely as ext functions in
-    // the owning layer) once core lands. Their upstream tests are skipped in
-    // FrustumTest.kt for the same reason.
-
     /**
      * Returns `true` if the given bounding sphere is intersecting this frustum.
      *
@@ -160,7 +151,6 @@ public class Frustum(
      */
     public fun intersectsBox(box: Box3): Boolean {
         val planes = this.planes
-        // _vector module temp inlined as a local (dialect rule 13).
         val vector = Vector3()
 
         for (i in 0 until 6) {

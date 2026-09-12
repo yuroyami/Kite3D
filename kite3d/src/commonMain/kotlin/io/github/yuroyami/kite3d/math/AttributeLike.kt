@@ -1,15 +1,14 @@
 /*
  * Copyright (c) 2026 yuroyami - MIT.
- * Kite3D math-layer seam (no direct three.js source file).
  */
 package io.github.yuroyami.kite3d.math
 
 /**
- * The read seam that `fromBufferAttribute` methods pull vector components through.
+ * A source of per-vertex vector components. Methods such as `fromBufferAttribute` and
+ * [Box3.setFromBufferAttribute] read from it.
  *
- * three.js vectors read from a `BufferAttribute` (a `core` concept). The pure math
- * layer must not depend on `core`, so it depends on this narrow interface instead.
- * A `BufferAttribute` type in a core layer can implement [AttributeLike].
+ * Kite3D has no `BufferAttribute` class. Implement this interface on your own vertex
+ * buffer to read vectors from it.
  */
 public interface AttributeLike {
 
