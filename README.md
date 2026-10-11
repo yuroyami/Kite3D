@@ -3,6 +3,9 @@
 3D maths for Kotlin Multiplatform: vectors, matrices, quaternions, bounding
 volumes and colour, with the same API as three.js.
 
+<sub>AI tools wrote much of the code, tests and documentation in this project, under the
+direction and review of its author.</sub>
+
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.yuroyami/kite3d)](https://central.sonatype.com/artifact/io.github.yuroyami/kite3d)
 [![CI](https://img.shields.io/github/actions/workflow/status/yuroyami/Kite3D/ci.yml?branch=main&label=CI)](https://github.com/yuroyami/Kite3D/actions/workflows/ci.yml)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
