@@ -1,0 +1,60 @@
+name: Release
+
+# Push a tag to release, for example `git tag v0.2.1 && git push origin v0.2.1`.
+# The tag must match publishing.version in kite3d/module.yaml. The job refuses to publish
+# when they differ, so a mistyped tag cannot ship a mislabelled artifact.
+#
+# Repository secrets: MAVEN_CENTRAL_USERNAME and MAVEN_CENTRAL_PASSWORD (a Central Portal
+# token), SIGNING_KEY (an ASCII-armoured GPG private key) and SIGNING_PASSWORD.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  KOTLIN_CLI_NO_WELCOME_BANNER: 1
+
+jobs:
+  publish:
+    name: publish to Maven Central
+    # macOS is the only host that can build every target, so it is the only host that can
+    # produce a complete publication.
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check that the tag matches the project version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG="${GITHUB_REF#refs/tags/v}"
+          VERSION="$(awk '/^  publishing:/ { p = 1; next } p && /^    version:/ { print $2; exit }' kite3d/module.yaml)"
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "Tag v$TAG does not match publishing.version $VERSION in kite3d/module.yaml" >&2
+            exit 1
+          fi
+
+      - name: Test before publishing
+        run: ./kotlin test -p jvm -p macosArm64
+
+      - name: Check the public API against the committed dumps
+        run: |
+          ./kotlin build -p js -p wasmJs -p wasmWasi -p iosArm64 -p iosSimulatorArm64 -p iosX64 -p macosArm64 -p macosX64 -p tvosArm64 -p tvosSimulatorArm64 -p watchosArm32 -p watchosArm64 -p watchosDeviceArm64 -p watchosSimulatorArm64 -p linuxX64 -p linuxArm64 -p mingwX64 -p androidNativeArm32 -p androidNativeArm64 -p androidNativeX86 -p androidNativeX64
+          ./kotlin check abi klibAbi
+
+      - name: Publish to Maven Central
+        run: ./kotlin publish mavenCentral -m kite3d
+        env:
+          KOTLIN_TOOLCHAIN_MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          KOTLIN_TOOLCHAIN_MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          KOTLIN_TOOLCHAIN_SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          KOTLIN_TOOLCHAIN_SIGNING_KEY_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}

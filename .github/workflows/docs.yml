@@ -11,7 +11,11 @@ on:
       - 'docs/**'
       - 'mkdocs.yml'
       - '**/*.kt'
-      - '**/build.gradle.kts'
+      - '**/module.yaml'
+      - 'project.yaml'
+      - 'build-plugins/**'
+      - 'dokka-templates/**'
+      - 'kite3d/Module.md'
       - '.github/workflows/docs.yml'
   workflow_dispatch:
 
@@ -20,19 +24,23 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment; do not cancel an in-progress run.
+# Allow only one concurrent deployment. Do not cancel a deployment in progress.
 concurrency:
   group: pages
   cancel-in-progress: false
+
+env:
+  KOTLIN_CLI_NO_WELCOME_BANNER: 1
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.x'
 
@@ -42,17 +50,18 @@ jobs:
       - name: Build the docs site
         run: mkdocs build --site-dir site
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - name: Cache the Kotlin Toolchain downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          distribution: temurin
-          java-version: '21'
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+          path: ~/.cache/JetBrains/Kotlin
+          key: kotlin-toolchain-${{ runner.os }}-${{ hashFiles('kotlin', 'project.yaml', '**/module.yaml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: kotlin-toolchain-${{ runner.os }}-
 
       - name: Generate the Dokka API reference
-        run: ./gradlew dokkaGenerate --no-configuration-cache
+        run: |
+          # `do` is a command of the kotlin script here, not the shell keyword.
+          # shellcheck disable=SC1010
+          ./kotlin do dokka && ./kotlin do dokkaSite
 
       - name: Merge the API reference into the site
         run: |
@@ -61,7 +70,7 @@ jobs:
           touch site/.nojekyll
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site
 
@@ -74,4 +83,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

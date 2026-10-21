@@ -2,102 +2,112 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  KOTLIN_CLI_NO_WELCOME_BANNER: 1
+
 jobs:
-  # Linux runner: tests for JVM, JS, Wasm and linuxX64. `assemble` here skips the Apple
-  # targets, because they need Xcode. The apple job builds those.
+  # Tests for JVM, JS, Wasm and linuxX64, and the JVM ABI check.
   linux:
     name: jvm/js/wasm/linux tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          distribution: temurin
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
-      - name: Assemble (non-Apple targets)
-        run: ./gradlew assemble --stacktrace
-      - name: Test (jvm, js-node, wasmJs-node, wasmWasi-node, linuxX64)
-        run: ./gradlew jvmTest jsNodeTest wasmJsNodeTest wasmWasiNodeTest linuxX64Test --stacktrace
+          persist-credentials: false
+
+      - name: Cache the Kotlin Toolchain downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/JetBrains/Kotlin
+          key: kotlin-toolchain-${{ runner.os }}-${{ hashFiles('kotlin', 'project.yaml', '**/module.yaml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: kotlin-toolchain-${{ runner.os }}-
+
+      - name: Test (jvm, linuxX64)
+        run: ./kotlin test -p jvm -p linuxX64
+
+      # `./kotlin test` cannot run the JS and wasmWasi tests, and it runs wasmJs only in a browser.
+      # The script links all three and runs them in Node.
+      - name: Test (js, wasmJs, wasmWasi in Node)
+        run: python3 .github/scripts/web-tests/run.py
+
+      - name: Check the JVM public API against the committed dump
+        run: ./kotlin check abi
+
       - name: Upload test reports
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: test-reports-linux
-          path: kite3d/build/reports/tests/
+          path: build/reports/
 
-  # Apple runner: the only host that can compile and run the Apple-family targets.
-  # It is also the only host that can build every klib in the matrix, so the ABI
-  # dump is checked here.
+  # The only host that can compile and run the Apple targets. It is also the only host that
+  # can build every klib, so the klib ABI dump is checked here.
   apple:
-    name: apple tests + ABI check
+    name: apple tests + klib ABI check
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          distribution: temurin
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
-      - name: Check public ABI against the checked-in dump
-        run: ./gradlew :kite3d:checkKotlinAbi --stacktrace
-      - name: Assemble Apple targets
-        run: ./gradlew assemble --stacktrace
+          persist-credentials: false
+
+      - name: Cache the Kotlin Toolchain downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/Library/Caches/JetBrains/Kotlin
+          key: kotlin-toolchain-${{ runner.os }}-${{ hashFiles('kotlin', 'project.yaml', '**/module.yaml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: kotlin-toolchain-${{ runner.os }}-
+
       # macos-latest is arm64, so the x64 and device targets cannot run tests here.
-      # `assemble` above compiles them.
+      # The klib build below compiles them.
       - name: Test (macosArm64, iosSimulatorArm64, tvosSimulatorArm64, watchosSimulatorArm64)
-        run: ./gradlew macosArm64Test iosSimulatorArm64Test tvosSimulatorArm64Test watchosSimulatorArm64Test --stacktrace
+        run: ./kotlin test -p macosArm64 -p iosSimulatorArm64 -p tvosSimulatorArm64 -p watchosSimulatorArm64
+
+      - name: Check the klib public API against the committed dump
+        run: |
+          ./kotlin build -p js -p wasmJs -p wasmWasi -p iosArm64 -p iosSimulatorArm64 -p iosX64 -p macosArm64 -p macosX64 -p tvosArm64 -p tvosSimulatorArm64 -p watchosArm32 -p watchosArm64 -p watchosDeviceArm64 -p watchosSimulatorArm64 -p linuxX64 -p linuxArm64 -p mingwX64 -p androidNativeArm32 -p androidNativeArm64 -p androidNativeX86 -p androidNativeX64
+          ./kotlin check klibAbi
+
       - name: Upload test reports
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: test-reports-apple
-          path: kite3d/build/reports/tests/
+          path: build/reports/
 
-  # Windows runner: the only host that can run the mingw native tests.
+  # The only host that can run the mingw native tests.
   windows:
     name: mingw native tests
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          distribution: temurin
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+          persist-credentials: false
+
+      - name: Cache the Kotlin Toolchain downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/AppData/Local/JetBrains/Kotlin
+          key: kotlin-toolchain-${{ runner.os }}-${{ hashFiles('kotlin.bat', 'project.yaml', '**/module.yaml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: kotlin-toolchain-${{ runner.os }}-
+
       - name: Test (mingwX64)
-        run: ./gradlew mingwX64Test --stacktrace
+        run: .\kotlin.bat test -p mingwX64
+
       - name: Upload test reports
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: test-reports-windows
-          path: kite3d/build/reports/tests/
-
-  # Docs build. It tests no code, but a broken Dokka run should fail here, not in a release.
-  docs:
-    name: dokka
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
-      - name: Generate API reference
-        run: ./gradlew dokkaGenerate --stacktrace
-
-# Targets whose tests CI does not run:
-#   linuxArm64, iosArm64/X64, tvosArm64, watchosArm32/Arm64/DeviceArm64, macosX64,
-#   androidNative*: compiled by `assemble` only.
-#   jsBrowserTest, wasmJsBrowserTest: the Node tasks already run the same compiled code,
-#   and the library has no DOM code, so a browser job adds nothing.
+          path: build/reports/

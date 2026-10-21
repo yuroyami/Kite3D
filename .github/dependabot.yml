@@ -1,16 +1,8 @@
 version: 2
 
-# The core has no runtime dependencies, so this only tracks the build itself:
-# the Kotlin/Dokka/publishing plugins and the actions used by CI.
+# Dependabot cannot read the Kotlin Toolchain files, so this only tracks the
+# actions used by CI. Update the toolchain with `./kotlin update`.
 updates:
-  - package-ecosystem: gradle
-    directory: /
-    schedule:
-      interval: monthly
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "chore"
-
   - package-ecosystem: github-actions
     directory: /
     schedule:

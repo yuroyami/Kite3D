@@ -33,6 +33,13 @@ kotlin {
 }
 ```
 
+With the Kotlin Toolchain, in `module.yaml`:
+
+```yaml
+dependencies:
+  - io.github.yuroyami:kite3d:0.2.0
+```
+
 ## The two conventions to learn first
 
 Everything else follows from these.

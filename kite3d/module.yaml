@@ -1,0 +1,271 @@
+# :kite3d is the published library: three.js r184's src/math (MIT) in common Kotlin, plus Kite3D's
+# own Camera. It depends on kotlin-stdlib only. There is no Android target: Android apps use the
+# jvm artifact, which targets Java 11.
+product:
+  type: kmp/lib
+  platforms:
+    - jvm
+    - js
+    - wasmJs
+    - wasmWasi
+    - iosArm64
+    - iosSimulatorArm64
+    - iosX64
+    - macosArm64
+    - macosX64
+    - tvosArm64
+    - tvosSimulatorArm64
+    - watchosArm32
+    - watchosArm64
+    - watchosDeviceArm64
+    - watchosSimulatorArm64
+    - linuxX64
+    - linuxArm64
+    - mingwX64
+    - androidNativeArm32
+    - androidNativeArm64
+    - androidNativeX86
+    - androidNativeX64
+
+# `./kotlin publish mavenLocal -m kite3d` puts a build into ~/.m2 for tests in other projects.
+repositories:
+  - url: mavenLocal
+    publish: true
+    resolve: false
+
+settings:
+  kotlin:
+    # Keep abi-tools in build-plugins/abi-check/module.yaml at the same version.
+    version: 2.4.21
+    explicitApi: strict
+  jvm:
+    jdk:
+      version: 21
+    # Build with JDK 21, but emit Java 11 bytecode for Java 11 runtimes and Android's D8.
+    release: 11
+  publishing:
+    enabled: true
+    group: io.github.yuroyami
+    version: 0.2.0
+    pom:
+      name: Kite3D
+      description: >-
+        3D maths for Kotlin Multiplatform: vectors, matrices, quaternions, Euler angles, bounding volumes, ray and
+        frustum intersection, spherical coordinates, colour management, keyframe interpolants and a camera that
+        projects points to the screen. Maths only: no scene graph, no geometry, no renderer. Same API as three.js.
+        Depends on kotlin-stdlib alone.
+      url: https://github.com/yuroyami/Kite3D
+      licenses:
+        - name: The MIT License
+          url: https://opensource.org/licenses/MIT
+      developers:
+        - id: yuroyami
+          name: yuroyami
+          url: https://github.com/yuroyami
+      scm:
+        url: https://github.com/yuroyami/Kite3D
+        connection: scm:git:git://github.com/yuroyami/Kite3D.git
+        developerConnection: scm:git:ssh://git@github.com/yuroyami/Kite3D.git
+    signArtifacts: true
+    publishSources: true
+    mavenCentral:
+      enabled: true
+      publishingMode: auto
+
+# -Xexport-kdoc keeps the KDoc in the native klibs. If the module already has a
+# settings@native block, add the flag to that block instead.
+settings@native:
+  kotlin:
+    freeCompilerArgs: [ -Xexport-kdoc ]
+
+# Gradle named the klib "io.github.yuroyami:kite3d". Keep that name, or libraries built against
+# earlier releases fail to link on Kotlin/Native. Set it per platform: on @native, it also
+# renames the klibs of shared native code, which must keep their own names.
+settings@js:
+  kotlin:
+    freeCompilerArgs: [ -Xir-module-name=io.github.yuroyami:kite3d ]
+
+settings@wasmJs:
+  kotlin:
+    freeCompilerArgs: [ -Xir-module-name=io.github.yuroyami:kite3d ]
+
+settings@wasmWasi:
+  kotlin:
+    freeCompilerArgs: [ -Xir-module-name=io.github.yuroyami:kite3d ]
+
+settings@iosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@iosSimulatorArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@iosX64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@macosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@macosX64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@tvosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@tvosSimulatorArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@watchosArm32:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@watchosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@watchosDeviceArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@watchosSimulatorArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@linuxX64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@linuxArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@mingwX64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@androidNativeArm32:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@androidNativeArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@androidNativeX86:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+settings@androidNativeX64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:kite3d, -Xshort-module-name=kite3d ]
+
+# Tests compile into their own klib, which needs a different name. The test blocks name the
+# same platforms as the blocks above, so the toolchain applies them last.
+test-settings@js:
+  kotlin:
+    freeCompilerArgs: [ -Xir-module-name=kite3d_test ]
+
+test-settings@wasmJs:
+  kotlin:
+    freeCompilerArgs: [ -Xir-module-name=kite3d_test ]
+
+test-settings@wasmWasi:
+  kotlin:
+    freeCompilerArgs: [ -Xir-module-name=kite3d_test ]
+
+test-settings@iosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@iosSimulatorArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@iosX64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@macosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@macosX64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@tvosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@tvosSimulatorArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@watchosArm32:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@watchosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@watchosDeviceArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@watchosSimulatorArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@linuxX64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@linuxArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@mingwX64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@androidNativeArm32:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@androidNativeArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@androidNativeX86:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+test-settings@androidNativeX64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=kite3d_test, -Xshort-module-name=kite3d_test ]
+
+plugins:
+  abi-check:
+    enabled: true
+    # The committed dumps are api/kite3d.api and api/kite3d.klib.api.
+    dumpDir: api
+    # The klibAbi check reads the klibs of these platforms, so run `./kotlin build` first.
+    klibPlatforms: [ androidNativeArm32, androidNativeArm64, androidNativeX64, androidNativeX86, iosArm64, iosSimulatorArm64, iosX64, js, linuxArm64, linuxX64, macosArm64, macosX64, mingwX64, tvosArm64, tvosSimulatorArm64, wasmJs, wasmWasi, watchosArm32, watchosArm64, watchosDeviceArm64, watchosSimulatorArm64 ]
+  dokka:
+    enabled: true
+    moduleName: kite3d
+    includes: [ Module.md ]
+    customStyleSheets: [ ../docs/api-theme/kite.css ]
+    templatesDir: ../dokka-templates
+    footerMessage: MIT · Kite3D is part of the Kite family.
+    sourceLinkUrl: https://github.com/yuroyami/Kite3D/blob/main/kite3d/src
+    # `./kotlin do dokkaSite` merges the module pages into build/dokka/html.
+    siteName: Kite3D
+    siteModules: [ kite3d ]

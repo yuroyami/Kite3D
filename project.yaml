@@ -1,0 +1,8 @@
+modules:
+  - build-plugins/abi-check
+  - build-plugins/dokka
+  - kite3d
+
+plugins:
+  - //build-plugins/abi-check
+  - //build-plugins/dokka

@@ -8,7 +8,7 @@ direction and review of its author.</sub>
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.yuroyami/kite3d)](https://central.sonatype.com/artifact/io.github.yuroyami/kite3d)
 [![CI](https://img.shields.io/github/actions/workflow/status/yuroyami/Kite3D/ci.yml?branch=main&label=CI)](https://github.com/yuroyami/Kite3D/actions/workflows/ci.yml)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.4.21-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 **[Documentation](https://yuroyami.github.io/Kite3D/)** · a guided tour, a first
@@ -56,6 +56,13 @@ kotlin {
         }
     }
 }
+```
+
+With the Kotlin Toolchain, in `module.yaml`:
+
+```yaml
+dependencies:
+  - io.github.yuroyami:kite3d:0.2.0
 ```
 
 Everything lives in `io.github.yuroyami.kite3d.math`. The five interpolants live
@@ -329,8 +336,8 @@ execute them.
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Every change lands with its tests.
-Regenerate the ABI dump with `./gradlew :kite3d:updateKotlinAbi` when you change
-the public surface.
+Regenerate the ABI dumps with `./kotlin do updateAbi` and `./kotlin do updateKlibAbi`
+when you change the public surface.
 
 ## License
 

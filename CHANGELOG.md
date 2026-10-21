@@ -4,6 +4,13 @@ All notable changes to Kite3D are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Build
+
+- The project builds with the Kotlin Toolchain (`./kotlin`) instead of Gradle, on
+  Kotlin 2.4.21. The published artifacts keep their coordinates and klib names.
+
 ## [0.2.0] - 2026-09-12
 
 ### Added
